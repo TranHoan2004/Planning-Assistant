@@ -1,0 +1,5 @@
+.git/
+.venv/
+bazel-bin/
+bazel-out/
+bazel-testlogs/

@@ -1,0 +1,80 @@
+load("@gazelle//:def.bzl", "gazelle")
+load("@rules_multirun//:defs.bzl", "multirun")
+load("@rules_python//python:pip.bzl", "compile_pip_requirements")
+load("@rules_uv//uv:pip.bzl", "pip_compile")
+load("@rules_uv//uv:venv.bzl", "create_venv")
+load("@rules_python_gazelle_plugin//manifest:defs.bzl", "gazelle_python_manifest")
+load("@rules_python_gazelle_plugin//modules_mapping:def.bzl", "modules_mapping")
+load("@pypi//:requirements.bzl", "all_whl_requirements")
+
+gazelle(
+    name = "gazelle_go",
+    prefix = "gitlab.com/plango-travel/backend",
+)
+
+# should only run on windows as rules_uv does not support windows
+compile_pip_requirements(
+    name = "generate_requirements_windows_txt",
+    requirements_txt = "requirements_lock.txt",
+    requirements_windows = "requirements_windows.txt",
+)
+
+pip_compile(
+    name = "generate_requirements_linux_txt",
+    python_platform = "x86_64-unknown-linux-gnu",
+    requirements_in = "//:pyproject.toml",
+    requirements_txt = "//:requirements_lock.txt",
+)
+
+pip_compile(
+    name = "generate_requirements_macos_txt",
+    python_platform = "aarch64-apple-darwin",
+    requirements_in = "//:pyproject.toml",
+    requirements_txt = "//:requirements_macos.txt",
+)
+
+multirun(
+    name = "generate_requirements_lock",
+    commands = [
+        ":generate_requirements_linux_txt",
+        ":generate_requirements_macos_txt",
+    ],
+    # Running in a single threaded mode allows consecutive `uv` invocations to benefit
+    # from the `uv` cache from the first run.
+    jobs = 1,
+)
+
+create_venv(
+    name = "create_venv",
+    requirements_txt = select({
+        "@platforms//os:linux": ":requirements_lock.txt",
+        "@platforms//os:osx": ":requirements_macos.txt",
+    }),
+)
+
+modules_mapping(
+    name = "modules_map",
+    exclude_patterns = [
+        "^_|(\\._)+",  # This is the default.
+        "(\\.tests)+",  # Add a custom one to get rid of the psutil tests.
+        "^colorama",  # Get rid of colorama on Windows.
+        "^tzdata",  # Get rid of tzdata on Windows.
+        "^lazy_object_proxy\\.cext$",  # Get rid of this on Linux because it isn't included on Windows.
+    ],
+    include_stub_packages = True,
+    modules_mapping_name = "modules_mapping_with_types.json",
+    wheels = all_whl_requirements,
+)
+
+# - //:gazelle_python_manifest.update can be used with `bazel run`
+#   to recalculate the manifest
+# - //:gazelle_python_manifest.test is a test target ensuring that
+#   the manifest doesn't need to be updated
+# This target updates a file called gazelle_python.yaml, and
+# requires that file exist before the target is run.
+# When you are using gazelle you need to run this target first.
+gazelle_python_manifest(
+    name = "gazelle_python_manifest",
+    modules_mapping = ":modules_map",
+    pip_repository_name = "pypi",
+)

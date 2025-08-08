@@ -1,0 +1,9 @@
+[project]
+name = "plango"
+version = "0.1.0"
+dependencies = [
+    "ruff==0.12.5",
+    "langgraph==0.5.4",
+    "langchain==0.3.27",
+    "fastapi==0.116.1"
+]

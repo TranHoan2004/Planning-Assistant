@@ -1,0 +1,66 @@
+# GENERATED FILE - DO NOT EDIT!
+#
+# To update this file, run:
+#   bazel run //:gazelle_python_manifest.update
+
+---
+manifest:
+  modules_mapping:
+    annotated_types: annotated_types
+    anyio: anyio
+    certifi: certifi
+    charset_normalizer: charset_normalizer
+    fastapi: fastapi
+    greenlet: greenlet
+    h11: h11
+    httpcore: httpcore
+    httpx: httpx
+    idna: idna
+    jsonpatch: jsonpatch
+    jsonpointer: jsonpointer
+    langchain: langchain
+    langchain_core: langchain_core
+    langchain_text_splitters: langchain_text_splitters
+    langgraph.cache.base: langgraph_checkpoint
+    langgraph.cache.memory: langgraph_checkpoint
+    langgraph.channels: langgraph
+    langgraph.checkpoint.base: langgraph_checkpoint
+    langgraph.checkpoint.memory: langgraph_checkpoint
+    langgraph.checkpoint.serde: langgraph_checkpoint
+    langgraph.config: langgraph
+    langgraph.constants: langgraph
+    langgraph.errors: langgraph
+    langgraph.func: langgraph
+    langgraph.graph: langgraph
+    langgraph.managed: langgraph
+    langgraph.prebuilt: langgraph_prebuilt
+    langgraph.pregel: langgraph
+    langgraph.store.base: langgraph_checkpoint
+    langgraph.store.memory: langgraph_checkpoint
+    langgraph.types: langgraph
+    langgraph.typing: langgraph
+    langgraph.utils: langgraph
+    langgraph.version: langgraph
+    langgraph.warnings: langgraph
+    langgraph_sdk: langgraph_sdk
+    langsmith: langsmith
+    orjson: orjson
+    ormsgpack: ormsgpack
+    packaging: packaging
+    pydantic: pydantic
+    pydantic_core: pydantic_core
+    requests: requests
+    requests_toolbelt: requests_toolbelt
+    ruff: ruff
+    sniffio: sniffio
+    sqlalchemy: sqlalchemy
+    starlette: starlette
+    tenacity: tenacity
+    typing_extensions: typing_extensions
+    typing_inspection: typing_inspection
+    urllib3: urllib3
+    xxhash: xxhash
+    yaml: PyYAML
+    zstandard: zstandard
+  pip_repository:
+    name: pypi

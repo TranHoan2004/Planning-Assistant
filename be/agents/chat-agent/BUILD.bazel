@@ -1,0 +1,6 @@
+load("@gazelle/def.bzl", "gazelle")
+
+gazelle(
+    name = "gazelle",
+    gazelle = "@rules_python_gazelle_plugin//python:gazelle_binary",
+)
