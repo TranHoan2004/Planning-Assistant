@@ -1,5 +1,8 @@
 .vscode/
 .idea/
+.bazelbsp/
 bazel-*
 
 .venv/
+.*_cache/
+__pycache__/

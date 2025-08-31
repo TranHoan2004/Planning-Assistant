@@ -1,0 +1,20 @@
+load("@aspect_rules_py//py:defs.bzl", "py_library")
+
+# gazelle:resolve py application.chatbot //agents/chat/application:application
+
+py_library(
+    name = "api",
+    srcs = [
+        "__init__.py",
+        "conversation.py",
+    ],
+    imports = ["."],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//agents/chat/application",
+        "//agents/chat/infrastructure/config",
+        "@pip//fastapi",
+        "@pip//loguru",
+        "@pip//pydantic",
+    ],
+)

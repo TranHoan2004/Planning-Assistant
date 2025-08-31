@@ -6,20 +6,40 @@
 ---
 manifest:
   modules_mapping:
+    aiohappyeyeballs: aiohappyeyeballs
+    aiohttp: aiohttp
+    aiosignal: aiosignal
     annotated_types: annotated_types
     anyio: anyio
+    attr: attrs
+    attrs: attrs
     certifi: certifi
     charset_normalizer: charset_normalizer
+    click: click
+    colorama: colorama
+    copier: copier
+    deprecated: Deprecated
+    distro: distro
+    dotenv: python_dotenv
+    dunamai: dunamai
     fastapi: fastapi
+    frozenlist: frozenlist
+    funcy: funcy
     greenlet: greenlet
+    groq: groq
     h11: h11
     httpcore: httpcore
     httpx: httpx
     idna: idna
+    iniconfig: iniconfig
+    jinja2: jinja2
+    jinja2_ansible_filters: jinja2_ansible_filters
     jsonpatch: jsonpatch
     jsonpointer: jsonpointer
     langchain: langchain
     langchain_core: langchain_core
+    langchain_groq: langchain_groq
+    langchain_tavily: langchain_tavily
     langchain_text_splitters: langchain_text_splitters
     langgraph.cache.base: langgraph_checkpoint
     langgraph.cache.memory: langgraph_checkpoint
@@ -35,6 +55,7 @@ manifest:
     langgraph.managed: langgraph
     langgraph.prebuilt: langgraph_prebuilt
     langgraph.pregel: langgraph
+    langgraph.runtime: langgraph
     langgraph.store.base: langgraph_checkpoint
     langgraph.store.memory: langgraph_checkpoint
     langgraph.types: langgraph
@@ -44,14 +65,29 @@ manifest:
     langgraph.warnings: langgraph
     langgraph_sdk: langgraph_sdk
     langsmith: langsmith
+    limits: limits
+    loguru: loguru
+    markupsafe: MarkupSafe
+    multidict: multidict
     orjson: orjson
     ormsgpack: ormsgpack
     packaging: packaging
+    pathspec: pathspec
+    platformdirs: platformdirs
+    pluggy: pluggy
+    plumbum: plumbum
+    prompt_toolkit: prompt_toolkit
+    propcache: propcache
+    py: pytest
     pydantic: pydantic
     pydantic_core: pydantic_core
+    pygments: pygments
+    pytest: pytest
+    pytest_asyncio: pytest_asyncio
+    questionary: questionary
     requests: requests
     requests_toolbelt: requests_toolbelt
-    ruff: ruff
+    slowapi: slowapi
     sniffio: sniffio
     sqlalchemy: sqlalchemy
     starlette: starlette
@@ -59,8 +95,12 @@ manifest:
     typing_extensions: typing_extensions
     typing_inspection: typing_inspection
     urllib3: urllib3
+    uvicorn: uvicorn
+    wcwidth: wcwidth
+    wrapt: wrapt
     xxhash: xxhash
     yaml: PyYAML
+    yarl: yarl
     zstandard: zstandard
   pip_repository:
-    name: pypi
+    name: pip

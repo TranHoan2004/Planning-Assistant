@@ -1,0 +1,14 @@
+load("@aspect_rules_py//py:defs.bzl", "py_library")
+
+py_library(
+    name = "infrastructure",
+    srcs = [
+        "__init__.py",
+        "llm.py",
+    ],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "@pip//langchain_groq",
+        "@pip//python_dotenv",
+    ],
+)

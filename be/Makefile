@@ -1,11 +1,20 @@
-update-py-deps-windows:
-	@bazelisk run //:generate_requirements_windows_txt.update
+build:
+	@bazelisk build //...
+
+generate-build:
+	@bazelisk run //:gazelle
+
+create-py-venv:
+	@bazelisk run //requirements:create_venv
 
 update-py-deps:
-	@bazelisk run //:generate_requirements_lock
+	chmod +x tools/repin.sh && tools/repin.sh
 
-update-py-manifest:
-	@bazelisk run //:gazelle_python_manifest.update
+update-preset:
+	@bazelisk run //tools:preset.update
+
+format:
+	@bazelisk run //:format
 
 clean:
-	@bazelisk clean 
+	@bazelisk clean

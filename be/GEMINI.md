@@ -1,0 +1,83 @@
+# Gemini.md
+
+This document provides context for the Gemini code assistant to understand the project structure, conventions, and commands.
+
+## Project Overview
+
+This is a polyglot monorepo using Bazel as the primary build and dependency management system. The project contains both Go and Python code and is structured as a collection of services and agents.
+
+The project uses a `Makefile` to provide convenient shortcuts for common Bazel commands.
+
+## Building and Running
+
+### Building the project
+
+To build the entire project, run:
+
+```bash
+make build
+```
+
+or
+
+```bash
+bazelisk build //...
+```
+
+To build a specific package, run:
+
+```bash
+bazelisk build //path/to/specific/package:target
+```
+
+### Running the project
+
+To run a specific target, use the `run` command:
+
+```bash
+bazelisk run //path/to/specific/package:target
+```
+
+For example, to run the chat agent, use the following command:
+
+```bash
+bazelisk run //agents/chat:main
+```
+
+## Development Conventions
+
+### Git Commit Conventions
+
+The project follows a conventional commit format. Please adhere to the following guidelines when writing commit messages:
+
+-   **feat(scope):** A brief description of a new feature.
+-   **fix(scope):** A patch for a bug in the codebase.
+-   **hotfix(scope):** A critical bug fix for a production environment.
+-   **refactor(scope):** A code change that neither fixes a bug nor adds a feature.
+-   **docs:** Documentation-only changes.
+-   **config(scope):** Changes that affect the build system, CI, or Git-related configurations.
+-   **style(scope):** Changes that do not affect the meaning of the code (e.g., whitespace, formatting).
+-   **test(scope):** Adding missing tests or correcting existing tests.
+-   **! suffix:** Annotates a commit that introduces a breaking API change.
+
+### Python Development
+
+The project uses `pyproject.toml` to manage Python dependencies. To add or update dependencies:
+
+1.  Add the dependency to the `pyproject.toml` file.
+2.  Run `make update-py-deps` to update the lock file and regenerate the `BUILD.bazel` files.
+3.  Run `make create-py-venv` to update the virtual environment.
+
+### Go Development
+
+The project uses Go modules for dependency management. To add or update dependencies, modify the `go.mod` file and run `make generate-build` to update the `BUILD.bazel` files.
+
+### Formatting and Linting
+
+To format the code, run:
+
+```bash
+make format
+```
+
+This will format both Go and Python code.

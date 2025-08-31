@@ -1,0 +1,19 @@
+load("@aspect_rules_py//py:defs.bzl", "py_library")
+
+py_library(
+    name = "config",
+    srcs = [
+        "__init__.py",
+        "config.py",
+        "logging.py",
+        "rate_limit.py",
+    ],
+    imports = ["."],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "@pip//fastapi",
+        "@pip//loguru",
+        "@pip//pydantic",
+        "@pip//slowapi",
+    ],
+)
