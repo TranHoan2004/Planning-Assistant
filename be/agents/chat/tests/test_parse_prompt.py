@@ -372,11 +372,8 @@ class TestParsePrompt(unittest.IsolatedAsyncioTestCase):
 
     @staticmethod
     def _get_input_cfg() -> InputConfig:
-        return {
-            "session_id": uuid.uuid1().__str__(),
-            "user_id": "1"
-        }
+        return {"session_id": uuid.uuid1().__str__(), "user_id": "1"}
 
 
-if __name__ == '__main__':
-    unittest.main(warnings='ignore')
+if __name__ == "__main__":
+    unittest.main(warnings="ignore")

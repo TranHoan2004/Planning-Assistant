@@ -1,24 +1,22 @@
 load("@aspect_rules_py//py:defs.bzl", "py_library")
 
-# gazelle:resolve py infrastructure.llm.llm //agents/chat/infrastructure:infrastructure
-# gazelle:resolve py domain.value_object.Budget //agents/chat/domain:domain
-# gazelle:resolve py domain.value_object.TimeInterval //agents/chat/domain:domain
-# gazelle:resolve py domain.value_object.TravelInput //agents/chat/domain:domain
-# gazelle:resolve py prompt.prompt.normal_prompt //agents/chat/prompt:prompt
-
 py_library(
     name = "application",
     srcs = [
         "__init__.py",
+        "agent.py",
         "chatbot.py",
+        "graph.py",
+        "state.py",
+        "tools.py",
     ],
     imports = ["."],
     visibility = ["//:__subpackages__"],
     deps = [
-        "//agents/chat/domain",
-        "//agents/chat/infrastructure",
-        "//agents/chat/prompt",
-        "@pip//langchain",
+        "//agents/chat/application/chat",
+        "//agents/chat/infrastructure/config",
+        "//shared/domain",
+        "//shared/tools",
         "@pip//langchain_core",
         "@pip//langchain_tavily",
         "@pip//langgraph",

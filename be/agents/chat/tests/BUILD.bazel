@@ -1,29 +1,19 @@
-load("@aspect_rules_py//py:defs.bzl", "py_binary", "py_library")
+load("@aspect_rules_py//py:defs.bzl", "py_test")
 
-py_binary(
-    name = "test_parse_prompt",
-    srcs = ["test_parse_prompt.py"],
-    data = ["//agents/chat:.env"],
-    imports = ["."],
-    visibility = ["//:__subpackages__"],
-    deps = [
-        "//agents/chat/application",
-        "@pip//pytest",
-        "@pip//pytest_asyncio",
-        "@pip//python_dotenv"
-    ]
-)
-
-py_binary(
+py_test(
     name = "test_missing_info",
     srcs = ["test_missing_info.py"],
-    data = ["//agents/chat:.env"],
-    imports = ["."],
-    visibility = ["//:__subpackages__"],
     deps = [
         "//agents/chat/application",
         "@pip//pytest",
-        "@pip//pytest_asyncio",
-        "@pip//python_dotenv"
-    ]
+    ],
+)
+
+py_test(
+    name = "test_parse_prompt",
+    srcs = ["test_parse_prompt.py"],
+    deps = [
+        "//agents/chat/application",
+        "@pip//pytest",
+    ],
 )

@@ -35,6 +35,7 @@ manifest:
     jinja2: jinja2
     jinja2_ansible_filters: jinja2_ansible_filters
     jsonpatch: jsonpatch
+    jsonpath_ng: jsonpath_ng
     jsonpointer: jsonpointer
     langchain: langchain
     langchain_core: langchain_core
@@ -46,6 +47,7 @@ manifest:
     langgraph.channels: langgraph
     langgraph.checkpoint.base: langgraph_checkpoint
     langgraph.checkpoint.memory: langgraph_checkpoint
+    langgraph.checkpoint.redis: langgraph_checkpoint_redis
     langgraph.checkpoint.serde: langgraph_checkpoint
     langgraph.config: langgraph
     langgraph.constants: langgraph
@@ -58,6 +60,7 @@ manifest:
     langgraph.runtime: langgraph
     langgraph.store.base: langgraph_checkpoint
     langgraph.store.memory: langgraph_checkpoint
+    langgraph.store.redis: langgraph_checkpoint_redis
     langgraph.types: langgraph
     langgraph.typing: langgraph
     langgraph.utils: langgraph
@@ -68,7 +71,9 @@ manifest:
     limits: limits
     loguru: loguru
     markupsafe: MarkupSafe
+    ml_dtypes: ml_dtypes
     multidict: multidict
+    numpy: numpy
     orjson: orjson
     ormsgpack: ormsgpack
     packaging: packaging
@@ -76,15 +81,19 @@ manifest:
     platformdirs: platformdirs
     pluggy: pluggy
     plumbum: plumbum
+    ply: ply
     prompt_toolkit: prompt_toolkit
     propcache: propcache
     py: pytest
     pydantic: pydantic
     pydantic_core: pydantic_core
+    pydantic_settings: pydantic_settings
     pygments: pygments
     pytest: pytest
     pytest_asyncio: pytest_asyncio
     questionary: questionary
+    redis: redis
+    redisvl: redisvl
     requests: requests
     requests_toolbelt: requests_toolbelt
     slowapi: slowapi
@@ -94,6 +103,7 @@ manifest:
     tenacity: tenacity
     typing_extensions: typing_extensions
     typing_inspection: typing_inspection
+    ulid: python_ulid
     urllib3: urllib3
     uvicorn: uvicorn
     wcwidth: wcwidth

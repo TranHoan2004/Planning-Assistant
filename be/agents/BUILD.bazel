@@ -1,0 +1,29 @@
+load("@aspect_rules_py//py:defs.bzl", "py_binary", "py_library")
+
+py_binary(
+    name = "main",
+    srcs = ["main.py"],
+    data = [".env"],
+    imports = ["."],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//agents/chat/infrastructure/config",
+        "//agents/chat/presentation/api",
+        "@pip//fastapi",
+        "@pip//slowapi",
+        "@pip//uvicorn",
+    ],
+)
+
+py_library(
+    name = "agents",
+    srcs = ["main.py"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//agents/chat/infrastructure/config",
+        "//agents/chat/presentation/api",
+        "@pip//fastapi",
+        "@pip//slowapi",
+        "@pip//uvicorn",
+    ],
+)

@@ -6,3 +6,5 @@ bazel-*
 .venv/
 .*_cache/
 __pycache__/
+
+.env

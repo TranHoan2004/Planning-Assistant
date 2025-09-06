@@ -18,13 +18,12 @@ class TestParsePrompt(unittest.IsolatedAsyncioTestCase):
             Hãy giúp tôi lên kế hoạch một cách đầy đủ, chi tiết, đáp ứng nhu cầu, và
             đảm bảo có một trải nghiệm tốt nhất
             """,
-
             """
             Nhóm bạn chúng tôi muốn có một chuyến đi nghỉ dưỡng vào dịp hè này.
             Chúng tôi dự định đi khoảng 5 ngày, từ 10/1 đến 15/1 với ngân sách
             mỗi người tầm 5 đến 7 triệu đồng. Chúng tôi dự định đến khu du lịch
             nào đó ở miền Trung, chỗ mà có không khí trong lành và nhiều hoạt động giải trí.
-            """
+            """,
         ]
 
         for prompt in prompts:
@@ -48,20 +47,18 @@ class TestParsePrompt(unittest.IsolatedAsyncioTestCase):
             Hãy gợi ý và lên kế hoạch cho tôi về một bãi biển đẹp và có nhiều nhà hàng
             hải sản.
             """,
-
             """
             Nhóm bạn chúng tôi muốn có một chuyến đi nghỉ dưỡng vào dịp hè này.
             Chúng tôi dự định đi khoảng 5 ngày, ngân sách mỗi người tầm 5 đến 7 triệu đồng.
             Chúng tôi dự định đến khu du lịch nào đó ở miền Trung, chỗ mà
             có không khí trong lành và nhiều hoạt động giải trí.
             """,
-
             """
             Tôi muốn tổ chức chuyến du lịch cho công ty vào dịp cuối năm.
             Khoảng 20 người, dự trù chi phí tầm 45 - 50 triệu cho cả đoàn.
             Chúng tôi muốn đi đâu đó vừa thuận tiện đi lại, vừa có không gian
             để tổ chức team building, nhưng hiện tại chưa chọn được địa điểm.
-            """
+            """,
         ]
 
         for prompt in prompts:
@@ -185,11 +182,8 @@ class TestParsePrompt(unittest.IsolatedAsyncioTestCase):
 
     @staticmethod
     def _get_input_cfg() -> InputConfig:
-        return {
-            "session_id": uuid.uuid1().__str__(),
-            "user_id": "1"
-        }
+        return {"session_id": uuid.uuid1().__str__(), "user_id": "1"}
 
 
-if __name__ == '__main__':
-    unittest.main(warnings='ignore')
+if __name__ == "__main__":
+    unittest.main(warnings="ignore")

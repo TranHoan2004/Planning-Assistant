@@ -1,37 +1,10 @@
-load("@aspect_rules_py//py:defs.bzl", "py_binary", "py_library")
+load("@aspect_rules_py//py:defs.bzl", "py_library")
 
-# gazelle:resolve py infrastructure.config.config //agents/chat/infrastructure/config:config
-# gazelle:resolve py infrastructure.config.logging //agents/chat/infrastructure/config:config
-# gazelle:resolve py infrastructure.config.rate_limit //agents/chat/infrastructure/config:config
-# gazelle:resolve py presentation.api.conversation //agents/chat/presentation/api:api
 exports_files([".env"])
-py_binary(
-    name = "main",
-    srcs = ["main.py"],
-    data = [".env"],
-    imports = ["."],
-    visibility = ["//:__subpackages__"],
-    deps = [
-        "//agents/chat/infrastructure/config",
-        "//agents/chat/presentation/api",
-        "@pip//fastapi",
-        "@pip//python_dotenv",
-        "@pip//slowapi",
-        "@pip//uvicorn",
-    ],
-)
 
 py_library(
     name = "chat",
-    srcs = ["main.py"],
+    data = [".env"],
     imports = ["."],
     visibility = ["//:__subpackages__"],
-    deps = [
-        "//agents/chat/infrastructure/config",
-        "//agents/chat/presentation/api",
-        "@pip//fastapi",
-        "@pip//python_dotenv",
-        "@pip//slowapi",
-        "@pip//uvicorn",
-    ],
 )

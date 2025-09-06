@@ -6,26 +6,38 @@ from fastapi.responses import StreamingResponse, JSONResponse
 from loguru import logger
 from pydantic import BaseModel, Field
 
-from infrastructure.config.rate_limit import limiter
-from application.chatbot import reply
+from agents.chat.infrastructure.config.rate_limit import limiter
 
-router = APIRouter(tags=["conversation"], prefix="/v1/conversation")
+router = APIRouter(tags=["conversation"])
 
 
 class ChatRequest(BaseModel):
-    session_id: str = str(uuid4())
-    user_id: str
-    prompt: str
+    session_id: str | None = Field(default_factory=uuid4().__str__, description="Session ID")
+    user_id: str = Field(description="Current user's ID")
+    prompt: str = Field(description="User prompt")
 
 
-@router.post("/chat")
-@limiter.limit("10/minutes")
-async def chat(request: Request, chat_body: ChatRequest):
-    logger.info(f"current session: {chat_body.session_id}, prompt: {chat_body.prompt}")
-    return await reply(
-        chat_body.prompt,
-        {"session_id": chat_body.session_id, "user_id": chat_body.user_id},
-    )
+# @router.post("/v1/conversation/chat")
+# @limiter.limit("10/minutes")
+# async def chat(request: Request, chat_body: ChatRequest):
+#     logger.info(f"current session: {chat_body.session_id}, prompt: {chat_body.prompt}")
+#     return await reply(
+#         chat_body.prompt,
+#         {"session_id": chat_body.session_id, "user_id": chat_body.user_id},
+#     )
+
+
+# @router.post("/v1/conversation/chat")
+# async def reply(request: Request, chat_request: ChatRequest):
+#     logger.info(f"current session: {chat_request.session_id}, prompt: {chat_request.prompt}")
+
+#     try:
+#         return response(
+#             session_id=chat_request.session_id,
+#             messages=chat_request.prompt,
+#         )
+#     except Exception as e:
+#         raise HTTPException(status_code=500, detail=f"Internal error: {str(e)}") from e
 
 
 # Response without streaming for fast api test

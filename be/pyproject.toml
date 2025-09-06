@@ -10,9 +10,11 @@ dependencies = [
     "slowapi>=0.1.9",
     "python-dotenv>=1.1.1",
     "loguru>=0.7.3",
+    "pydantic-settings>=2.10.1",
     "langchain-groq>=0.3.7",
     "langchain-tavily>=0.2.11",
     "langsmith>=0.4.14",
+    "langgraph-checkpoint-redis>=0.1.1",
     "pytest>=8.3.0",
     "pytest-asyncio"
 ]

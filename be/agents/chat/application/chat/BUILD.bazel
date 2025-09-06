@@ -1,17 +1,17 @@
 load("@aspect_rules_py//py:defs.bzl", "py_library")
 
 py_library(
-    name = "infrastructure",
+    name = "chat",
     srcs = [
         "__init__.py",
-        "llm.py",
-        "redis.py",
+        "nodes.py",
+        "summarize.py",
     ],
     visibility = ["//:__subpackages__"],
     deps = [
+        "//agents/chat/application",
+        "//agents/chat/infrastructure",
         "//agents/chat/infrastructure/config",
-        "@pip//langchain_groq",
-        "@pip//langgraph_checkpoint_redis",
-        "@pip//redis",
+        "@pip//langchain_core",
     ],
 )

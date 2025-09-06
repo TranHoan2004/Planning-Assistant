@@ -11,7 +11,6 @@ py_library(
     imports = ["."],
     visibility = ["//:__subpackages__"],
     deps = [
-        "//agents/chat/application",
         "//agents/chat/infrastructure/config",
         "@pip//fastapi",
         "@pip//loguru",

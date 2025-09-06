@@ -14,6 +14,8 @@ py_library(
         "@pip//fastapi",
         "@pip//loguru",
         "@pip//pydantic",
+        "@pip//pydantic_settings",
+        "@pip//python_dotenv",
         "@pip//slowapi",
     ],
 )

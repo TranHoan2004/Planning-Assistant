@@ -1,16 +1,27 @@
 from datetime import date
 from typing import Optional, TypedDict
 from pydantic import BaseModel, Field
+from enum import Enum
+
+
+class Currency(Enum):
+    VND = "VND"
+    USD = "USD"
 
 
 class TimeInterval(BaseModel):
-    from_date: str = Field(..., description="Start date in YYYY-MM-DD format")
-    to_date: str = Field(..., description="End date in YYYY-MM-DD format")
+    """Travel duration at the start and end of the trip"""
+
+    from_date: date = Field(..., description="Start date in YYYY-MM-DD format")
+    to_date: date = Field(..., description="End date in YYYY-MM-DD format")
 
 
 class Budget(BaseModel):
-    value: float = Field(..., description="Budget amount")
-    currency: str = Field(default="VND", description="Currency only using VND")
+    """Budget range for the trip"""
+
+    min_value: float = Field(description="Min value of budget")
+    max_value: float = Field(description="Max value of budget")
+    currency: Currency = Field(default=Currency.VND, description="Currency")
 
 
 class TravelInput(BaseModel):

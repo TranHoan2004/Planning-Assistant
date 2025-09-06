@@ -43,7 +43,6 @@ Example output:
 """
 
 
-# Prompt template
 normal_prompt = ChatPromptTemplate.from_messages(
     [
         ("system", faq_prompt),
