@@ -1,50 +1,33 @@
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@import 'tailwindcss';
+@import '@repo/tailwind-config';
+@import '@repo/ui/styles.css';
+@plugin './hero.ts';
+
+@source '../../../../node_modules/@heroui/theme/dist/**/*.{js,jsx,ts,tsx}';
+@source '../../node_modules/streamdown/dist/index.js';
+@custom-variant dark (&:is(.dark *));
+
+.bg-gradient-primary {
+  @apply bg-gradient-to-r from-[#F65555] to-[#FFB26A]
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.bg-main {
+  @apply bg-[#FFB26A]
 }
 
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
-
-body {
-  color: var(--foreground);
-  background: var(--background);
-}
-
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-.imgDark {
-  display: none;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-
-  .imgLight {
+@layer utilities {
+  /* Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
-  .imgDark {
-    display: unset;
+
+  /* IE and Edge */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+  }
+
+  /* Firefox */
+  .no-scrollbar {
+    scrollbar-width: none;
   }
 }

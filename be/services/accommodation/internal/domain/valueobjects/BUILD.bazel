@@ -1,0 +1,8 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "valueobjects",
+    srcs = ["vo.go"],
+    importpath = "gitlab.com/plango-travel/backend/services/accommodation/internal/domain/valueobjects",
+    visibility = ["//services/accommodation:__subpackages__"],
+)

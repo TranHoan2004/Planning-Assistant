@@ -1,0 +1,19 @@
+load("@aspect_rules_py//py:defs.bzl", "py_library")
+
+py_library(
+    name = "application",
+    srcs = [
+        "graph.py",
+        "nodes.py",
+        "tools.py",
+    ],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//agents/plan/domain",
+        "//agents/shared",
+        "//agents/shared/infrastructure",
+        "//agents/shared/utils",
+        "@pip//langchain_core",
+        "@pip//langgraph",
+    ],
+)

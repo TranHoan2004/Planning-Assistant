@@ -29,6 +29,7 @@ bazel_env(
     name = "bazel_env",
     toolchains = {
         "python": "@rules_python//python:current_py_toolchain",
+        "jdk": "@rules_java//toolchains:current_host_java_runtime",
     },
     tools = {
         # Mapping from tool binary name ($PATH entry) to Bazel label
@@ -36,5 +37,7 @@ bazel_env(
         "copier": ":copier",
         "go": "@rules_go//go",
         "python": "$(PYTHON3)",
+        "jar": "$(JAVABASE)/bin/jar",
+        "java": "$(JAVA)",
     } | MULTITOOL_TOOLS,
 )

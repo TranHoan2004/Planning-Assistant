@@ -1,0 +1,57 @@
+[versions]
+springBoot = "3.5.5"
+junit = "5.13.4"
+springdoc = "2.7.0"
+jjwt = "0.11.5"
+mapstruct = "1.5.5.Final"
+lombok = "1.18.32"
+modelmapper = "3.2.1"
+h2 = "2.2.224"
+postgresql = "42.6.0" # PostgreSQL JDBC driver
+
+[plugins]
+springBoot = { id = "org.springframework.boot", version.ref = "springBoot" }
+
+[libraries]
+# BOMs
+springBootBom = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "springBoot" }
+junitBom = { module = "org.junit:junit-bom", version.ref = "junit" }
+
+# Validation
+springBootValidation = { module = "org.springframework.boot:spring-boot-starter-validation" }
+
+# Core Spring Boot
+springBootWeb = { module = "org.springframework.boot:spring-boot-starter-web" }
+springBootSecurity = { module = "org.springframework.boot:spring-boot-starter-security" }
+springBootDataJpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa" }
+springBootActuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
+springBootLoader = { module = "org.springframework.boot:spring-boot-loader" }
+springBootTest = { module = "org.springframework.boot:spring-boot-starter-test" }
+
+# SpringDoc
+springdocOpenapi = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc" }
+
+# ModelMapper
+modelmapper = { module = "org.modelmapper:modelmapper", version.ref = "modelmapper" }
+
+# Database
+postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
+
+# JWT (jjwt)
+jjwtApi = { module = "io.jsonwebtoken:jjwt-api", version.ref = "jjwt" }
+jjwtImpl = { module = "io.jsonwebtoken:jjwt-impl", version.ref = "jjwt" }
+jjwtJackson = { module = "io.jsonwebtoken:jjwt-jackson", version.ref = "jjwt" }
+
+# MapStruct
+mapstruct = { module = "org.mapstruct:mapstruct", version.ref = "mapstruct" }
+mapstructProcessor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstruct" }
+
+# Lombok
+lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
+
+# JUnit
+junit = { module = "org.junit.jupiter:junit-jupiter-api" }
+junitEngine = { module = "org.junit.jupiter:junit-jupiter-engine" }
+junitParams = { module = "org.junit.jupiter:junit-jupiter-params" }
+junitPlatformLauncher = { module = "org.junit.platform:junit-platform-launcher" }
+junitPlatformReporting = { module = "org.junit.platform:junit-platform-reporting" }

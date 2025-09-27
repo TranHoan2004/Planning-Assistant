@@ -1,0 +1,82 @@
+stages:
+  - lint
+  - build
+  - test
+  - deploy
+
+variables:
+  NODE_VERSION: "22"
+  PNPM_VERSION: "10.16.1"
+
+cache:
+  - key:
+      files:
+        - pnpm-lock.yaml
+    paths:
+      - node_modules/
+      - .pnpm-store/
+
+  - key: "turbo"
+    paths: 
+      - .turbo
+
+.install_deps: &install_deps
+  before_script:
+    # Install pnpm and turbo
+    - npm install -g pnpm@${PNPM_VERSION}
+    - npm install -g turbo
+    # Configure pnpm store
+    - pnpm config set store-dir .pnpm-store
+    # Install dependencies for entire monorepo
+    - pnpm install --frozen-lockfile
+
+build:
+  stage: build
+  image: node:${NODE_VERSION}-alpine
+  tags:
+    - plg-fe
+  <<: *install_deps
+  script:
+    - pnpm install --frozen-lockfile
+    - turbo run build
+  artifacts:
+    paths:
+      - apps/*/dist/
+      - apps/*/.next/
+      - packages/*/dist/
+      - node_modules/
+      - apps/*/node_modules/
+      - packages/*/node_modules/
+    expire_in: 1 hour
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+lint:   
+  stage: lint
+  image: node:${NODE_VERSION}-alpine
+  tags:
+    - plg-fe
+  allow_failure: true
+  <<: *install_deps
+  script:
+    - turbo run lint
+    - turbo run type-check || true
+  artifacts:
+    paths:
+      - node_modules/
+      - apps/*/node_modules/
+      - packages/*/node_modules/
+    expire_in: 30 minutes
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+deploy:web:
+  stage: deploy
+  environment: dev
+  tags:
+    - plg-fe
+  script:
+    - echo "Deploying application..."
+    - echo "Application successfully deployed."

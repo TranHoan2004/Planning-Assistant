@@ -1,0 +1,17 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "api",
+    srcs = [
+        "hotel.go",
+        "routes.go",
+    ],
+    importpath = "gitlab.com/plango-travel/backend/services/accommodation/internal/presentation/api",
+    visibility = ["//services/accommodation:__subpackages__"],
+    deps = [
+        "//services/accommodation/internal/application/usecases",
+        "//services/accommodation/pkg",
+        "@com_github_gin_gonic_gin//:gin",
+        "@org_uber_go_zap//:zap",
+    ],
+)

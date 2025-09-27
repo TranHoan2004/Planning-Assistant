@@ -1,0 +1,18 @@
+load("@aspect_rules_py//py:defs.bzl", "py_library")
+
+py_library(
+    name = "infrastructure",
+    srcs = [
+        "__init__.py",
+        "connection_pool.py",
+        "llm.py",
+    ],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//agents/shared/infrastructure/config",
+        "@pip//langchain_groq",
+        "@pip//loguru",
+        "@pip//psycopg",  # keep
+        "@pip//psycopg_pool",
+    ],
+)

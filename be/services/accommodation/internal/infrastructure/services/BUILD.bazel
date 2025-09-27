@@ -1,0 +1,16 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "services",
+    srcs = ["amadeus.go"],
+    importpath = "gitlab.com/plango-travel/backend/services/accommodation/internal/infrastructure/services",
+    visibility = ["//services/accommodation:__subpackages__"],
+    deps = [
+        "//services/accommodation/internal/application/usecases",
+        "//services/accommodation/internal/domain/valueobjects",
+        "//services/accommodation/internal/infrastructure/config",
+        "//services/accommodation/internal/infrastructure/dtos",
+        "//services/accommodation/internal/infrastructure/middlewares",
+        "@org_uber_go_zap//:zap",
+    ],
+)

@@ -1,0 +1,41 @@
+# ===== Custom Security JWT =====
+exe:
+  security:
+    jwt:
+      expiration: ${SPRING_JWT_EXPIRATION}
+      refresh-token:
+        expiration: ${SPRING_JWT_REFRESH_TOKEN_EXPIRATION}
+      signerKey: ${SPRING_JWT_SECRET}
+
+# ===== Spring Datasource (PostgreSQL) =====
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      idle-timeout: 30000
+      pool-name: HikariPool
+
+  # ===== JPA Config =====
+  jpa:
+    hibernate:
+      ddl-auto: update   # create, update, validate, none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+    properties:
+      hibernate:
+        format_sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    open-in-view: false
+
+# ===== Logging =====
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE

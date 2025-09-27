@@ -1,0 +1,21 @@
+load("@aspect_rules_py//py:defs.bzl", "py_library")
+
+py_library(
+    name = "api",
+    srcs = [
+        "__init__.py",
+        "conversation.py",
+        "itinerary.py",
+        "response.py",
+    ],
+    imports = ["."],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//agents/aggregate",
+        "//agents/shared",
+        "//agents/shared/infrastructure/config",
+        "@pip//fastapi",
+        "@pip//loguru",
+        "@pip//pydantic",
+    ],
+)

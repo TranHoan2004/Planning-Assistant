@@ -1,0 +1,18 @@
+load("@aspect_rules_py//py:defs.bzl", "py_library")
+
+py_library(
+    name = "aggregate",
+    srcs = ["agent.py"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//agents/chat/application",
+        "//agents/plan/domain",
+        "//agents/shared",
+        "//agents/shared/infrastructure",
+        "@pip//langchain_core",
+        "@pip//langgraph",
+        "@pip//langgraph_checkpoint_postgres",
+        "@pip//loguru",
+        "@pip//psycopg_pool",
+    ],
+)

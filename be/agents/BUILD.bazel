@@ -1,14 +1,16 @@
 load("@aspect_rules_py//py:defs.bzl", "py_binary", "py_library")
+load("@rules_oci//oci:defs.bzl", "oci_push")
+load("//tools/oci:py_image.bzl", "py_image")
 
 py_binary(
     name = "main",
     srcs = ["main.py"],
-    data = [".env"],
     imports = ["."],
     visibility = ["//:__subpackages__"],
     deps = [
-        "//agents/chat/infrastructure/config",
-        "//agents/chat/presentation/api",
+        "//agents/api",
+        "//agents/shared/infrastructure",
+        "//agents/shared/infrastructure/config",
         "@pip//fastapi",
         "@pip//slowapi",
         "@pip//uvicorn",
@@ -18,12 +20,26 @@ py_binary(
 py_library(
     name = "agents",
     srcs = ["main.py"],
+    imports = ["."],
     visibility = ["//:__subpackages__"],
     deps = [
-        "//agents/chat/infrastructure/config",
-        "//agents/chat/presentation/api",
+        "//agents/api",
+        "//agents/shared/infrastructure",
+        "//agents/shared/infrastructure/config",
         "@pip//fastapi",
         "@pip//slowapi",
         "@pip//uvicorn",
     ],
+)
+
+py_image(
+    name = "agents_img",
+    binary = ":main",
+    exposed_ports = ["4000"],
+)
+
+oci_push(
+    name = "push_img",
+    image = ":agents_img",
+    repository = "registry.gitlab.com/plango-travel/backend/agents",
 )

@@ -3,5 +3,6 @@
     {
       "mode": "auto"
     }
-  ]
+  ],
+  "tailwindCSS.classFunctions": ["cva", "cx"]
 }

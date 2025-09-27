@@ -2,7 +2,7 @@
 
 module(
     name = "plango_monorepo",
-    version = "0.0.1",
+    version = "0.0.2",
     compatibility_level = 1,
 )
 
@@ -21,6 +21,11 @@ bazel_dep(name = "rules_python_gazelle_plugin", version = "1.5.1")
 bazel_dep(name = "aspect_rules_py", version = "1.6.1")
 bazel_dep(name = "rules_uv", version = "0.84.0")
 bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "rules_java", version = "8.15.2")
+bazel_dep(name = "rules_jvm_external", version = "6.8")
+bazel_dep(name = "rules_spring", version = "2.6.3")
+bazel_dep(name = "contrib_rules_jvm", version = "0.30.0")
+bazel_dep(name = "rules_oci", version = "2.2.6")
 
 multitool = use_extension("@rules_multitool//multitool:extension.bzl", "multitool")
 multitool.hub(lockfile = "//tools:tools.lock.json")
@@ -32,12 +37,20 @@ go_sdk = use_extension("@rules_go//go:extensions.bzl", "go_sdk")
 go_sdk.from_file(go_mod = "//:go.mod")
 go_sdk.nogo(nogo = "//tools/lint:nogo")
 
-go_deps = use_extension("@rules_go//go:extensions.bzl", "go_deps")
+go_deps = use_extension("@gazelle//:extensions.bzl", "go_deps")
 go_deps.from_file(go_mod = "//:go.mod")
 
 # All *direct* Go dependencies of the module have to be listed explicitly.
 # Run 'bazel mod tidy' to update this
-use_repo(go_deps)
+use_repo(
+    go_deps,
+    "com_github_gin_contrib_gzip",
+    "com_github_gin_contrib_zap",
+    "com_github_gin_gonic_gin",
+    "com_github_joho_godotenv",
+    "org_uber_go_fx",
+    "org_uber_go_zap",
+)
 #########################
 
 #########################
@@ -58,4 +71,67 @@ pip.parse(
     requirements_lock = "//requirements:all.txt",
 )
 use_repo(pip, "pip")
+#########################
+
+#########################
+# Java and other JVM languages
+maven = use_extension("@rules_jvm_external//:extensions.bzl", "maven")
+maven.from_toml(
+    bom_modules = [
+        "org.springframework.boot:spring-boot-dependencies",
+        "org.junit:junit-bom",
+    ],
+    libs_versions_toml = "//gradle:libs.versions.toml",
+)
+maven.install(
+    lock_file = "//:maven_install.json",
+    repositories = [
+        "https://maven.aliyun.com/repository/central",
+        "https://maven.aliyun.com/repository/public",
+
+        # Main maven Central
+        "https://repo.maven.apache.org/maven2",
+    ],
+)
+use_repo(maven, "maven")
+#########################
+
+#########################
+# OCI
+oci = use_extension("@rules_oci//oci:extensions.bzl", "oci")
+
+# Base image for Golang Containers.
+oci.pull(
+    name = "distroless_base",
+    digest = "sha256:06c713c675e983c5aea030592b1d635954218d29c4db2f8ec66912da1b87e228",
+    image = "gcr.io/distroless/base",
+    platforms = [
+        "linux/amd64",
+        "linux/arm64",
+    ],
+)
+use_repo(oci, "distroless_base", "distroless_base_linux_amd64", "distroless_base_linux_arm64")
+
+# Base image for Python Containers.
+oci.pull(
+    name = "python_base",
+    digest = "sha256:7c06e91f61fa88c08cc74f7e1b7c69ae24910d745357e0dfe1d2c0322aaf20f9",
+    image = "ubuntu",
+    platforms = [
+        "linux/amd64",
+        "linux/arm64/v8",
+    ],
+)
+use_repo(oci, "python_base", "python_base_linux_amd64", "python_base_linux_arm64_v8")
+
+# Base image for Java Containers.
+oci.pull(
+    name = "distroless_java",
+    digest = "sha256:dfea876744f635b5fea3ea53099410cfc5d17aeea7b62887310512d78094f6f3",
+    image = "gcr.io/distroless/java21",
+    platforms = [
+        "linux/amd64",
+    ],
+)
+use_repo(oci, "distroless_java", "distroless_java_linux_amd64")
 #########################

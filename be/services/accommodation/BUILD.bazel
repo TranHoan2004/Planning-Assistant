@@ -1,0 +1,38 @@
+load("@rules_go//go:def.bzl", "go_binary", "go_library")
+load("@rules_oci//oci:defs.bzl", "oci_push")
+load("//tools/oci:go_image.bzl", "go_image")
+
+go_library(
+    name = "accommodation_lib",
+    srcs = ["main.go"],
+    importpath = "gitlab.com/plango-travel/backend/services/accommodation",
+    visibility = ["//visibility:private"],
+    deps = [
+        "//services/accommodation/bootstrap",
+        "//services/accommodation/internal/application",
+        "//services/accommodation/internal/infrastructure",
+        "//services/accommodation/internal/presentation",
+        "@org_uber_go_fx//:fx",
+        "@org_uber_go_fx//fxevent",
+        "@org_uber_go_zap//:zap",
+    ],
+)
+
+# keep
+go_binary(
+    name = "main",
+    embed = [":accommodation_lib"],
+    visibility = ["//visibility:public"],
+)
+
+go_image(
+    name = "accommodation_img",
+    binary = ":main",
+    exposed_ports = ["4001"],
+)
+
+oci_push(
+    name = "img_push",
+    image = ":accommodation_img",
+    repository = "registry.gitlab.com/plango-travel/backend/accommodation",
+)

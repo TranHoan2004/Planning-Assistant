@@ -1,0 +1,15 @@
+load("@aspect_rules_py//py:defs.bzl", "py_library")
+
+py_library(
+    name = "tools",
+    srcs = [
+        "__init__.py",
+        "search_places.py",
+    ],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//agents/shared",
+        "//agents/shared/utils",
+        "@pip//loguru",
+    ],
+)

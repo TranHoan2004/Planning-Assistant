@@ -1,19 +1,34 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from slowapi.errors import RateLimitExceeded
-from agents.chat.infrastructure.config.rate_limit import (
+from agents.shared.infrastructure.config.rate_limit import (
     rate_limit_exceeded_handler,
     limiter,
 )
-from agents.chat.infrastructure.config.config import settings
-from agents.chat.infrastructure.config.logging import init_logging
-from agents.chat.presentation.api.conversation import router as conv_router
+from agents.shared.infrastructure.config.settings import settings
+from agents.shared.infrastructure.config.logging import init_logging
+from agents.shared.infrastructure.connection_pool import (
+    init_connection_pool,
+    close_pool,
+)
+from agents.api.conversation import router as conv_router
+from agents.api.itinerary import router as itinerary_router
 
 is_dev = settings.ENVIRONMENT == "dev"
 init_logging(is_dev)
 
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await init_connection_pool()
+    yield
+    await close_pool()
+
+
 app = FastAPI(
     title="Plango Chat API",
+    lifespan=lifespan,
 )
 app.add_middleware(
     CORSMiddleware,
@@ -27,6 +42,7 @@ app.add_exception_handler(RateLimitExceeded, rate_limit_exceeded_handler)
 
 # Routes setup
 app.include_router(conv_router)
+app.include_router(itinerary_router)
 
 
 @app.get("/health")

@@ -2,26 +2,51 @@
   "name": "@repo/ui",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "files": [
+    "dist"
+  ],
   "exports": {
-    "./*": "./src/*.tsx"
+    "./styles.css": "./dist/index.css",
+    "./*": {
+      "default": "./dist/*.js",
+      "types": "./dist/*.d.ts"
+    }
   },
   "scripts": {
-    "lint": "eslint . --max-warnings 0",
-    "generate:component": "turbo gen react-component",
-    "check-types": "tsc --noEmit"
+    "build:styles": "tailwindcss -i ./src/styles.css -o ./dist/index.css",
+    "build:components": "tsc",
+    "build": "concurrently \"pnpm run build:styles\" \"pnpm run build:components\" ",
+    "check-types": "tsc --noEmit",
+    "dev:styles": "tailwindcss -i ./src/styles.css -o ./dist/index.css --watch",
+    "dev:components": "tsc --watch",
+    "dev": "concurrently \"pnpm run dev:styles\" \"pnpm run dev:components\" ",
+    "lint": "eslint . --max-warnings 0"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
+    "@repo/tailwind-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@repo/utils": "workspace:*",
+    "@tailwindcss/cli": "^4.1.12",
     "@turbo/gen": "^2.5.0",
-    "@types/node": "^22.15.3",
-    "@types/react": "19.1.0",
-    "@types/react-dom": "19.1.1",
-    "eslint": "^9.30.0",
-    "typescript": "5.8.2"
+    "@types/node": "^22.18.4",
+    "@types/react": "19.1.13",
+    "@types/react-dom": "19.1.9",
+    "concurrently": "^9.2.1",
+    "eslint": "^9.35.0",
+    "tailwindcss": "^4.1.11",
+    "tailwindcss-react-aria-components": "^2.0.1",
+    "typescript": "5.9.2"
   },
   "dependencies": {
+    "class-variance-authority": "^0.7.1",
+    "motion": "^12.23.12",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "react-stately": "^3.41.0"
   }
 }

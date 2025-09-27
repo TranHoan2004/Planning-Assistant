@@ -20,6 +20,31 @@ make create-py-venv
 ```
 Make sure you update venv manually when adding new deps by re-run the above command
 
+## Working with Java packages
+To add depedencies, navigate to `gradle/libs.versions.toml` then add your dependencies. Refer https://docs.gradle.org/current/userguide/version_catalogs.html for more information about version catalogs.
+
+Then run this following command to update deps
+```shell
+make update-jvm-deps
+```
+Or
+```shell
+REPIN=1 bazelisk run @maven//:pin
+```
+
+You need to handwriting the BUILD.bazel script yourself in this moment. (Maybe can have auto-gen toolchain in the future)
+
+## Working with Go packages
+To add external dependencies, you can run this following command:
+```shell
+bazelisk run @rules_go//go get go/external/dependencies
+```
+
+For Auto-generate BUILD.bazel script file, run:
+```shell
+make generate-build
+```
+
 ## Building project
 For building the whole project, run this command
 ```shell

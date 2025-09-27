@@ -10,6 +10,9 @@ create-py-venv:
 update-py-deps:
 	chmod +x tools/repin.sh && tools/repin.sh
 
+update-jvm-deps:
+	@REPIN=1 bazelisk run @maven//:pin
+
 update-preset:
 	@bazelisk run //tools:preset.update
 

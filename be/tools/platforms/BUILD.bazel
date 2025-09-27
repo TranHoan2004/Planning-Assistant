@@ -1,5 +1,7 @@
 "Define execution or target platforms, see https://bazel.build/extending/platforms"
 
+package(default_visibility = ["//visibility:public"])
+
 platform(
     name = "linux_aarch64",
     constraint_values = [

@@ -1,0 +1,17 @@
+{
+  "name": "@repo/utils",
+  "version": "1.0.0",
+  "description": "Utilities library for the repo",
+  "type": "module",
+  "keywords": [],
+  "exports": {
+    "./*": "./src/*.ts"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^3.3.1"
+  },
+  "devDependencies": {
+    "typescript": "5.9.2"
+  }
+}

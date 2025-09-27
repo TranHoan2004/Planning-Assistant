@@ -1,0 +1,9 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "entities",
+    srcs = ["hotel.go"],
+    importpath = "gitlab.com/plango-travel/backend/services/accommodation/internal/domain/entities",
+    visibility = ["//services/accommodation:__subpackages__"],
+    deps = ["//services/accommodation/internal/domain/valueobjects"],
+)

@@ -1,0 +1,114 @@
+load("@aspect_bazel_lib//lib:tar.bzl", "tar")
+load("@contrib_rules_jvm//java:defs.bzl", "JUNIT5_DEPS", "java_test_suite")
+load("@rules_java//java:defs.bzl", "java_library", "java_plugin")
+load("@rules_oci//oci:defs.bzl", "oci_push")
+load("@rules_spring//springboot:springboot.bzl", "springboot")
+load("//tools/oci:java_image.bzl", "java_img")
+
+runtime_deps = [
+    "//tools/import_bundles:springboot_required_deps",
+
+    # --- Core Spring Boot ---
+    "@maven//:org_springframework_boot_spring_boot_starter_web",
+    "@maven//:org_springframework_boot_spring_boot_starter_security",
+    "@maven//:org_springdoc_springdoc_openapi_starter_webmvc_ui",  # 2.7.0
+    "@maven//:org_springframework_boot_spring_boot_starter_data_jpa",
+    "@maven//:org_springframework_spring_tx",
+    "@maven//:org_springframework_spring_webmvc",
+    "@maven//:org_springframework_boot_spring_boot_starter_validation",
+
+    # --- Database ---
+    "@maven//:org_postgresql_postgresql",
+    "@maven//:org_hibernate_orm_hibernate_core",
+    "@maven//:org_springframework_data_spring_data_commons",
+    "@maven//:org_springframework_data_spring_data_jpa",
+    "@maven//:jakarta_persistence_jakarta_persistence_api",
+    "@maven//:jakarta_validation_jakarta_validation_api",
+
+    # --- JWT (jjwt) ---
+    "@maven//:io_jsonwebtoken_jjwt_api",
+    "@maven//:io_jsonwebtoken_jjwt_impl",
+    "@maven//:io_jsonwebtoken_jjwt_jackson",
+
+    # --- Security ---
+    "@maven//:org_springframework_security_spring_security_config",
+    "@maven//:org_springframework_security_spring_security_core",
+    "@maven//:org_springframework_security_spring_security_crypto",
+    "@maven//:org_springframework_security_spring_security_web",
+
+    # --- Tools & Utils ---
+    "@maven//:org_modelmapper_modelmapper",
+    "@maven//:org_mapstruct_mapstruct",
+    "@maven//:org_mapstruct_mapstruct_processor",
+    "@maven//:org_projectlombok_lombok",
+    "@maven//:io_swagger_core_v3_swagger_annotations_jakarta",
+    "@maven//:com_fasterxml_jackson_core_jackson_annotations",
+    "@maven//:org_apache_tomcat_embed_tomcat_embed_core",
+    "@maven//:org_slf4j_slf4j_api",
+]
+
+springboot_test_deps = [
+    "@maven//:org_springframework_spring_beans",
+    "@maven//:org_springframework_boot_spring_boot_test",
+    "@maven//:org_springframework_spring_test",
+    "@maven//:org_junit_jupiter_junit_jupiter_api",
+    "@maven//:org_junit_jupiter_junit_jupiter_params",
+]
+
+java_plugin(
+    name = "lombok_plugin",
+    processor_class = "lombok.launch.AnnotationProcessorHider$AnnotationProcessor",
+    deps = ["@maven//:org_projectlombok_lombok"],
+)
+
+java_plugin(
+    name = "mapstruct_plugin",
+    processor_class = "org.mapstruct.ap.MappingProcessor",
+    deps = ["@maven//:org_mapstruct_mapstruct_processor"],
+)
+
+java_library(
+    name = "auth_service",
+    srcs = glob(["src/main/java/**/*.java"]),
+    plugins = [
+        ":lombok_plugin",
+        ":mapstruct_plugin",
+    ],
+    resources = glob(["src/main/resources/**/*"]),
+    visibility = ["//:__subpackages__"],
+    deps = runtime_deps,
+)
+
+springboot(
+    name = "auth",
+    boot_app_class = "com.plango.auth.AuthApplication",
+
+    # SPRING BOOT 3
+    # The launcher class changed in between Boot2 and Boot3, so we provide the
+    # Boot3 launcher class here (the Boot2 one is the default)
+    boot_launcher_class = "org.springframework.boot.loader.launch.JarLauncher",
+    java_library = ":auth_service",
+    visibility = ["//visibility:public"],
+)
+
+java_test_suite(
+    name = "auth_tests",
+    size = "small",
+    srcs = glob(["src/test/java/**/*.java"]),
+    runner = "junit5",
+    test_suffixes = ["Tests.java"],
+    runtime_deps = JUNIT5_DEPS,
+    deps = [":auth_service"] + springboot_test_deps,
+)
+
+java_img(
+    name = "auth_img",
+    exposed_ports = ["8080"],
+    jar_name = "auth.jar",
+)
+
+oci_push(
+    name = "auth_img.push",
+    image = ":auth_img",
+    repository = "registry.gitlab.com/plango-travel/backend/auth",
+)

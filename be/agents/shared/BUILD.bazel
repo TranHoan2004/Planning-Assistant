@@ -1,0 +1,18 @@
+load("@aspect_rules_py//py:defs.bzl", "py_library")
+
+py_library(
+    name = "shared",
+    srcs = [
+        "__init__.py",
+        "data_stream/consts.py",
+        "data_stream/stream_parts.py",
+        "models.py",
+        "state.py",
+    ],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "@pip//langgraph",
+        "@pip//pydantic",
+        "@pip//typing_extensions",
+    ],
+)

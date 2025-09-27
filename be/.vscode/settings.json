@@ -1,0 +1,32 @@
+{
+    "python.analysis.autoImportCompletions": true,
+    "search.exclude": {
+        "bazel-*": true
+    },
+    "files.watcherExclude": {
+        "bazel-*/**": true
+    },
+    "files.exclude": {
+        "bazel-*": true
+    },
+
+    "python.analysis.exclude": [
+        "bazel-*/**",
+        "grade/**",
+        "infra/**",
+        "tools/**",
+        "services/auth/**",
+        "services/accommodation/**"
+    ],
+    "bazel.lsp.command": "starpls",
+    "bazel.lsp.args": ["server", "--experimental_infer_ctx_attributes"],
+    "windsurfPyright.analysis.autoImportCompletions": true,
+    "windsurfPyright.analysis.exclude": {
+        "bazel-*/**": true,
+        "grade/**": true,
+        "infra/**": true,
+        "tools/**": true,
+        "services/auth/**": true,
+        "services/accommodation/**": true,
+    }
+}

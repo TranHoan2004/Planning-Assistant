@@ -1,0 +1,89 @@
+variables:
+  BAZEL_VERSION: 8.3.1
+  BAZEL_OUTPUT_BASE: /tmp/.cache/bazel
+
+image:
+  name: gcr.io/bazel-public/bazel:$BAZEL_VERSION
+  entrypoint: [""]
+
+stages:
+  - build
+  - test
+  - deploy
+
+.inject-buildbuddy-key:
+  before_script:
+    - echo "build --remote_header=$BUILDBUDDY_API_KEY" >> .bazelrc
+
+build:
+  extends: .inject-buildbuddy-key
+  stage: build
+  script:
+    - bazel --output_base=$BAZEL_OUTPUT_BASE build //...
+  artifacts:
+    paths:
+      - $BAZEL_OUTPUT_BASE
+    expire_in: 1 week
+  cache:
+    key: $CI_COMMIT_REF_SLUG
+    paths:
+      - $BAZEL_OUTPUT_BASE
+  rules:
+    - if: $CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_BRANCH == "main"
+      when: always
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: always
+    - when: never
+  tags:
+    - plg-be
+
+test:
+  extends: .inject-buildbuddy-key
+  stage: test
+  script:
+    - bazel --output_base=$BAZEL_OUTPUT_BASE test //...
+  allow_failure: true
+  artifacts:
+    paths:
+      - $BAZEL_OUTPUT_BASE
+    expire_in: 1 week
+  cache:
+    key: $CI_COMMIT_REF_SLUG
+    paths:
+      - $BAZEL_OUTPUT_BASE
+  rules:
+    - if: $CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_BRANCH == "main"
+      when: always
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: always
+    - when: never
+  tags:
+    - plg-be
+
+deploy:agent:
+  extends: .inject-buildbuddy-key
+  stage: deploy
+  environment: dev
+  script:
+    - echo "Deploying agent..."
+  when: manual
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /v.*/'
+      when: always
+    - when: never
+  tags:
+    - plg-be-dev-deploy
+
+deploy:authservice:
+  extends: .inject-buildbuddy-key
+  stage: deploy
+  environment: dev
+  script:
+    - echo "Deploying Auth Service..."
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /v.*/'
+      when: always
+    - when: never
+  tags:
+    - plg-be-dev-deploy
+  when: manual
