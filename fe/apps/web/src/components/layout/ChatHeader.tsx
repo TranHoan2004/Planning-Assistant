@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import {
   Navbar as HeroUINavbar,
+  NavbarBrand,
   NavbarContent,
   NavbarItem
 } from '@heroui/navbar'
@@ -23,6 +24,8 @@ import { CiLogout } from 'react-icons/ci'
 import { useRouter } from 'next/navigation'
 import { clearCurrentUser, setCurrentUser } from '@/state/auth-slice'
 import { clientApi } from '@/utils/client-api'
+import LocaleSwitcher from '../ui/LocalSwitcher'
+import { Image } from '@heroui/react'
 
 export const ChatHeader = () => {
   const { currentUser } = useSelector((state: RootState) => state.auth)
@@ -133,42 +136,81 @@ export const ChatHeader = () => {
   )
 
   return (
-    <HeroUINavbar maxWidth="full" position="sticky">
-      <NavbarContent
-        className="hidden sm:flex basis-1/5 sm:basis-full"
-        justify="end"
-      >
-        <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem>
+    <HeroUINavbar
+      className="border-b border-[#B7B9C5]"
+      height={60}
+      maxWidth="full"
+      position="sticky"
+    >
+      <NavbarBrand>
+        <Link href="/" className='flex border-r border-[#B7B9C5] pr-8 items-end'>
+          <Image
+            src="/logo.png"
+            alt="logo"
+            className="object-contain pt-3.5"
+          />
+        </Link>
+      </NavbarBrand>
+      <NavbarContent className="header-content flex items-end !justify-between w-full">
+        {/* <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem> */}
+        <NavbarItem className="flex h-full items-end">
+          <div className="flex">
+            <div className="border-x border-[#B7B9C5] w-[160px] text-center cursor-pointer pb-3">
+              <span className="font-bold border-b-4 border-yellow-400">
+                Khám phá
+              </span>
+            </div>
+            <div className="border-r border-[#B7B9C5] w-[160px] text-center cursor-pointer pb-3">
+              <span className="">Chuyến bay</span>
+            </div>
+            <div className="border-r border-[#B7B9C5] w-[160px] text-center cursor-pointer pb-3">
+              <span className="">Khách sạn</span>
+            </div>
+            <div className="border-r border-[#B7B9C5] w-[160px] text-center cursor-pointer pb-3">
+              <span className="">Blog</span>
+            </div>
+            <div className="border-r border-[#B7B9C5] w-[160px] text-center cursor-pointer pb-3">
+              <span className="">Về PlanGo</span>
+            </div>
+            {!currentUser && (
+            <div className="w-[160px] text-center cursor-pointer pb-3">
+              <span className="font-bold text-red-500">Đăng nhập</span>
+            </div>)}
+          </div>
+          {!currentUser ? (
+            <div className="helllo pb-1">
+              <Button
+                as={Link}
+                className="text-md font-medium !rounded-lg bg-[#060304] text-white"
+                href="/login"
+                variant="solid"
+              >
+                Lên kế hoạch ngay
+              </Button>
+            </div>
+          ) : (
+            <div className="w-[160px] flex justify-center">
+              <Dropdown>
+                <DropdownTrigger>
+                  <Avatar size="sm" className="cursor-pointer mb-1.5" />
+                </DropdownTrigger>
+                <DropdownMenu>
+                  <DropdownItem
+                    key="logout"
+                    onPress={handleLogout}
+                    startContent={<CiLogout className="text-xl" />}
+                  >
+                    Logout
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            </div>
+          )}
+        </NavbarItem>
 
-        {!currentUser ? (
-          <NavbarItem className="hidden md:flex">
-            <Button
-              as={Link}
-              className="text-md font-medium !rounded-[10px] text-white bg-gradient-to-r from-[#F65555] to-[#FFB26A] hover:from-[#FFB26A] hover:to-[#F65555] transition-colors duration-200"
-              href="/login"
-              variant="solid"
-            >
-              Login
-            </Button>
-          </NavbarItem>
-        ) : (
-          <NavbarItem className="">
-            <Dropdown>
-              <DropdownTrigger>
-                <Avatar size="sm" className="cursor-pointer" />
-              </DropdownTrigger>
-              <DropdownMenu>
-                <DropdownItem
-                  key="logout"
-                  onPress={handleLogout}
-                  startContent={<CiLogout className="text-xl" />}
-                >
-                  Logout
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </NavbarItem>
-        )}
+        {/* <NavbarItem>
+          <LocaleSwitcher />
+        </NavbarItem> */}
       </NavbarContent>
     </HeroUINavbar>
   )

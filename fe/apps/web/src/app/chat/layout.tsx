@@ -13,10 +13,10 @@ export default function Layout({
   children: React.ReactNode
 }>) {
   return (
-    <div className="w-screen h-screen">
-      <Sidebar />
-      <div className="h-full flex-col flex ml-50">
-        <ChatHeader />
+    <div className="h-screen">
+      <ChatHeader />
+      <div className="relative flex-1 flex h-[calc(100vh-62px)]">
+        <Sidebar />
         {children}
       </div>
     </div>

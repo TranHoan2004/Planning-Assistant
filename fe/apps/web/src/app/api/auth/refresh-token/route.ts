@@ -1,7 +1,6 @@
 import { AUTH_API_URL } from '@/utils/constraints'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
-import { refreshToken as refreshTokenService } from '@/services/auth.service'
 
 export const POST = async () => {
   const cookieStore = await cookies()

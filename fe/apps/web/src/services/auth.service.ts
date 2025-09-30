@@ -16,8 +16,7 @@ export const login = async (request: LoginRequest) => {
     body: JSON.stringify(request)
   })
 
-  const data = await response.json()
-  return data
+  return await response.json()
 }
 
 export interface RegisterRequest {
@@ -97,15 +96,14 @@ export const resetPassword = async (email: string, newPassword: string) => {
   return res.status
 }
 
-export const GetSixDigitsOtpCode = async () => {
-  const res = await fetch(`${AUTH_API_URL}/otp`, {
+export const getSixDigitsOtpCode = async (email: string) => {
+  const res = await fetch(`${AUTH_API_URL}/api/auth/otp?email=${email}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
     }
   })
 
-  if (res.ok) {
-    return await res.json()
-  }
+  if (!res.ok) throw new Error('Cannot get OTP code')
+  return await res.json()
 }

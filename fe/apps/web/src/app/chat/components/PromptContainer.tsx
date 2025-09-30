@@ -6,6 +6,7 @@ import { cn } from '@repo/utils/tailwind-utils'
 import { Button } from '@heroui/button'
 import { IoMdArrowRoundUp } from 'react-icons/io'
 import { CiImageOn } from 'react-icons/ci'
+import { useChatContext } from '@/contexts/chat-context'
 
 interface PromptContainerProps {
   className?: string
@@ -20,7 +21,7 @@ const PromptContainer = ({
   placeholder,
   handleSubmit
 }: PromptContainerProps) => {
-  const [value, setValue] = useState('')
+  const { input, setInput } = useChatContext()
   const [selectedFiles, setSelectedFiles] = useState<File[]>([])
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null)
 
@@ -30,13 +31,13 @@ const PromptContainer = ({
       textarea.style.height = 'auto'
       textarea.style.height = `${Math.min(textarea.scrollHeight, 200)}px`
     }
-  }, [value])
+  }, [input])
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
-      handleSubmit?.(value, selectedFiles)
-      setValue('')
+      handleSubmit?.(input, selectedFiles)
+      setInput('')
       setSelectedFiles([])
     }
   }
@@ -66,9 +67,9 @@ const PromptContainer = ({
   }
 
   const handleSubmitClick = () => {
-    if (value.trim() || selectedFiles.length > 0) {
-      handleSubmit?.(value, selectedFiles)
-      setValue('')
+    if (input.trim() || selectedFiles.length > 0) {
+      handleSubmit?.(input, selectedFiles)
+      setInput('')
       setSelectedFiles([])
     }
   }
@@ -121,8 +122,8 @@ const PromptContainer = ({
           <textarea
             placeholder={placeholder || 'Ask anything...'}
             ref={textAreaRef}
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             onPaste={handlePaste}
             className={cn(
@@ -166,7 +167,7 @@ const PromptContainer = ({
             size="sm"
             isIconOnly
             onPress={handleSubmitClick}
-            disabled={disabled || (!value.trim() && selectedFiles.length === 0)}
+            disabled={disabled || (!input.trim() && selectedFiles.length === 0)}
           >
             <IoMdArrowRoundUp className="text-white size-4" />
           </Button>

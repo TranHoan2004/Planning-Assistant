@@ -2,16 +2,16 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Link } from '@heroui/react'
 import { Input } from '@heroui/input'
 import CustomButton from '@/components/ui/CustomButton'
-import { GetSixDigitsOtpCode } from '@/services/auth.service'
 import { IoArrowBack } from 'react-icons/io5'
 import { Step } from '@/app/forgot-password/components/ForgotPasswordFlow'
 import { callToast } from '@/app/forgot-password/components/CallToast'
 
 interface Props {
   setStep: React.Dispatch<React.SetStateAction<Step>>
+  email: string
 }
 
-export default function OtpForm({ setStep }: Props) {
+export default function OtpForm({ setStep, email }: Props) {
   const inputs = Array(6).fill(0)
   const inputRefs = useRef<(HTMLInputElement | null)[]>([])
   const LENGTH = 6
@@ -89,8 +89,12 @@ export default function OtpForm({ setStep }: Props) {
 
   const fetchOtp = async () => {
     try {
-      const data = await GetSixDigitsOtpCode()
-      setOtp(String(data))
+      const res = await fetch(`/api/auth/forgot-password?email=${encodeURIComponent(email)}`, {
+        method: 'GET'
+      })
+      const data = await res.json()
+
+      setOtp(String(data.otp))
     } catch (error) {
       callToast({
         title: 'Error',

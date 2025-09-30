@@ -8,6 +8,7 @@ import { Input } from '@heroui/input'
 import PasswordInput from '@/components/ui/PasswordInput'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Link } from '@heroui/react'
+import { callToast } from '@/app/forgot-password/components/CallToast'
 
 const registerFormSchema = z
   .object({
@@ -66,12 +67,19 @@ const RegisterForm = () => {
         throw new Error(errorData.error || 'Registration failed')
       }
 
-      router.push(
-        `/login` +
+      callToast({
+        title: 'Registration Successful',
+        message: 'Now you can login in the login page.',
+        color: 'success'
+      })
+      setTimeout(() => {
+        router.push(
+          `/login` +
           (callbackUrl !== '/'
             ? `?callbackUrl=${encodeURIComponent(callbackUrl)}`
             : '')
-      )
+        )
+      }, 3000)
     } catch (error) {
       console.error('Registration error:', error)
       setError('root', {

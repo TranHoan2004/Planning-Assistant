@@ -18,7 +18,7 @@ const ForgotPasswordFlow = () => {
   return (
     <>
       {step === 'otp' ? (
-        <OtpForm setStep={setStep} />
+        <OtpForm setStep={setStep} email={email} />
       ) : (
         <div className="flex min-h-0 flex-1 flex-col">
           <div className="grid h-full min-h-screen lg:grid-cols-2">

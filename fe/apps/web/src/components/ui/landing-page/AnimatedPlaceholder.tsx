@@ -1,23 +1,12 @@
 import { useEffect, useState } from 'react'
+import { useTranslations } from 'next-intl'
 
 const AnimatedPlaceholder = ({ isVisible }: { isVisible: boolean }) => {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [fade, setFade] = useState(true)
+  const t = useTranslations('HomePage')
 
-  const placeholders = [
-    'Plan a surf trip to Costa Rica in August',
-    'Weekend getaway to the mountains with friends',
-    'Family vacation to Disney World',
-    'Backpacking through Southeast Asia',
-    'Romantic trip to Paris for 5 days',
-    'Group adventure to New Zealand',
-    'Budget travel through Eastern Europe',
-    'Luxury safari in Tanzania',
-    'Food tour of Tokyo with colleagues',
-    'Beach vacation in the Maldives',
-    'Cultural exploration of Morocco',
-    'Road trip across California'
-  ]
+  const placeholders = t.raw('pre-promt') as string[]
 
   useEffect(() => {
     const interval = setInterval(() => {

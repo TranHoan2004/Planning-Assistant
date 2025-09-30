@@ -3,7 +3,6 @@
 import React from 'react'
 import { Input } from '@heroui/react'
 import CustomButton from '@/components/ui/CustomButton'
-import { verifyEmail } from '@/services/auth.service'
 import { Step } from '@/app/forgot-password/components/ForgotPasswordFlow'
 import { callToast } from '@/app/forgot-password/components/CallToast'
 
@@ -17,12 +16,21 @@ const VerifyEmail = ({ setStep, setEmail, email }: VerifyEmailProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      const status = await verifyEmail(email)
+      const res = await fetch('/api/auth/forgot-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email })
+      })
+
+      const data = await res.json()
+      const status = String(data.code)
 
       switch (status) {
         case 'REG_002':
           callToast({
-            message: 'Email is not found',
+            message: 'Email is not found. Please enter your email again',
             color: 'warning'
           })
           break
@@ -39,7 +47,6 @@ const VerifyEmail = ({ setStep, setEmail, email }: VerifyEmailProps) => {
         default:
           throw new Error('Error happened when verifying email')
       }
-
     } catch (error) {
       callToast({
         message: (error as Error).message,

@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import PasswordInput from '@/components/ui/PasswordInput'
 import CustomButton from '@/components/ui/CustomButton'
 import { z } from 'zod'
-import { resetPassword } from '@/services/auth.service'
 import { useRouter } from 'next/navigation'
 import { callToast } from '@/app/forgot-password/components/CallToast'
 
@@ -16,7 +15,7 @@ const resetPasswordSchema = z
       .string()
       .min(8, 'Password must be at least 8 characters.')
       .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).{8,}$/,
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])(?=.{8,})/,
         'Password must include uppercase, lowercase, number, and special character.'
       ),
     confirm: z
@@ -48,7 +47,15 @@ export default function ResetPasswordForm({ email }: Props) {
     }
     setError('')
     try {
-      const status = await resetPassword(email, password)
+      const res = await fetch('/api/auth/forgot-password', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password })
+      })
+
+      const status = res.status
 
       if (status === 200) {
         callToast({
@@ -60,6 +67,8 @@ export default function ResetPasswordForm({ email }: Props) {
         setTimeout(() => {
           router.push('/login')
         }, 3000)
+      } else {
+        throw new Error('Unexpected error occurred.')
       }
     } catch (error) {
       callToast({

@@ -1,0 +1,25 @@
+{
+    "HomePage": {
+        "slogan": "\"Plan less, travel more\"",
+        "description": "Use AI to create your perfect group itinerary in minutes.",
+        "pre-promt": [
+            "Help me plan a group trip.",
+            "I need an itinerary for our trip.",
+            "Can you suggest a travel plan?",
+            "I want an itinerary for our trip.",
+            "Help me create a travel plan.",
+            "I need an itinerary for our group trip.",
+            "Can you help me plan a trip?",
+            "I want a travel plan for our group.",
+            "Help me create an itinerary for our trip.",
+            "I need a travel plan for our trip."
+        ],
+        "quick-action": [
+            "Danang Travel Plan",
+            "Hoi An Travel Plan",
+            "Budget Travel Ideas",
+            "Family Travel",
+            "See more..."
+        ]
+    }
+}

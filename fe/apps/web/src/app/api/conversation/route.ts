@@ -52,40 +52,6 @@ const handleConversation = async (request: NextRequest) => {
   }
 }
 
-const getConversation = async (request: NextRequest) => {
-  const params = request.nextUrl.searchParams
-  const sessionId = params.get('session_id')
-  const userId = params.get('user_id')
-
-  if (!sessionId || !userId) {
-    return NextResponse.json(
-      {
-        status: 'error',
-        error: 'session_id and user_id are required'
-      },
-      {
-        status: 400
-      }
-    )
-  }
-
-  const response = await fetch(
-    `${CONVERSATION_API_URL}/v1/conversation/messages?session_id=${sessionId}&user_id=${userId}`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }
-  )
-
-  return new NextResponse(response.body, {
-    headers: response.headers,
-    status: response.status,
-    statusText: response.statusText
-  })
-}
-
 const convertToMessageContent = (message: UIMessage) => {
   return message.parts
     .filter((part) => part.type === 'text')
@@ -94,5 +60,3 @@ const convertToMessageContent = (message: UIMessage) => {
 }
 
 export const POST = withAuth(handleConversation)
-
-export const GET = withAuth(getConversation)

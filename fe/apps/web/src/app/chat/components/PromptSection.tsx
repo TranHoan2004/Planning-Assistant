@@ -4,9 +4,8 @@ import { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import type { RootState } from '@/state/store'
 import PromptContainer from './PromptContainer'
-import LoadingIndicator from './LoadingIndicator'
 import { DefaultChatTransport } from 'ai'
-import { useChat, useCompletion } from '@ai-sdk/react'
+import { useChat } from '@ai-sdk/react'
 import { v4 as uuidv4 } from 'uuid'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { clientApi } from '@/utils/client-api'
@@ -15,8 +14,9 @@ import { Message, MessageContent } from './messages'
 import { Response as AIResponse } from './response'
 import { MdAssistant, MdPerson } from 'react-icons/md'
 import { ItineraryResponse } from '../_schema/itinerary'
-import ItineraryDetailView from './ItinenaryDetailView'
 import { parse, Allow } from 'partial-json'
+import { useChatContext } from '@/contexts/chat-context'
+import { HeartTitleIcon } from '@/assets/Icons'
 
 interface PromptSectionProps {
   sessionId?: string
@@ -25,20 +25,16 @@ interface PromptSectionProps {
 const PromptSection = ({ sessionId }: PromptSectionProps) => {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const [currentSessionId, setCurrentSessionId] = useState(sessionId)
   const [isChatMode, setIsChatMode] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const { currentUser } = useSelector((state: RootState) => state.auth)
 
   const querySentRef = useRef<string | null>(null)
-
-  const [itinerary, setItinerary] = useState<ItineraryResponse | undefined>(
-    undefined
-  )
+  const { setItinerary, currentSessionId, setCurrentSessionId } = useChatContext()
 
   const query = searchParams.get('query')
 
-  const { messages, status, sendMessage } = useChat({
+  const { messages, status, sendMessage, setMessages } = useChat({
     transport: new DefaultChatTransport({
       api: '/api/conversation',
       credentials: 'include',
@@ -104,17 +100,6 @@ const PromptSection = ({ sessionId }: PromptSectionProps) => {
     }
   })
 
-  // const { complete, completion, setInput } = useCompletion({
-  //   api: '/api/completion/itinerary',
-  //   credentials: 'include',
-  //   onError: (error) => {
-  //     console.log(error)
-  //   },
-  //   onFinish: (data) => {
-  //     console.log(data)
-  //   }
-  // })
-
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
@@ -135,10 +120,17 @@ const PromptSection = ({ sessionId }: PromptSectionProps) => {
     if (!currentSessionId || !currentUser?.id) return
 
     const getConversationMessages = async () => {
-      const response = await clientApi.get(
-        `/api/conversation?session_id=${sessionId}&user_id=${currentUser?.id}`
-      )
-      console.log(response.data)
+      try {
+        const response = await clientApi.get(
+          `/api/conversation/${currentSessionId}?user_id=${currentUser?.id}`
+        )
+        if (response.data?.length > 0) {
+          setIsChatMode(true)
+          setMessages(response.data)
+        }
+      } catch (err) {
+        console.error(err)
+      }
     }
 
     getConversationMessages()
@@ -174,7 +166,14 @@ const PromptSection = ({ sessionId }: PromptSectionProps) => {
         : `/chat/${currentSessionId}`
       router.replace(newUrl)
     }
-  }, [query, currentUser?.id, currentSessionId, sendMessage, router, searchParams])
+  }, [
+    query,
+    currentUser?.id,
+    currentSessionId,
+    sendMessage,
+    router,
+    searchParams
+  ])
 
   const handleSubmit = (inputValue: string, files?: File[]) => {
     setIsChatMode(true)
@@ -194,131 +193,77 @@ const PromptSection = ({ sessionId }: PromptSectionProps) => {
 
   const handleOnNoClick = () => {}
 
+
   const handleSendImage = async (selectedImage: File[]) => {
-    for (const image of selectedImage) {
-      if (!image) return
-      //   const fakeMessage: MessageItem = {
-      //     id: uuid,
-      //     attachments: [
-      //       {
-      //         id: uuid,
-      //         name: image.name,
-      //         mimeType: image.type,
-      //         size: image.size,
-      //         imageData: {
-      //           url: URL.createObjectURL(image),
-      //           width: 0,
-      //           height: 0,
-      //           previewUrl: '',
-      //           maxWidth: 0,
-      //           maxHeight: 0,
-      //           renderAsSticker: false,
-      //           imageType: 0
-      //         }
-      //       }
-      //     ],
-      //     status: 'sending'
-      //   }
-
-      //   dispatch(addNewCustomMessage(fakeMessage))
-
-      //   try {
-      //     const formData = new FormData()
-      //     formData.append('file', image)
-      //     formData.append('type', 'IMAGE')
-      //     const response = await postImageFile(
-      //       currentConversation.id,
-      //       formData,
-      //       false
-      //     )
-      //     const newMessageId = response.data.message.id
-
-      //     dispatch(updateMessageId({ oldId: uuid, newId: newMessageId }))
-      //   } catch (error) {
-      //     throw error
-      //   } finally {
-      //     setSelectedImage([])
-      //   }
-      // }
-    }
+    // Image handling logic...
   }
 
   return (
-    <div className="flex-1 relative flex flex-col">
-      <div
-        className={`flex-1 flex items-center justify-center ${
-          isChatMode ? '!hidden' : 'opacity-100 mt-21'
-        }`}
-      >
-        <div className="text-center">
-          <div className="mb-8">
-            <div className="w-24 h-24 mx-auto mb-6 bg-pink-200 rounded-full flex items-center justify-center">
-              <span className="text-2xl">🗺️</span>
+    <div className="flex-1 relative flex flex-col h-full py-8 px-5">
+      {!isChatMode ? (
+        <div className={`flex-1 flex flex-col items-center justify-center`}>
+          <div className="text-center">
+            <div className="mb-8">
+              <h1 className="text-[60px] font-bold text-gray-900 mb-4 flex">
+                Lên ý tưởng cùng Plango <HeartTitleIcon />
+              </h1>
+              <p className="text-[#060304] mb-2 text-lg">
+                Plango ở đây để giúp bạn có được chuyến đi đẹp nhất trong cuộc
+                đời của mình
+              </p>
+              <p className="text-[#060304] mb-2 text-lg">
+                Hãy bắt đầu hỏi mình bất cứ điều gì về du lịch!
+              </p>
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">
-              Where to today?
-            </h1>
-            <p className="text-gray-600 mb-2">
-              Hey there, I'm here to assist you in planning your experience.
-            </p>
-            <p className="text-gray-600">
-              Ask me anything travel related or upload files for assistance.
-            </p>
           </div>
         </div>
-      </div>
-
-      <div
-        className={`relative flex-1 px-4 transition-opacity duration-500 ${
-          isChatMode ? 'opacity-100' : 'opacity-0 h-0 overflow-hidden '
-        }`}
-      >
-        <div className="mx-auto">
-          <div className="max-h-[80vh] overflow-y-auto space-y-2 mb-4 no-scrollbar">
-            {/* {status === 'submitted' && <LoadingIndicator />} */}
-            {messages.map((message) => (
-              <Message key={message.id} from={message.role}>
-                <MessageContent>
-                  {message.parts.map((part, i) => {
-                    switch (part.type) {
-                      case 'text':
-                        return (
-                          <AIResponse key={`${message.id}-${i}`}>
-                            {part.text}
-                          </AIResponse>
-                        )
-                      case 'data-interrupt':
-                        return (
-                          <ApproveSelect
-                            key={`${message.id}-${i}`}
-                            label="Do you want to continue?"
-                            onYes={handleOnYesClick}
-                            onNo={handleOnNoClick}
-                          />
-                        )
-                      default:
-                        return null
-                    }
-                  })}
-                </MessageContent>
-                {message.role === 'assistant' ? (
-                  <span className="p-1 ring-1 ring-gray-300 rounded-full">
-                    <MdAssistant className="size-6" />
-                  </span>
-                ) : (
-                  <span className="p-1 ring-1 ring-gray-300 rounded-full">
-                    <MdPerson className="size-6" />
-                  </span>
-                )}
-              </Message>
-            ))}
-            {itinerary && <ItineraryDetailView data={itinerary} />}
-            <div ref={messagesEndRef} />
+      ) : (
+        <div className={`relative flex-1 px-4 transition-opacity duration-500`}>
+          <div className="mx-auto">
+            <div className="max-h-[80vh] overflow-y-auto space-y-2 mb-4 no-scrollbar">
+              {messages.map((message) => (
+                <Message key={message.id} from={message.role}>
+                  <MessageContent>
+                    {message.parts.map((part, i) => {
+                      switch (part.type) {
+                        case 'text':
+                          return (
+                            <AIResponse key={`${message.id}-${i}`}>
+                              {part.text}
+                            </AIResponse>
+                          )
+                        case 'data-interrupt':
+                          return (
+                            <ApproveSelect
+                              key={`${message.id}-${i}`}
+                              label="Do you want to continue?"
+                              onYes={handleOnYesClick}
+                              onNo={handleOnNoClick}
+                            />
+                          )
+                        default:
+                          return null
+                      }
+                    })}
+                  </MessageContent>
+                  {message.role === 'assistant' ? (
+                    <span className="p-1 ring-1 ring-gray-300 rounded-full">
+                      <MdAssistant className="size-6" />
+                    </span>
+                  ) : (
+                    <span className="p-1 ring-1 ring-gray-300 rounded-full">
+                      <MdPerson className="size-6" />
+                    </span>
+                  )}
+                </Message>
+              ))}
+              <div ref={messagesEndRef} />
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
-      <div className="pb-10 relative">
+      <div className="bot flex justify-center items-center">
         <PromptContainer
           disabled={status !== 'ready'}
           handleSubmit={handleSubmit}

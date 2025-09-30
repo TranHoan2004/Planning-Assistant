@@ -7,6 +7,11 @@
 @source '../../node_modules/streamdown/dist/index.js';
 @custom-variant dark (&:is(.dark *));
 
+:root {
+  --sidebar: 64px;
+  --header: 60px;
+}
+
 .bg-gradient-primary {
   @apply bg-gradient-to-r from-[#F65555] to-[#FFB26A]
 }
@@ -31,3 +36,4 @@
     scrollbar-width: none;
   }
 }
+

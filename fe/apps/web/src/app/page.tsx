@@ -6,14 +6,17 @@ import { Button } from '@heroui/button'
 import { Card } from '@heroui/card'
 import { Image } from '@heroui/image'
 import InputContainer from '@/components/ui/landing-page/InputContainer'
+import { getTranslations } from 'next-intl/server'
+import { ScrollShadow } from '@heroui/scroll-shadow'
 
-const Home = () => {
+const Home = async () => {
+  const t = await getTranslations('HomePage')
   return (
-    <div className="flex h-screen">
-      <Sidebar />
-      <div className="flex-1 flex flex-col">
-        <ChatHeader />
-        <div className="flex-1 overflow-y-auto">
+    <div className="flex flex-col h-screen">
+      <ChatHeader />
+      <div className="flex-1 flex h-[calc(100vh-62px)]">
+        <Sidebar />
+        <ScrollShadow className="flex-1 h-full" size={0} hideScrollBar>
           <main className="flex flex-col items-center justify-center px-4 md:px-6">
             <div className="w-full max-w-7xl mx-auto h-full flex flex-col justify-center space-y-12">
               {/* Hero Section */}
@@ -21,10 +24,10 @@ const Home = () => {
                 <div className="flex flex-col items-center justify-center opacity-100 transition-opacity duration-300 gap-10">
                   <div className="mb-6">
                     <h1 className="mb-6 text-center text-6xl font-black">
-                      "Plan less, Travel more."
+                      {t('slogan')}
                     </h1>
                     <p className="text-center text-base font-normal">
-                      Use AI to create your perfect group itinerary in minutes.
+                      {t('description')}
                     </p>
                   </div>
 
@@ -291,7 +294,7 @@ const Home = () => {
               </div>
             </div>
           </main>
-        </div>
+        </ScrollShadow>
       </div>
     </div>
   )

@@ -7,10 +7,14 @@ import { Button } from '@heroui/button'
 import Link from 'next/link'
 import { FaArrowUp } from 'react-icons/fa6'
 import { v4 as uuidv4 } from 'uuid'
+import { useTranslations } from 'next-intl'
 
 const InputContainer = () => {
   const router = useRouter()
   const [input, setInput] = useState('')
+  const t = useTranslations('HomePage')
+
+  const quickActions = t.raw('quick-action') as string[]
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -57,13 +61,7 @@ const InputContainer = () => {
       {/* Quick Action Buttons */}
       <div className="mt-6 min-h-[96px]">
         <div className="flex flex-wrap justify-center gap-2 max-w-[545px] mx-auto">
-          {[
-            'Plan a Weekend Getaway',
-            'Group Trip to Europe',
-            'Budget Travel Ideas',
-            'Family Vacation',
-            'More'
-          ].map((text) => (
+          {quickActions.map((text) => (
             <Button
               key={text}
               variant="bordered"

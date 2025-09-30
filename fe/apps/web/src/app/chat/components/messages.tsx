@@ -1,4 +1,4 @@
-import { Avatar, AvatarIcon } from '@heroui/avatar'
+import { Avatar } from '@heroui/avatar'
 import { cn } from '@repo/utils/tailwind-utils'
 import type { UIMessage } from 'ai'
 import { cva, type VariantProps } from 'class-variance-authority'

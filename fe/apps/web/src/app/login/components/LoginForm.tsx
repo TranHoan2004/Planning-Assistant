@@ -77,7 +77,7 @@ const LoginForm = () => {
       />
 
       <CustomButton
-        type='submit'
+        type="submit"
         label={isSubmitting ? 'Signing in...' : 'Continue'}
         disabled={isSubmitting}
       />

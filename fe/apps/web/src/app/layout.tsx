@@ -3,6 +3,8 @@ import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import './globals.css'
 import { Providers } from './providers'
+import { NextIntlClientProvider } from 'next-intl'
+import { cookies } from 'next/headers'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -18,15 +20,18 @@ export const metadata: Metadata = {
   description: 'Your perfect travel assistant'
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children
 }: Readonly<{
   children: React.ReactNode
 }>) {
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <Providers>{children}</Providers>
+        <NextIntlClientProvider>
+          <Providers>{children}</Providers>
+        </NextIntlClientProvider>
       </body>
     </html>
   )

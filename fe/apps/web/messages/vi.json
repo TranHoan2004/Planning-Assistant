@@ -1,0 +1,25 @@
+{
+    "HomePage": {
+        "slogan": "\"Ít kế hoạch, nhiều khám phá\"",
+        "description": "Sử dụng AI để tạo hành trình nhóm hoàn hảo của bạn trong vài phút.",
+        "pre-promt": [
+            "Hãy giúp tôi lập kế hoạch cho chuyến đi nhóm.",
+            "Tôi cần một lịch trình cho chuyến đi của chúng tôi.",
+            "Bạn có thể đề xuất một kế hoạch du lịch không?",
+            "Tôi muốn một lịch trình cho chuyến đi của chúng tôi.",
+            "Hãy giúp tôi tạo một kế hoạch du lịch.",
+            "Tôi cần một lịch trình cho chuyến đi nhóm của chúng tôi.",
+            "Bạn có thể giúp tôi lập kế hoạch cho chuyến đi không?",
+            "Tôi muốn một kế hoạch du lịch cho nhóm của chúng tôi.",
+            "Hãy giúp tôi tạo một lịch trình cho chuyến đi của chúng tôi.",
+            "Tôi cần một kế hoạch du lịch cho chuyến đi của chúng tôi."
+        ],
+        "quick-action": [
+            "Kế hoạch du lịch Đà Nẵng",
+            "Kế hoạch du lịch Hội An",
+            "Ý tưởng du lịch tiết kiệm",
+            "Du lịch với gia đình",
+            "Xem thêm..."
+        ]
+    }
+}

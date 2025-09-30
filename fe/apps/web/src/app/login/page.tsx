@@ -48,7 +48,7 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <Footer/>
+          <Footer />
         </div>
 
         {/* Right Side */}
