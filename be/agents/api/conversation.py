@@ -60,12 +60,13 @@ async def reply(request: Request, conversation_req: ConversationRequest):
         raise HTTPException(status_code=500, detail=f"Internal error: {str(e)}") from e
 
 
-@router.get("/v1/conversation/messages")
+@router.get("/v1/conversation/{session_id}")
 @limiter.limit("10/minutes")
-async def get_conversation(request: Request, session_id: str, user_id: str):
-    logger.info(f"current session: {session_id}, user_id: {user_id}")
+async def get_conversation(request: Request, session_id: str):
+    logger.info(f"get converstation for session: {session_id}")
     try:
-        pass
+        result = await agent.get_conversation(session_id)
+        return result
     except Exception as e:
         logger.error(f"Internal error: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Internal error: {str(e)}") from e

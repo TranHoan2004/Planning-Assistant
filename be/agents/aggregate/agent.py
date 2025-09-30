@@ -1,11 +1,11 @@
-from typing import Optional
+from typing import Optional, Union
 from uuid import uuid4
 from enum import Enum
 
 from langgraph.graph.state import CompiledStateGraph
 from loguru import logger
 from langchain_core.runnables import RunnableConfig
-from langchain_core.messages import HumanMessage
+from langchain_core.messages import AIMessage, HumanMessage
 from langgraph.checkpoint.postgres.aio import AsyncPostgresSaver
 from langgraph.types import Command
 from psycopg_pool import AsyncConnectionPool
@@ -170,6 +170,44 @@ class Agent:
         except Exception as e:
             logger.error(f"Error getting response: {str(e)}")
             raise RuntimeError(f"Error getting response: {str(e)}") from e
+
+    async def get_conversation(self, session_id: str):
+        if self._graph is None:
+            self._graph = await self._create_workflow_graph()
+
+        config: RunnableConfig = {
+            "configurable": {
+                "thread_id": session_id,
+            },
+        }
+
+        final_msg = []
+        try:
+            result = await self._graph.aget_state(config=config)
+            for msg in result.values.get("messages", []):
+                converted_msg = self._convert_to_ui_message(msg)
+                final_msg.append(converted_msg)
+            return final_msg
+        except Exception as e:
+            logger.error(f"Error getting response: {str(e)}")
+            raise RuntimeError(f"Error getting response: {str(e)}") from e
+
+    def _convert_to_ui_message(self, msg: Union[HumanMessage, AIMessage]) -> Optional[dict]:
+        if isinstance(msg, HumanMessage):
+            return {
+                "id": msg.id,
+                "role": "user",
+                "parts": [{"type": "text", "text": msg.content}],
+            }
+        elif isinstance(msg, AIMessage):
+            if msg.content and len(msg.tool_calls) == 0:
+                return {
+                    "id": msg.id,
+                    "role": "assistant",
+                    "parts": [{"type": "text", "text": msg.content}],
+                }
+
+        return None
 
 
 agent = Agent()
