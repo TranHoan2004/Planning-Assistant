@@ -1,0 +1,12 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "config",
+    srcs = [
+        "config.go",
+        "logger.go",
+    ],
+    importpath = "gitlab.com/plango-travel/backend/services/user_profile/internal/infrastructure/config",
+    visibility = ["//services/user_profile:__subpackages__"],
+    deps = ["@org_uber_go_zap//:zap"],
+)

@@ -1,6 +1,6 @@
 'use client'
 
-import { ItineraryResponse } from '@/app/chat/_schema/itinerary'
+import { ItineraryResponse } from '@/app/(main)/chat/_schema/itinerary'
 import { createContext, useState, use } from 'react'
 
 type ChatContextType = {
@@ -10,6 +10,8 @@ type ChatContextType = {
   setInput: (input: string) => void
   itinerary?: ItineraryResponse
   setItinerary: (itinerary?: ItineraryResponse) => void
+  recommendHotelIds: string[]
+  setRecommendHotelIds: (hotelIds: string[]) => void
 }
 
 export const ChatContext = createContext<ChatContextType | null>(null)
@@ -27,6 +29,8 @@ export const ChatProvider = ({ children, sessionId }: ChatProviderProps) => {
     undefined
   )
 
+  const [recommendHotelIds, setRecommendHotelIds] = useState<string[]>([])
+
   return (
     <ChatContext.Provider
       value={{
@@ -35,7 +39,9 @@ export const ChatProvider = ({ children, sessionId }: ChatProviderProps) => {
         input,
         setInput,
         itinerary,
-        setItinerary
+        setItinerary,
+        recommendHotelIds,
+        setRecommendHotelIds
       }}
     >
       {children}

@@ -14,20 +14,38 @@ from agents.shared.infrastructure.connection_pool import (
 )
 from agents.api.conversation import router as conv_router
 from agents.api.itinerary import router as itinerary_router
+from agents.shared.utils.googlemaps_api import GoogleMapsAPI
+from agents.shared.utils.bookingcom_api import BookingComAPI
+from agents.shared.infrastructure.db import init_db
 
 is_dev = settings.ENVIRONMENT == "dev"
 init_logging(is_dev)
 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
+async def startup(app: FastAPI):
+    googlemaps_api = GoogleMapsAPI(api_key=settings.GOOGLE_MAPS_API_KEY)
+    booking_api = BookingComAPI(api_key=settings.RAPIDAPI_KEY)
     await init_connection_pool()
-    yield
+    await init_db()
+    await googlemaps_api.__aenter__()
+    app.state.googlemaps_api = googlemaps_api
+    app.state.booking_api = booking_api
+
+
+async def shutdown(app: FastAPI):
+    await app.state.googlemaps_api.__aexit__(None, None, None)
     await close_pool()
 
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await startup(app)
+    yield
+    await shutdown(app)
+
+
 app = FastAPI(
-    title="Plango Chat API",
+    title="Planggo Chat API",
     lifespan=lifespan,
 )
 app.add_middleware(
@@ -42,7 +60,7 @@ app.add_exception_handler(RateLimitExceeded, rate_limit_exceeded_handler)
 
 # Routes setup
 app.include_router(conv_router)
-app.include_router(itinerary_router)
+# app.include_router(itinerary_router)
 
 
 @app.get("/health")

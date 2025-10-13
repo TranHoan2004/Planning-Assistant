@@ -4,7 +4,8 @@ import localFont from 'next/font/local'
 import './globals.css'
 import { Providers } from './providers'
 import { NextIntlClientProvider } from 'next-intl'
-import { cookies } from 'next/headers'
+import { getMessages } from 'next-intl/server'
+import { GoogleTagManager } from '@next/third-parties/google'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -25,11 +26,13 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const messages = await getMessages()
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="vi" suppressHydrationWarning>
+      <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID!} />
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <NextIntlClientProvider>
+        <NextIntlClientProvider messages={messages}>
           <Providers>{children}</Providers>
         </NextIntlClientProvider>
       </body>

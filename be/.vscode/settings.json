@@ -7,7 +7,7 @@
         "bazel-*/**": true
     },
     "files.exclude": {
-        "bazel-*": true
+        "bazel-*/**": true
     },
 
     "python.analysis.exclude": [
@@ -15,18 +15,36 @@
         "grade/**",
         "infra/**",
         "tools/**",
+        "requirements/**",
         "services/auth/**",
-        "services/accommodation/**"
+        "services/accommodation/**",
+        "services/user_profile/**"
     ],
     "bazel.lsp.command": "starpls",
     "bazel.lsp.args": ["server", "--experimental_infer_ctx_attributes"],
     "windsurfPyright.analysis.autoImportCompletions": true,
-    "windsurfPyright.analysis.exclude": {
-        "bazel-*/**": true,
-        "grade/**": true,
-        "infra/**": true,
-        "tools/**": true,
-        "services/auth/**": true,
-        "services/accommodation/**": true,
-    }
+    "windsurfPyright.analysis.exclude": [
+        ".git",
+        ".venv",
+        "**/__pycache__",
+        "**/node_modules",
+        "bazel-*/**",
+        "grade/**",
+        "infra/**",
+        "tools/**",
+        "requirements/**",
+        "services/auth/**",
+        "services/accommodation/**",
+        "services/user_profile/**"
+    ],
+    "cursorpyright.analysis.autoImportCompletions": true,
+    "cursorpyright.analysis.exclude": [
+        "bazel-*/**",
+        "grade/**",
+        "infra/**",
+        "tools/**",
+        "services/auth/**",
+        "services/accommodation/**",
+        "services/user_profile/**"
+    ]
 }

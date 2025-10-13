@@ -4,8 +4,11 @@ import LoginForm from './components/LoginForm'
 import RightSide from './components/RightSide'
 import { Link } from '@heroui/link'
 import Footer from '@/app/login/components/Footer'
+import { getTranslations } from 'next-intl/server'
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  const t = await getTranslations('LoginPage')
+
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <div className="grid h-full min-h-screen lg:grid-cols-2">
@@ -28,15 +31,11 @@ export default function LoginPage() {
           <div className="flex justify-center flex-1 items-center">
             <div className="w-full max-w-[450px] space-y-8">
               <div className="w-full text-center space-y-2">
-                <h2 className="text-6xl font-[700]">
-                  Plan Less
-                  <br />
-                  Travel More
-                </h2>
+                <h2 className="text-6xl font-[700]">{t('slogan')}</h2>
                 <p className="text-gray-500 text-md mt-4">
-                  The AI for planning and booking.{' '}
+                  {t('subtitle') + ' '}
                   <Link href="/" className="text-orange-600">
-                    Try it now !
+                    {t('tryNow')}
                   </Link>
                 </p>
               </div>

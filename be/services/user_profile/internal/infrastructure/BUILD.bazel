@@ -1,0 +1,17 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "infrastructure",
+    srcs = ["modules.go"],
+    importpath = "gitlab.com/plango-travel/backend/services/user_profile/internal/infrastructure",
+    visibility = ["//services/user_profile:__subpackages__"],
+    deps = [
+        "//services/user_profile/internal/application/usecases",
+        "//services/user_profile/internal/infrastructure/config",
+        "//services/user_profile/internal/infrastructure/database",
+        "//services/user_profile/internal/infrastructure/middlewares",
+        "//services/user_profile/internal/infrastructure/repositories",
+        "//services/user_profile/internal/infrastructure/services",
+        "@org_uber_go_fx//:fx",
+    ],
+)

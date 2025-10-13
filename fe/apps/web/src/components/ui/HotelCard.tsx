@@ -129,7 +129,7 @@ export default function HotelCard({
             height={256}
             src={currentImage}
             alt={title}
-            className={`object-cover object-center ${imageClassName}`}
+            className={`w-full object-cover object-center ${imageClassName}`}
             removeWrapper
             // onError={() => handleImageError(currentImageIndex)}
             onClick={() => onImageClick?.(currentImage, currentImageIndex)}
@@ -190,7 +190,7 @@ export default function HotelCard({
               className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-black bg-opacity-50 hover:bg-opacity-70 text-white p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"
               aria-label="Previous image"
             >
-              <FaAngleLeft/>
+              <FaAngleLeft />
             </button>
 
             {/* Next Button */}

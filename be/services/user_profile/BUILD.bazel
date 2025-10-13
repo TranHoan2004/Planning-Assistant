@@ -1,0 +1,23 @@
+load("@rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "user_profile_lib",
+    srcs = ["main.go"],
+    importpath = "gitlab.com/plango-travel/backend/services/user_profile",
+    visibility = ["//visibility:private"],
+    deps = [
+        "//services/user_profile/bootstrap",
+        "//services/user_profile/internal/application",
+        "//services/user_profile/internal/infrastructure",
+        "//services/user_profile/internal/presentation",
+        "@org_uber_go_fx//:fx",
+        "@org_uber_go_fx//fxevent",
+        "@org_uber_go_zap//:zap",
+    ],
+)
+
+go_binary(
+    name = "user_profile",
+    embed = [":user_profile_lib"],
+    visibility = ["//visibility:public"],
+)

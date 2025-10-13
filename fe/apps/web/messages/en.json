@@ -1,7 +1,7 @@
 {
     "HomePage": {
         "slogan": "\"Plan less, travel more\"",
-        "description": "Use AI to create your perfect group itinerary in minutes.",
+        "description": "Use AI to create your perfect group journey in minutes.",
         "pre-promt": [
             "Help me plan a group trip.",
             "I need an itinerary for our trip.",
@@ -9,17 +9,193 @@
             "I want an itinerary for our trip.",
             "Help me create a travel plan.",
             "I need an itinerary for our group trip.",
-            "Can you help me plan a trip?",
+            "Can you help me plan the trip?",
             "I want a travel plan for our group.",
             "Help me create an itinerary for our trip.",
             "I need a travel plan for our trip."
         ],
         "quick-action": [
-            "Danang Travel Plan",
-            "Hoi An Travel Plan",
-            "Budget Travel Ideas",
-            "Family Travel",
+            "Da Nang travel plan",
+            "Hoi An travel plan",
+            "Budget travel ideas",
+            "Family travel",
             "See more..."
         ]
+    },
+    "LoginPage": {
+        "slogan": "\"Plan less, travel more\"",
+        "subtitle": "Plango is here to help you have the best trip of your life.",
+        "tryNow": "Try now!",
+        "form": {
+            "email": "Email",
+            "emailPlaceholder": "Enter your email",
+            "password": "Password",
+            "passwordPlaceholder": "Enter your password",
+            "loginButton": "Log in",
+            "loginButtonLoading": "Logging in...",
+            "registerText": "Don’t have an account? ",
+            "registerLink": "Register now",
+            "forgotPassword": "Forgot password?"
+        },
+        "error": {
+            "invalidCredentials": "Incorrect email or password",
+            "invalidEmail": "Please enter a valid email address",
+            "invalidPassword": "Password must have at least {passwordMin} characters"
+        },
+        "prompts": [
+            "Ask Plango to create a complete itinerary",
+            "Request hotel recommendations at your destination",
+            "Learn about local activities and attractions"
+        ]
+    },
+    "RegisterPage": {
+        "slogan": "\"Plan less, travel more\"",
+        "subtitle": "Plango is here to help you have the best trip of your life.",
+        "tryNow": "Try now!",
+        "form": {
+            "email": "Email",
+            "emailPlaceholder": "Enter your email",
+            "password": "Password",
+            "passwordPlaceholder": "Create a password",
+            "confirmPassword": "Confirm password",
+            "confirmPasswordPlaceholder": "Confirm your password",
+            "passwordRule": "At least {passwordMin} characters, including uppercase, lowercase, numbers, and special characters",
+            "registerButton": "Register",
+            "registerButtonLoading": "Creating account...",
+            "loginText": "Already have an account? ",
+            "loginLink": "Log in now"
+        },
+        "error": {
+            "emailExists": "Email already exists",
+            "invalidEmail": "Please enter a valid email address",
+            "passwordMismatch": "Passwords do not match",
+            "passwordLength": "Password must be at least 8 characters",
+            "passwordComplexity": "Password must include uppercase, lowercase, numbers, and special characters"
+        },
+        "prompts": [
+            "Ask Plango to create a complete itinerary",
+            "Request hotel recommendations at your destination",
+            "Learn about local activities and attractions"
+        ]
+    },
+    "ForgotPasswordPage": {
+        "title": "Forgot your password?",
+        "subtitle": "Enter your email to receive an OTP code to reset your password.",
+        "verifyEmailBtn": "Verify Email",
+        "otp-sent": "The OTP code has been sent to your email.",
+        "otp-valid": "Your OTP code has been successfully verified.",
+        "otp-invalid": "The OTP code is invalid or has expired.",
+        "otp-get-error": "An error occurred while retrieving the OTP code:",
+        "otp-title": "OTP Verification",
+        "otp-subtitle": "Please enter the 6-digit OTP code sent to your email.",
+        "otp-placeholder": "Enter OTP code",
+        "otp-resend": "Resend OTP code",
+        "backToLogin": "Back to login page",
+        "emailNotFound": "Email not found in the system",
+        "sendOtpSuccess": "Please check your email to get the 6-digit OTP code",
+        "verifyEmailFailed": "Email verification failed. Please try again.",
+        "resetPassword": "Reset Password",
+        "resetPasswordSubtitle": "Please enter a new password for your account.",
+        "resetPasswordBtn": "Reset Password",
+        "newPassword": "New Password",
+        "passwordLength": "Password must be at least {passwordMin} characters.",
+        "passwordRules": "Password must include uppercase, lowercase, numbers, and special characters.",
+        "passwordMismatch": "Passwords do not match.",
+        "savePasswordErrorDefault": "Invalid password!",
+        "resetPasswordSuccessMessage": "Your password has been successfully reset. Please log in again.",
+        "resetPasswordSuccessTitle": "Password Reset Successful",
+        "resetPasswordUnexpectedError": "An unexpected error occurred. Please try again.",
+        "passwordLabel": "Password",
+        "passwordPlaceholder": "Enter new password",
+        "confirmPasswordLabel": "Confirm Password",
+        "confirmPasswordPlaceholder": "Confirm new password"
+    },
+    "Header": {
+        "explore": "Explore",
+        "flight": "Flights",
+        "hotel": "Hotels",
+        "blog": "Blog",
+        "about-us": "About Plango",
+        "login": "Log in",
+        "logout": "Log out",
+        "plan-now": "Plan now",
+        "search-placeholder": "Search..."
+    },
+    "Sidebar": {
+        "tool-tips": {
+            "new-chat": "New conversation",
+            "chat-history": "Chat history",
+            "saved": "Saved",
+            "language": "Change Language"
+        },
+        "follow-us": "Follow Plango"
+    },
+    "ChatPage": {
+        "title": "New Plan",
+        "description": "Plan your perfect group trip with Plango",
+        "approve-select": {
+            "yes": "Yes",
+            "no": "No"
+        },
+        "itinenaryDetailView": {
+            "day": "Day",
+            "destination": "Destination",
+            "estimated-budget": "Estimated budget",
+            "daily-itinerary": "Daily itinerary",
+            "daily-budget": "Daily budget",
+            "activity-timeline": {
+                "morning": "Morning",
+                "afternoon": "Afternoon",
+                "evening": "Evening"
+            },
+            "aditional-details": {
+                "meals": "Meals",
+                "transportation": "Transportation"
+            },
+            "important-travel-notes": "Important travel notes"
+        },
+        "loadingIndicator": {
+            "aiThinking": "AI is thinking..."
+        },
+        "promptContainer": {
+            "placeholderDefault": "Help me plan a group trip.",
+            "file": "File",
+            "fileCount": "selected"
+        },
+        "promtSection": {
+            "title": "Brainstorm with Plango",
+            "subtitle": "Plango is here to help you have the best trip of your life.",
+            "helper-text": "Start by asking anything about travel!",
+            "placeholderProps": "Create your perfect travel plan with Plango now..."
+        },
+        "suggestionSection": {
+            "hotel": {
+                "error": {
+                    "title": "Hotel search error",
+                    "subtitle": "Please try again later.",
+                    "button": "Retry"
+                },
+                "result": {
+                    "title": "Hotels in {location}"
+                },
+                "filter": {
+                    "arrange": {
+                        "title": "Sort by",
+                        "priceLowToHigh": "Lowest price",
+                        "highestRecommended": "Highest rated",
+                        "mostReviewed": "Most reviewed"
+                    }
+                },
+                "loading": {
+                    "isLoadingTrue": "Loading hotels...",
+                    "loadmore": "Load more hotels"
+                },
+                "noResult": {
+                    "title": "No hotels found",
+                    "subtitle": "Please try again with a different keyword.",
+                    "button": "Retry"
+                }
+            }
+        }
     }
 }

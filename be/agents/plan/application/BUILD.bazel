@@ -5,15 +5,19 @@ py_library(
     srcs = [
         "graph.py",
         "nodes.py",
+        "state.py",
         "tools.py",
     ],
     visibility = ["//:__subpackages__"],
     deps = [
         "//agents/plan/domain",
-        "//agents/shared",
+        "//agents/shared:models",
+        "//agents/shared:runtime",
         "//agents/shared/infrastructure",
-        "//agents/shared/utils",
         "@pip//langchain_core",
         "@pip//langgraph",
+        "@pip//langgraph_prebuilt",
+        "@pip//loguru",
+        "@pip//pydantic",
     ],
 )

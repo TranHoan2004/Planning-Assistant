@@ -1,0 +1,12 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "presentation",
+    srcs = ["modules.go"],
+    importpath = "gitlab.com/plango-travel/backend/services/user_profile/internal/presentation",
+    visibility = ["//services/user_profile:__subpackages__"],
+    deps = [
+        "//services/user_profile/internal/presentation/api",
+        "@org_uber_go_fx//:fx",
+    ],
+)

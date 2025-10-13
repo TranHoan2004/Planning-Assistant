@@ -6,6 +6,8 @@
 ---
 manifest:
   modules_mapping:
+    PIL: pillow
+    aiofiles: aiofiles
     aiohappyeyeballs: aiohappyeyeballs
     aiohttp: aiohttp
     aiosignal: aiosignal
@@ -13,32 +15,43 @@ manifest:
     anyio: anyio
     attr: attrs
     attrs: attrs
+    audioop: audioop_lts
+    brotli: Brotli
     certifi: certifi
     charset_normalizer: charset_normalizer
     click: click
     colorama: colorama
     copier: copier
+    dateutil: python_dateutil
     deprecated: Deprecated
     distro: distro
     dotenv: python_dotenv
     dunamai: dunamai
     fastapi: fastapi
+    ffmpy: ffmpy
+    filelock: filelock
     frozenlist: frozenlist
+    fsspec: fsspec
     funcy: funcy
+    gradio: gradio
+    gradio_client: gradio_client
     greenlet: greenlet
-    groq: groq
+    groovy: groovy
     h11: h11
+    hf_xet: hf_xet
     httpcore: httpcore
     httpx: httpx
+    huggingface_hub: huggingface_hub
     idna: idna
     iniconfig: iniconfig
     jinja2: jinja2
     jinja2_ansible_filters: jinja2_ansible_filters
+    jiter: jiter
     jsonpatch: jsonpatch
     jsonpointer: jsonpointer
     langchain: langchain
     langchain_core: langchain_core
-    langchain_groq: langchain_groq
+    langchain_openai: langchain_openai
     langchain_tavily: langchain_tavily
     langchain_text_splitters: langchain_text_splitters
     langgraph.cache.base: langgraph_checkpoint
@@ -66,14 +79,21 @@ manifest:
     langgraph.version: langgraph
     langgraph.warnings: langgraph
     langgraph_sdk: langgraph_sdk
+    langgraph_swarm: langgraph_swarm
     langsmith: langsmith
     limits: limits
     loguru: loguru
-    markupsafe: MarkupSafe
+    markdown_it: markdown_it_py
+    markupsafe: markupsafe
+    mdurl: mdurl
     multidict: multidict
+    multipart: python_multipart
+    numpy: numpy
+    openai: openai
     orjson: orjson
     ormsgpack: ormsgpack
     packaging: packaging
+    pandas: pandas
     pathspec: pathspec
     platformdirs: platformdirs
     pluggy: pluggy
@@ -87,22 +107,40 @@ manifest:
     pydantic: pydantic
     pydantic_core: pydantic_core
     pydantic_settings: pydantic_settings
+    pydub: pydub
     pygments: pygments
     pytest: pytest
     pytest_asyncio: pytest_asyncio
+    python_multipart: python_multipart
+    pytz: pytz
     questionary: questionary
+    regex: regex
     requests: requests
     requests_toolbelt: requests_toolbelt
+    rich: rich
+    ruff: ruff
+    safehttpx: safehttpx
+    semantic_version: semantic_version
+    shellingham: shellingham
+    six: six
     slowapi: slowapi
     sniffio: sniffio
     sqlalchemy: sqlalchemy
+    sqlmodel: sqlmodel
     starlette: starlette
     tenacity: tenacity
+    tiktoken: tiktoken
+    tiktoken_ext.openai_public: tiktoken
+    tomlkit: tomlkit
+    tqdm: tqdm
+    typer: typer
     typing_extensions: typing_extensions
     typing_inspection: typing_inspection
+    tzdata: tzdata
     urllib3: urllib3
     uvicorn: uvicorn
     wcwidth: wcwidth
+    websockets: websockets
     wrapt: wrapt
     xxhash: xxhash
     yaml: PyYAML

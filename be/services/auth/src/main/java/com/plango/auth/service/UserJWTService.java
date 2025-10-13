@@ -8,6 +8,7 @@ import java.util.function.Function;
 import javax.crypto.SecretKey;
 
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
 @Service
+@RequiredArgsConstructor
 public class UserJWTService {
     @Value("${exe.security.jwt.secret-key}")
     private String secretKey;
@@ -27,6 +29,9 @@ public class UserJWTService {
 
     @Value("${exe.security.jwt.refresh-token.expiration}")
     private long refreshExpiration;
+
+    private final RedisService redisService;
+
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -64,12 +69,18 @@ public class UserJWTService {
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
+        if (redisService.isTokenRevoked(token)) {
+            return false;
+        }
         final String username = extractUsername(token);
         final String type = extractClaim(token, claims -> claims.get("type", String.class));
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token) && "access".equals(type));
     }
 
     public boolean isRefreshTokenValid(String token, UserDetails userDetails) {
+        if (redisService.isTokenRevoked(token)) {
+            return false;
+        }
         final String username = extractUsername(token);
         final String type = extractClaim(token, claims -> claims.get("type", String.class));
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token) && "refresh".equals(type));
@@ -79,7 +90,7 @@ public class UserJWTService {
         return extractExpiration(token).before(new Date());
     }
 
-    private Date extractExpiration(String token) {
+    public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 

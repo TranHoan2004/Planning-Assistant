@@ -57,3 +57,13 @@ class DataStreamFinishPart(DataStreamPart):
 class DataStreamInterruptPart(DataStreamPart):
     def __init__(self, metadata: dict):
         super().__init__("tool-interrupt", {"metadata": metadata})
+
+
+class DataStreamStartStepPart(DataStreamPart):
+    def __init__(self):
+        super().__init__("start-step", None)
+
+
+class DataStreamFinishStepPart(DataStreamPart):
+    def __init__(self):
+        super().__init__("finish-step", None)

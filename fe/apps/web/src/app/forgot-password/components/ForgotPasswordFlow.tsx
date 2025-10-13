@@ -8,12 +8,14 @@ import Footer from '@/app/login/components/Footer'
 import OtpForm from '@/app/forgot-password/components/OtpForm'
 import ResetPasswordForm from '@/app/forgot-password/components/ResetPasswordForm'
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 
 export type Step = 'verify-email' | 'otp' | 'reset-password'
 
 const ForgotPasswordFlow = () => {
   const [step, setStep] = useState<Step>('verify-email')
   const [email, setEmail] = useState('')
+  const t = useTranslations('ForgotPasswordPage')
 
   return (
     <>
@@ -51,7 +53,7 @@ const ForgotPasswordFlow = () => {
                   )}
                   <div className="text-center mt-2">
                     <Link href="/login" className="text-blue-600">
-                      Back to Login
+                      {t('backToLogin')}
                     </Link>
                   </div>
                 </div>

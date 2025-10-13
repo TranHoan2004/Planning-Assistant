@@ -4,10 +4,10 @@ import { NextRequest, NextResponse } from 'next/server'
 
 const getConversation = async (
   request: NextRequest,
-  { params }: { params: { sessionId: string } }
+  { params }: { params: Promise<{ sessionId: string }> }
 ) => {
   const searchParams = request.nextUrl.searchParams
-  const sessionId = params.sessionId
+  const { sessionId } = await params
   const userId = searchParams.get('user_id')
 
   if (!sessionId || !userId) {

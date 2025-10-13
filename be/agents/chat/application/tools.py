@@ -1,5 +1,4 @@
-from typing import Literal
-from typing_extensions import Annotated
+from typing import Literal, Annotated
 
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.messages import SystemMessage
@@ -10,9 +9,9 @@ from langchain_tavily import TavilySearch
 from langchain_core.tools import tool, InjectedToolCallId
 from langgraph.types import Command
 from langchain_core.messages import ToolMessage
-from langgraph.prebuilt import interrupt
+from langchain_core.messages import BaseMessage, HumanMessage, AIMessage
 
-from agents.shared.tools.search_places import SearchPlacesTool
+from agents.shared.tools import SearchPlacesTool
 from agents.shared.infrastructure.config.settings import settings
 from agents.shared.infrastructure.llm import llm
 from agents.shared.models import Place, Plan
@@ -25,6 +24,17 @@ search_tool = TavilySearch(
 )
 
 search_places_tool = SearchPlacesTool(api_key=settings.SERPAPI_API_KEY)
+
+
+# helper to remove assistant messages with pending tool_calls
+def _filter_conversation_messages(messages: list[BaseMessage]) -> list[BaseMessage]:
+    filtered: list[BaseMessage] = []
+    for m in messages:
+        if isinstance(m, HumanMessage):
+            filtered.append(m)
+        elif isinstance(m, AIMessage) and not m.tool_calls and m.content:
+            filtered.append(m)
+    return filtered
 
 
 @tool(parse_docstring=True)
@@ -57,20 +67,19 @@ async def plan_itinerary(
 
     system_prompt = """Extract a travel plan from the user's conversation.
 **PAY ATTENTION** to budget range and user preferences.
-Return ONLY valid JSON in `json` tags\n{format_instructions}
+{format_instructions}
+Return ONLY a valid JSON object. Do not wrap in code fences or tags.
 \n**DO NOT** add any explanation or additional text.
-\nResponse in {language} language."""
+\nResponse in {language} language.
+\nSummary of the conversation so far (if any):\n{summary}"""
     system_prompt = system_prompt.format(
-        format_instructions=parser.get_format_instructions(), language=language
-    )
-
-    summary = "Summary of the conversation so far (if any):\n{summary}".format(
-        summary=state.get("summary", "")
+        format_instructions=parser.get_format_instructions(),
+        language=language,
+        summary=state.get("summary", ""),
     )
 
     prompt = ChatPromptTemplate.from_messages(
         [
-            SystemMessage(content=summary),
             SystemMessage(content=system_prompt),
             MessagesPlaceholder(variable_name="messages"),
         ]
@@ -78,15 +87,18 @@ Return ONLY valid JSON in `json` tags\n{format_instructions}
 
     chain = prompt | llm | parser
 
-    plan: Plan = await chain.ainvoke({"messages": state["messages"]})
+    conv_messages = _filter_conversation_messages(state["messages"])
+    plan: Plan = await chain.ainvoke({"messages": conv_messages})
 
     return Command(
         goto="plan_agent",
         update={
             "plan": plan,
             "language": language,
-            "messages": [
+            "messages": state["messages"]
+            + [
                 ToolMessage(content="Transfer to Plan Agent", tool_call_id=tool_call_id)
             ],
         },
+        graph=Command.PARENT,
     )

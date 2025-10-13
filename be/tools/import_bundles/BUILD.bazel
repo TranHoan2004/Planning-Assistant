@@ -17,5 +17,10 @@ java_library(
         "@maven//:org_springframework_spring_core",
         "@maven//:org_springframework_spring_expression",
         "@maven//:org_springframework_spring_web",
+        "@maven//:org_springframework_boot_spring_boot_starter_mail",
+        "@maven//:org_springframework_spring_context_support",
+        "@maven//:com_sun_mail_jakarta_mail",
+        "@maven//:jakarta_activation_jakarta_activation_api",
+        "@maven//:jakarta_mail_jakarta_mail_api",
     ],
 )

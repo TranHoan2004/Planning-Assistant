@@ -1,9 +1,21 @@
 load("@aspect_rules_py//py:defs.bzl", "py_library")
 
+# keep
 py_library(
     name = "tools",
     srcs = [
         "__init__.py",
+    ],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":tools_impl",
+    ],
+)
+
+# keep
+py_library(
+    name = "tools_impl",
+    srcs = [
         "search_places.py",
     ],
     visibility = ["//:__subpackages__"],

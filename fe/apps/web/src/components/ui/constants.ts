@@ -6,13 +6,7 @@ export const API_BASE_URL = ''
 export const HOST_URL = 'http://localhost:3000'
 export const LOCALHOST = 'http://localhost:8080'
 export const OAUTH2_REDIRECT_URI = `${HOST_URL}/oauth2/redirect`
-export const SUPPORTED_LOCALES = [{
-    code: 'vi',
-    label: '🇻🇳'
-}, {
-    code: 'en',
-    label: '🇺🇸'
-}]
+export const SUPPORTED_LOCALES = ['en', 'vi']
 
 // socket
 export const SOCKET_URL = `${API_BASE_URL}/ws`

@@ -5,18 +5,21 @@ import CustomButton from '@/components/ui/CustomButton'
 import { IoArrowBack } from 'react-icons/io5'
 import { Step } from '@/app/forgot-password/components/ForgotPasswordFlow'
 import { callToast } from '@/app/forgot-password/components/CallToast'
+import { get } from 'http'
+import { getTranslations } from 'next-intl/server'
 
 interface Props {
   setStep: React.Dispatch<React.SetStateAction<Step>>
   email: string
 }
 
-export default function OtpForm({ setStep, email }: Props) {
+export default async function OtpForm({ setStep, email }: Props) {
   const inputs = Array(6).fill(0)
   const inputRefs = useRef<(HTMLInputElement | null)[]>([])
   const LENGTH = 6
   const [values, setValues] = useState<string[]>(Array(LENGTH).fill(''))
   const [otp, setOtp] = useState('')
+  const t = await getTranslations('ForgotPasswordPage')
 
   const focus = (i: number) => inputRefs.current[i]?.focus()
 
@@ -62,8 +65,7 @@ export default function OtpForm({ setStep, email }: Props) {
   const handleResendOtp = async () => {
     await fetchOtp()
     callToast({
-      message:
-        'A new OTP has been sent to your email. Please check your email.',
+      message: t('otp-sent'),
       color: 'primary'
     })
   }
@@ -72,7 +74,7 @@ export default function OtpForm({ setStep, email }: Props) {
     e.preventDefault()
     if (otp === values.join('')) {
       callToast({
-        message: 'Your OTP has been verified successfully',
+        message: t('otp-valid'),
         color: 'success'
       })
       setTimeout(() => {
@@ -80,7 +82,7 @@ export default function OtpForm({ setStep, email }: Props) {
       }, 3000)
     } else {
       callToast({
-        message: 'Wrong OTP entered. Please try again.',
+        message: t('otp-invalid'),
         color: 'warning'
       })
       setValues(Array(LENGTH).fill(''))
@@ -89,16 +91,19 @@ export default function OtpForm({ setStep, email }: Props) {
 
   const fetchOtp = async () => {
     try {
-      const res = await fetch(`/api/auth/forgot-password?email=${encodeURIComponent(email)}`, {
-        method: 'GET'
-      })
+      const res = await fetch(
+        `/api/auth/forgot-password?email=${encodeURIComponent(email)}`,
+        {
+          method: 'GET'
+        }
+      )
       const data = await res.json()
 
       setOtp(String(data.otp))
     } catch (error) {
       callToast({
         title: 'Error',
-        message: 'Failed to get OTP code: ' + (error as Error).message,
+        message: t('otp-get-error') + (error as Error).message,
         color: 'danger'
       })
     }
@@ -112,10 +117,8 @@ export default function OtpForm({ setStep, email }: Props) {
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-4">
       <div className="w-full max-w-md bg-white rounded-3xl shadow-lg p-8 space-y-6">
         <div className="flex flex-col items-center space-y-3">
-          <h2 className="text-3xl font-bold">Enter OTP</h2>
-          <p className="text-gray-500 text-center">
-            Please enter the 6-digit code sent to your email.
-          </p>
+          <h2 className="text-3xl font-bold">{t('otp-title')}</h2>
+          <p className="text-gray-500 text-center">{t('otp-subtitle')}</p>
         </div>
 
         <form className="space-y-6" onSubmit={(e) => verifyOtp(e)}>
@@ -149,10 +152,10 @@ export default function OtpForm({ setStep, email }: Props) {
               className="text-blue-600 text-sm cursor-pointer"
               onClick={handleResendOtp}
             >
-              Resend OTP
+              {t('otp-resend')}
             </div>
             <Link href="/login" className="text-gray-500 text-sm">
-              Back to Login
+              {t('backToLogin')}
             </Link>
           </div>
 

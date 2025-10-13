@@ -1,0 +1,20 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "services",
+    srcs = [
+        "gcs.go",
+        "profile.go",
+        "saved.go",
+    ],
+    importpath = "gitlab.com/plango-travel/backend/services/user_profile/internal/infrastructure/services",
+    visibility = ["//services/user_profile:__subpackages__"],
+    deps = [
+        "//services/user_profile/internal/application/usecases",
+        "//services/user_profile/internal/domain/entities",
+        "//services/user_profile/internal/domain/repositories",
+        "//services/user_profile/internal/infrastructure/config",
+        "@com_google_cloud_go_storage//:storage",
+        "@org_uber_go_zap//:zap",
+    ],
+)

@@ -5,14 +5,18 @@ py_library(
     srcs = [
         "__init__.py",
         "connection_pool.py",
+        "db.py",
         "llm.py",
     ],
     visibility = ["//:__subpackages__"],
     deps = [
+        "//agents/chat/domain",
         "//agents/shared/infrastructure/config",
-        "@pip//langchain_groq",
+        "@pip//langchain_openai",
         "@pip//loguru",
         "@pip//psycopg",  # keep
         "@pip//psycopg_pool",
+        "@pip//sqlalchemy",
+        "@pip//sqlmodel",
     ],
 )

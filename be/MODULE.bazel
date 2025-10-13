@@ -40,6 +40,11 @@ go_sdk.nogo(nogo = "//tools/lint:nogo")
 go_deps = use_extension("@gazelle//:extensions.bzl", "go_deps")
 go_deps.from_file(go_mod = "//:go.mod")
 
+# go_deps.gazelle_override(
+# build_file_generation = "on",
+# path = "github.com/cncf/xds/go",
+# )
+
 # All *direct* Go dependencies of the module have to be listed explicitly.
 # Run 'bazel mod tidy' to update this
 use_repo(
@@ -47,7 +52,8 @@ use_repo(
     "com_github_gin_contrib_gzip",
     "com_github_gin_contrib_zap",
     "com_github_gin_gonic_gin",
-    "com_github_joho_godotenv",
+    "com_google_cloud_go_storage",
+    "org_mongodb_go_mongo_driver",
     "org_uber_go_fx",
     "org_uber_go_zap",
 )

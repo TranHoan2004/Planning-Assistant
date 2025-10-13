@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.client.RestClient;
 
 import com.plango.auth.repository.UserRepository;
 
@@ -56,6 +57,11 @@ public class AppConfig {
                 .setSkipNullEnabled(true);
 
         return mapper;
+    }
+
+    @Bean
+    public RestClient restClient() {
+        return RestClient.create();
     }
 
 }

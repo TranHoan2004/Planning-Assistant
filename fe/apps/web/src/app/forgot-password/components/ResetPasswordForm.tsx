@@ -4,44 +4,47 @@ import CustomButton from '@/components/ui/CustomButton'
 import { z } from 'zod'
 import { useRouter } from 'next/navigation'
 import { callToast } from '@/app/forgot-password/components/CallToast'
+import { getTranslations } from 'next-intl/server'
 
 interface Props {
   email: string
 }
 
-const resetPasswordSchema = z
-  .object({
-    password: z
-      .string()
-      .min(8, 'Password must be at least 8 characters.')
-      .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])(?=.{8,})/,
-        'Password must include uppercase, lowercase, number, and special character.'
-      ),
-    confirm: z
-      .string()
-      .min(8, 'Password must be at least 8 characters.')
-      .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).{8,}$/,
-        'Password must include uppercase, lowercase, number, and special character.'
-      )
-  })
-  .refine((data) => data.password === data.confirm, {
-    message: 'Passwords do not match.',
-    path: ['confirm']
-  })
-
-export default function ResetPasswordForm({ email }: Props) {
+export default async function ResetPasswordForm({ email }: Props) {
   const [password, setPassword] = useState('')
   const [confirm, setConfirm] = useState('')
   const [error, setError] = useState('')
   const router = useRouter()
+  const t = await getTranslations('ForgotPasswordPage')
+
+  const resetPasswordSchema = z
+    .object({
+      password: z
+        .string()
+        .min(8, t('passwordLength', { passwordMin: 8 }))
+        .regex(
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])(?=.{8,})/,
+          t('passwordRules')
+        ),
+      confirm: z
+        .string()
+        .min(8, t('passwordLength', { passwordMin: 8 }))
+        .regex(
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).{8,}$/,
+          t('passwordRules')
+        )
+    })
+    .refine((data) => data.password === data.confirm, {
+      message: t('passwordMismatch'),
+      path: ['confirm']
+    })
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     const result = resetPasswordSchema.safeParse({ password, confirm })
     if (!result.success) {
-      const firstError = result.error.issues[0]?.message || 'Invalid input'
+      const firstError =
+        result.error.issues[0]?.message || t('savePasswordErrorDefault')
       setError(firstError)
       return
     }
@@ -59,8 +62,8 @@ export default function ResetPasswordForm({ email }: Props) {
 
       if (status === 200) {
         callToast({
-          message: 'You can now log in with your new password.',
-          title: 'Password reset successful',
+          message: t('resetPasswordSuccess'),
+          title: t('resetPasswordSuccessTitle'),
           color: 'success'
         })
 
@@ -73,7 +76,7 @@ export default function ResetPasswordForm({ email }: Props) {
     } catch (error) {
       callToast({
         message: (error as Error).message,
-        title: 'Error during resetting password',
+        title: t('resetPasswordUnexpectedError'),
         color: 'danger'
       })
     }
@@ -81,9 +84,11 @@ export default function ResetPasswordForm({ email }: Props) {
 
   return (
     <div className="flex flex-col items-center justify-center p-8 max-w-[450px]">
-      <h2 className="text-5xl font-[700] mb-2 text-gray-800">Reset Password</h2>
+      <h2 className="text-5xl font-[700] mb-2 text-gray-800">
+        {t('resetPassword')}
+      </h2>
       <p className="text-gray-500 text-md mt-4 mb-6 text-center">
-        Please enter your new password below.
+        {t('resetPasswordSubtitle')}
       </p>
       <form
         onSubmit={handleSubmit}
@@ -92,8 +97,8 @@ export default function ResetPasswordForm({ email }: Props) {
         <PasswordInput
           className="w-full"
           value={password}
-          placeholder="New password"
-          label="Password"
+          placeholder={t('passwordPlaceholder')}
+          label={t('passwordLabel')}
           onChange={(e) => {
             setPassword(e.target.value)
             setError('')
@@ -102,8 +107,8 @@ export default function ResetPasswordForm({ email }: Props) {
         <PasswordInput
           className="w-full"
           value={confirm}
-          placeholder="Confirm new password"
-          label="Confirm Password"
+          placeholder={t('confirmPasswordPlaceholder')}
+          label={t('confirmPasswordLabel')}
           onChange={(e) => {
             setConfirm(e.target.value)
             setError('')
@@ -115,7 +120,7 @@ export default function ResetPasswordForm({ email }: Props) {
           className="text-white px-6 py-2 font-semibold w-3/4"
           disabled={!password || !confirm}
         >
-          Reset Password
+          {t('resetPasswordBtn')}
         </CustomButton>
       </form>
     </div>

@@ -3,7 +3,6 @@ from loguru import logger
 from pydantic import BaseModel, Field
 
 from agents.shared.infrastructure.config.rate_limit import limiter
-from agents.aggregate.agent import agent
 
 router = APIRouter(tags=["Itinerary"])
 

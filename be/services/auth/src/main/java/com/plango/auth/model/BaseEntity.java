@@ -1,7 +1,6 @@
 package com.plango.auth.model;
 
 import java.io.Serializable;
-import java.security.Timestamp;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;

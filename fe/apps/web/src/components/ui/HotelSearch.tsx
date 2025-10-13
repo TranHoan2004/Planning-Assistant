@@ -1,12 +1,13 @@
-'use client';
+'use client'
 
-import { useState } from 'react';
-import { useHotelSearch } from '@/hooks/useHotelSearch';
-import HotelCard from '@/components/ui/HotelCard';
+import { useState } from 'react'
+import { useHotelSearch } from '@/hooks/useHotelSearch'
+import HotelCard from '@/components/ui/HotelCard'
 
 export default function HotelSearch() {
-  const { hotels, loading, error, searchHotels, loadMore, nextPageToken } = useHotelSearch();
-  const [searchQuery, setSearchQuery] = useState('Nha Trang Resorts');
+  const { hotels, loading, error, searchHotels, loadMore, nextPageToken } =
+    useHotelSearch()
+  const [searchQuery, setSearchQuery] = useState('Nha Trang Resorts')
 
   const handleSearch = () => {
     searchHotels({
@@ -17,9 +18,9 @@ export default function HotelSearch() {
       currency: 'VND',
       gl: 'vn',
       hl: 'vi',
-      engine: 'google_hotels',
-    });
-  };
+      engine: 'google_hotels'
+    })
+  }
 
   return (
     <div className="p-4">
@@ -73,5 +74,5 @@ export default function HotelSearch() {
         </div>
       )}
     </div>
-  );
+  )
 }

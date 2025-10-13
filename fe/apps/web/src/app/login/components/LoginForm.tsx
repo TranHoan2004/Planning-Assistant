@@ -10,18 +10,24 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { useDispatch } from 'react-redux'
 import { setCurrentUser } from '@/state/auth-slice'
 import CustomButton from '@/components/ui/CustomButton'
+import { useTranslations } from 'next-intl'
 
-const loginFormSchema = z.object({
-  email: z.email('Please enter a valid email address'),
-  password: z.string().min(8, 'Password must be at least 8 characters')
-})
-
-type LoginFormData = z.infer<typeof loginFormSchema>
+type LoginFormData = {
+  email: string
+  password: string
+}
 
 const LoginForm = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
   const dispatch = useDispatch()
+  const t = useTranslations('LoginPage')
+
+  const loginFormSchema = z.object({
+    email: z.email(t('error.invalidEmail')),
+    password: z.string().min(8, t('error.invalidPassword', { passwordMin: 8 }))
+  })
+
   const {
     register,
     handleSubmit,
@@ -40,9 +46,7 @@ const LoginForm = () => {
     try {
       const response = await fetch('/api/auth/login', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       })
 
@@ -62,46 +66,44 @@ const LoginForm = () => {
         {...register('email')}
         variant="bordered"
         type="email"
-        placeholder="Enter your email"
-        label="Email"
+        placeholder={t('form.emailPlaceholder')}
+        label={t('form.email')}
         isInvalid={!!errors.email}
         errorMessage={errors.email?.message}
       />
 
       <PasswordInput
         {...register('password')}
-        placeholder="Enter your password"
-        label="Password"
+        placeholder={t('form.passwordPlaceholder')}
+        label={t('form.password')}
         isInvalid={!!errors.password}
         errorMessage={errors.password?.message}
       />
 
       <CustomButton
         type="submit"
-        label={isSubmitting ? 'Signing in...' : 'Continue'}
+        label={
+          isSubmitting ? t('form.loginButtonLoading') : t('form.loginButton')
+        }
         disabled={isSubmitting}
       />
 
       <p className="text-center text-sm text-gray-600">
-        Don&#39;t have an account?{' '}
+        {t('form.registerText')}{' '}
         <a
-          href={
-            `/register` +
-            (callbackUrl !== '/'
-              ? `?callbackUrl=${encodeURIComponent(callbackUrl)}`
-              : '')
-          }
+          href={`/register${callbackUrl !== '/' ? `?callbackUrl=${encodeURIComponent(callbackUrl)}` : ''}`}
           className="text-gray-800 underline hover:text-gray-600"
         >
-          Create your account
+          {t('form.registerLink')}
         </a>
       </p>
+
       <p className="text-center text-sm">
         <a
           href="/forgot-password"
           className="text-gray-800 underline hover:text-gray-600"
         >
-          Forgot password?
+          {t('form.forgotPassword')}
         </a>
       </p>
     </form>

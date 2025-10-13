@@ -1,14 +1,15 @@
-from typing import List
+from typing import List, Sequence
 
 from langchain_core.messages import (
-    AnyMessage,
+    BaseMessage,
     HumanMessage,
     AIMessage,
     RemoveMessage,
 )
 from langchain_core.runnables import RunnableConfig
+from langgraph.graph.message import REMOVE_ALL_MESSAGES
 
-from agents.shared.state import AgentState
+from agents.chat.application.state import ChatbotState
 from agents.shared.infrastructure.config.settings import settings
 
 
@@ -21,8 +22,8 @@ class SummarizeTool:
         self._summarization_llm = llm.bind(max_tokens=settings.MAX_TOKENS_FOR_SUMMARY)
 
     def _extract_conversation_messages(
-        self, messages: List[AnyMessage]
-    ) -> List[AnyMessage]:
+        self, messages: Sequence[BaseMessage]
+    ) -> List[BaseMessage]:
         """
         Extract human and non-tool AI messages from the message list.
 
@@ -44,7 +45,7 @@ class SummarizeTool:
 
     def _should_summarize_conversation(
         self,
-        state: AgentState,
+        state: ChatbotState,
         min_conversation_threshold: int = settings.MIN_CONVERSATION_THRESHOLD,
     ) -> bool:
         """
@@ -109,7 +110,7 @@ maintain all information that would be needed to create a travel itinerary.
 Only return the updated summary. DO NOT add explanations, section headers, or extra commentary.
             """
 
-    async def summarize(self, state: AgentState, config: RunnableConfig):
+    async def summarize(self, state: ChatbotState, config: RunnableConfig):
         """Summarize the messages conversation between human and chatbot"""
         if not self._should_summarize_conversation(state):
             return {"messages": state["messages"]}
@@ -128,10 +129,9 @@ Only return the updated summary. DO NOT add explanations, section headers, or ex
         )
 
         # Create delete messages for all but the most recent N messages
-        messages_to_delete = [
-            RemoveMessage(id=msg.id)
-            for msg in state["messages"][: -settings.TOTAL_MESSAGES_AFTER_SUMMARY]
-            if msg.id is not None
-        ]
+        updated_messages = state["messages"][-settings.TOTAL_MESSAGES_AFTER_SUMMARY :]
 
-        return {"summary": response.content, "messages": messages_to_delete}
+        return {
+            "summary": response.content,
+            "messages": [RemoveMessage(id=REMOVE_ALL_MESSAGES), *updated_messages],
+        }

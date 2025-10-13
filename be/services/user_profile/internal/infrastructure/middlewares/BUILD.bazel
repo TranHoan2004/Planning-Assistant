@@ -1,0 +1,15 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "middlewares",
+    srcs = [
+        "auth.go",
+        "cors.go",
+    ],
+    importpath = "gitlab.com/plango-travel/backend/services/user_profile/internal/infrastructure/middlewares",
+    visibility = ["//services/user_profile:__subpackages__"],
+    deps = [
+        "//services/user_profile/internal/infrastructure/config",
+        "@com_github_gin_gonic_gin//:gin",
+    ],
+)

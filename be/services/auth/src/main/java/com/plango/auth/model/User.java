@@ -3,11 +3,11 @@ package com.plango.auth.model;
 import java.util.Collection;
 import java.util.Collections;
 
+import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -24,6 +24,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class User extends BaseEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,11 +33,8 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "email", nullable = false, unique = true, length = 255)
     private String email;
 
-
     @Column(name = "password", nullable = false, length = 255)
     private String password;
-
-
 
     @Override
     public String getPassword() {

@@ -14,7 +14,8 @@ import {
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
-  DropdownItem
+  DropdownItem,
+  DropdownSection
 } from '@heroui/dropdown'
 import { Avatar } from '@heroui/avatar'
 import { SearchIcon } from '@/assets/Icons'
@@ -24,15 +25,21 @@ import { CiLogout } from 'react-icons/ci'
 import { useRouter } from 'next/navigation'
 import { clearCurrentUser, setCurrentUser } from '@/state/auth-slice'
 import { clientApi } from '@/utils/client-api'
-import LocaleSwitcher from '../ui/LocalSwitcher'
+import LocaleSwitcher from '../ui/LocaleSwitcher'
 import { Image } from '@heroui/react'
+import { useTranslations } from 'next-intl'
+import { setActiveItem } from '@/state/navbar-slice'
 
 export const ChatHeader = () => {
   const { currentUser } = useSelector((state: RootState) => state.auth)
+  const activeNav = useSelector((state: RootState) => state.navbar.activeItem)
   const [isSearchExpanded, setIsSearchExpanded] = useState(false)
   const [searchValue, setSearchValue] = useState('')
+  const t = useTranslations('Header')
   const router = useRouter()
   const dispatch = useDispatch()
+
+  const navItems = ['explore', 'flight', 'hotel', 'blog', 'about-us']
 
   useEffect(() => {
     const getCurrentUser = async () => {
@@ -76,6 +83,10 @@ export const ChatHeader = () => {
     setSearchValue(e.target.value)
   }
 
+  const handleNav = (item: string) => () => {
+    dispatch(setActiveItem(item))
+  }
+
   const searchInput = (
     <div className="relative flex items-center">
       <div
@@ -111,7 +122,7 @@ export const ChatHeader = () => {
             input: 'text-sm'
           }}
           labelPlacement="outside"
-          placeholder="Search..."
+          placeholder={t('search-placeholder')}
           startContent={
             <SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0 w-4 h-4" />
           }
@@ -143,72 +154,82 @@ export const ChatHeader = () => {
       position="sticky"
     >
       <NavbarBrand>
-        <Link href="/" className='flex border-r border-[#B7B9C5] pr-8 items-end'>
-          <Image
-            src="/logo.png"
-            alt="logo"
-            className="object-contain pt-3.5"
-          />
+        <Link
+          href="/"
+          className="flex border-r border-[#B7B9C5] pr-8 items-end"
+        >
+          <Image src="/logo.png" alt="logo" className="object-contain pt-3.5" />
         </Link>
       </NavbarBrand>
       <NavbarContent className="header-content flex items-end !justify-between w-full">
         {/* <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem> */}
         <NavbarItem className="flex h-full items-end">
           <div className="flex">
-            <div className="border-x border-[#B7B9C5] w-[160px] text-center cursor-pointer pb-3">
-              <span className="font-bold border-b-4 border-yellow-400">
-                Khám phá
-              </span>
-            </div>
-            <div className="border-r border-[#B7B9C5] w-[160px] text-center cursor-pointer pb-3">
-              <span className="">Chuyến bay</span>
-            </div>
-            <div className="border-r border-[#B7B9C5] w-[160px] text-center cursor-pointer pb-3">
-              <span className="">Khách sạn</span>
-            </div>
-            <div className="border-r border-[#B7B9C5] w-[160px] text-center cursor-pointer pb-3">
-              <span className="">Blog</span>
-            </div>
-            <div className="border-r border-[#B7B9C5] w-[160px] text-center cursor-pointer pb-3">
-              <span className="">Về PlanGo</span>
-            </div>
+            {navItems.map((item) => (
+              <Link
+                key={item}
+                id={item}
+                className="text-black"
+                href={`/${item}`}
+                onClick={handleNav(item)}
+              >
+                <div
+                  id={item}
+                  key={item}
+                  className="border-r border-[#B7B9C5] w-[160px] text-center cursor-pointer pb-3"
+                >
+                  <span
+                    className={
+                      item === activeNav
+                        ? 'font-bold border-b-4 border-yellow-400'
+                        : ''
+                    }
+                  >
+                    {t(`${item}`)}
+                  </span>
+                </div>
+              </Link>
+            ))}
             {!currentUser && (
-            <div className="w-[160px] text-center cursor-pointer pb-3">
-              <span className="font-bold text-red-500">Đăng nhập</span>
-            </div>)}
+              <div className="w-[160px] text-center cursor-pointer pb-3">
+                <Link href="/login">
+                  <span className="font-bold text-red-500">{t('login')}</span>
+                </Link>
+              </div>
+            )}
           </div>
           {!currentUser ? (
             <div className="helllo pb-1">
               <Button
                 as={Link}
                 className="text-md font-medium !rounded-lg bg-[#060304] text-white"
-                href="/login"
+                href="/chat"
                 variant="solid"
               >
-                Lên kế hoạch ngay
+                {t('plan-now')}
               </Button>
             </div>
           ) : (
             <div className="w-[160px] flex justify-center">
-              <Dropdown>
+              <Dropdown closeOnSelect={false}>
                 <DropdownTrigger>
                   <Avatar size="sm" className="cursor-pointer mb-1.5" />
                 </DropdownTrigger>
                 <DropdownMenu>
                   <DropdownItem
                     key="logout"
+                    closeOnSelect={true}
                     onPress={handleLogout}
                     startContent={<CiLogout className="text-xl" />}
                   >
-                    Logout
+                    {t('logout')}
                   </DropdownItem>
                 </DropdownMenu>
               </Dropdown>
             </div>
           )}
         </NavbarItem>
-
-        {/* <NavbarItem>
+        {/* <NavbarItem className='py-3'>
           <LocaleSwitcher />
         </NavbarItem> */}
       </NavbarContent>

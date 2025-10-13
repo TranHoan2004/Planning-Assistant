@@ -1,54 +1,28 @@
 package com.plango.auth.service;
 
-import java.util.Optional;
+import java.util.Date;
 
-import com.plango.auth.common.constants.ErrorCodes;
-import com.plango.auth.common.utils.LogWrapper;
-import com.plango.auth.exception.AppException;
-import com.plango.auth.model.Token;
-import com.plango.auth.repository.TokenRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.logout.LogoutHandler;
+import com.plango.auth.dto.request.LogoutRequest;
+import com.plango.auth.service.RedisService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
 @Service
-public class LogoutService implements LogoutHandler {
+@RequiredArgsConstructor
+public class LogoutService  {
 
-    @Autowired
-    private TokenRepository tokenRepository;
+    private final UserJWTService userJWTService;
+    private final RedisService redisService;
 
-    @Override
-    public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        final String token = extractJwtTokenFromHeader(request);
-        if (token == null) {
-            LogWrapper.warn("Token not found in header");
-            throw new AppException(ErrorCodes.AUT_004);
-        }
+    public void logout(LogoutRequest request) {
+        String accessToken = request.getAccessToken();
+        String refreshToken = request.getRefreshToken();
 
-        Token storedToken = tokenRepository.findByToken(token).orElse(null);
-        if (storedToken != null) {
-            storedToken.setExpired(true);
-            storedToken.setRevoked(true);
-            tokenRepository.save(storedToken);
-            LogWrapper.info("Token revoked");
-            SecurityContextHolder.clearContext();
-            response.setStatus(HttpServletResponse.SC_NO_CONTENT);
-        } else {
-            LogWrapper.error("Token not found");
-            throw new AppException(ErrorCodes.AUT_001);
-        }
-    }
+        Date accessExp = userJWTService.extractExpiration(accessToken);
+        redisService.revokeToken(accessToken, accessExp);
 
-    private String extractJwtTokenFromHeader(HttpServletRequest request) {
-        final String authHeader = request.getHeader("Authorization");
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return null;
-        }
-        return authHeader.substring(7);
+        Date refreshExp = userJWTService.extractExpiration(refreshToken);
+        redisService.revokeToken(refreshToken, refreshExp);
+
     }
 }

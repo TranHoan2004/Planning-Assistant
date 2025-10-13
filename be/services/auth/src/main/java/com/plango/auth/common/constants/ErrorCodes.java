@@ -43,9 +43,23 @@ public class ErrorCodes {
      * User does not have permission
      */
     public static final String AUT_004 = "AUT_004";
+    /**
+     * Login with oauth2 method failed
+     */
+    public static final String AUT_005 = "AUT_005";
+
+    /**
+     * Error occurred while creating user profile in external system
+     */
+    public static final String AUT_006 = "AUT_006";
 
     /**
      * User with the given email already exists (registration error)
      */
     public static final String REG_001 = "REG_001";
+
+    /**
+     * The given email is not existing
+     */
+    public static final String REG_002 = "REG_002";
 }

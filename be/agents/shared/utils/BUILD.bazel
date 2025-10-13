@@ -4,13 +4,18 @@ py_library(
     name = "utils",
     srcs = [
         "__init__.py",
+        "bookingcom_api.py",
+        "googlemaps_api.py",
         "serpapi.py",
     ],
     visibility = ["//:__subpackages__"],
     deps = [
+        "//agents/shared:models",
         "@pip//aiohttp",
+        "@pip//httpx",
         "@pip//langchain_core",
         "@pip//langgraph",
         "@pip//langgraph_prebuilt",
+        "@pip//loguru",
     ],
 )

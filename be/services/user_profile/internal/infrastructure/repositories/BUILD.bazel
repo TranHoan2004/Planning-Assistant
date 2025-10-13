@@ -1,0 +1,18 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "repositories",
+    srcs = [
+        "mongo_saved_repository.go",
+        "mongo_user_repository.go",
+    ],
+    importpath = "gitlab.com/plango-travel/backend/services/user_profile/internal/infrastructure/repositories",
+    visibility = ["//services/user_profile:__subpackages__"],
+    deps = [
+        "//services/user_profile/internal/domain/entities",
+        "//services/user_profile/internal/domain/repositories",
+        "@org_mongodb_go_mongo_driver//bson",
+        "@org_mongodb_go_mongo_driver//mongo",
+        "@org_mongodb_go_mongo_driver//mongo/options",
+    ],
+)

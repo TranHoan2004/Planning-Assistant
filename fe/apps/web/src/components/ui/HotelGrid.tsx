@@ -5,8 +5,14 @@ import { useHotelSearch } from '@/hooks/useHotelSearch'
 import HotelCard from '@/components/ui/HotelCard'
 import { Property } from '@/types/hotels.type'
 import { HotelsHouseIcon } from '@/assets/Icons'
-import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@heroui/react';
-
+import {
+  Button,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger
+} from '@heroui/react'
+import { useTranslations } from 'next-intl'
 
 interface HotelGridProps {
   initialQuery?: string
@@ -19,7 +25,7 @@ interface HotelGridProps {
 
 export default function HotelGrid({
   initialQuery = 'Nha Trang Resorts',
-  checkInDate = '2025-09-28',
+  checkInDate = '2025-10-01',
   checkOutDate = '2025-09-29',
   adults = 2,
   children = 0,
@@ -32,6 +38,7 @@ export default function HotelGrid({
     url: string
     hotelName: string
   } | null>(null)
+  const t = useTranslations('ChatPage.suggestionSection.hotel')
 
   // Initialize search on component mount
   useEffect(() => {
@@ -114,15 +121,13 @@ export default function HotelGrid({
                 d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
               />
             </svg>
-            <h3 className="text-lg font-semibold mb-2">
-              Lỗi tìm kiếm khách sạn
-            </h3>
+            <h3 className="text-lg font-semibold mb-2">{t('error.title')}</h3>
             <p className="text-gray-600 mb-4">{error}</p>
             <button
               onClick={handleSearch}
               className="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
             >
-              Thử lại
+              {t('error.button')}
             </button>
           </div>
         </div>
@@ -136,23 +141,31 @@ export default function HotelGrid({
       <div className="flex justify-between items-center mb-6">
         <div className="flex gap-2 items-center">
           <h2 className="text-xl font-bold text-black">
-            Khách sạn tại{' '}
-            {initialQuery.replace(/hotels?|resorts?/i, '').trim() ||
-              'Nha Trang'}
+            {t('result.title', {
+              location:
+                initialQuery.replace(/hotels?|resorts?/i, '').trim() ||
+                'Nha Trang'
+            })}
           </h2>
           <HotelsHouseIcon />
         </div>
         <div>
-                        <Dropdown>
-                <DropdownTrigger>
-                  <Button variant="bordered">Sắp xếp</Button>
-                </DropdownTrigger>
-                <DropdownMenu aria-label="Sort options">
-                  <DropdownItem key="price">Giá thấp nhất</DropdownItem>
-                  <DropdownItem key="rating">Đánh giá cao nhất</DropdownItem>
-                  <DropdownItem key="reviews">Nhiều đánh giá nhất</DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
+          <Dropdown>
+            <DropdownTrigger>
+              <Button variant="bordered">{t('filter.arrange.title')}</Button>
+            </DropdownTrigger>
+            <DropdownMenu aria-label="Sort options">
+              <DropdownItem key="price">
+                {t('filter.arrange.priceLowToHigh')}
+              </DropdownItem>
+              <DropdownItem key="rating">
+                {t('filter.arrange.highestRecommended')}
+              </DropdownItem>
+              <DropdownItem key="reviews">
+                {t('filter.arrange.mostReviewed')}
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
         </div>
       </div>
 
@@ -209,10 +222,10 @@ export default function HotelGrid({
                     d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                   ></path>
                 </svg>
-                Đang tải...
+                {t('loading.isLoadingTrue')}
               </span>
             ) : (
-              'Xem thêm khách sạn'
+              t('loading.loadmore')
             )}
           </Button>
         </div>
@@ -234,17 +247,13 @@ export default function HotelGrid({
               d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
             />
           </svg>
-          <h3 className="text-lg font-semibold mb-2">
-            Không tìm thấy khách sạn
-          </h3>
-          <p className="text-gray-600 mb-4">
-            Thử thay đổi điều kiện tìm kiếm của bạn
-          </p>
+          <h3 className="text-lg font-semibold mb-2">{t('noResult.title')}</h3>
+          <p className="text-gray-600 mb-4">{t('noResult.subtitle')}</p>
           <button
             onClick={handleSearch}
             className="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
           >
-            Tìm kiếm lại
+            {t('noResult.button')}
           </button>
         </div>
       )}

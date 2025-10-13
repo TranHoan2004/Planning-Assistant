@@ -29,19 +29,15 @@ public class RegisterRequest {
     @Email
     @NotBlank
     @JsonProperty("email")
-    @Schema(
-            description = "User email address",
-            example = "example@example.com"
-    )
+    @Schema(description = "User email address", example = "example@example.com")
     @Pattern(regexp = EMAIL_REGEX, message = "Email must follow the format <name>@<domain>")
     private String email;
 
     @Pattern(regexp = PASSWORD_REGEX, message = "Password must have at least one uppercase letter, a digit, a special character")
-    @Schema(
-            description = "User password (8–32 chars, must include upper/lowercase, number, special character)",
-            example = "Abcd1234!"
-    )
+    @Schema(description = "User password (8–32 chars, must include upper/lowercase, number, special character)", example = "Abcd1234!")
     @JsonProperty("password")
     private String password;
+
+    private String avatarUrl;
 
 }

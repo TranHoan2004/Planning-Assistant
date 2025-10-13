@@ -1,0 +1,20 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "bootstrap",
+    srcs = [
+        "modules.go",
+        "server.go",
+    ],
+    importpath = "gitlab.com/plango-travel/backend/services/user_profile/bootstrap",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//services/user_profile/internal/infrastructure/config",
+        "//services/user_profile/internal/infrastructure/middlewares",
+        "@com_github_gin_contrib_gzip//:gzip",
+        "@com_github_gin_contrib_zap//:zap",
+        "@com_github_gin_gonic_gin//:gin",
+        "@org_uber_go_fx//:fx",
+        "@org_uber_go_zap//:zap",
+    ],
+)

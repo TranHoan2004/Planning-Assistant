@@ -27,6 +27,8 @@ springBootDataJpa = { module = "org.springframework.boot:spring-boot-starter-dat
 springBootActuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
 springBootLoader = { module = "org.springframework.boot:spring-boot-loader" }
 springBootTest = { module = "org.springframework.boot:spring-boot-starter-test" }
+springbootRedis = { module = "org.springframework.boot:spring-boot-starter-data-redis" }
+springbootMail = { module = "org.springframework.boot:spring-boot-starter-mail" }
 
 # SpringDoc
 springdocOpenapi = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc" }
@@ -55,3 +57,7 @@ junitEngine = { module = "org.junit.jupiter:junit-jupiter-engine" }
 junitParams = { module = "org.junit.jupiter:junit-jupiter-params" }
 junitPlatformLauncher = { module = "org.junit.platform:junit-platform-launcher" }
 junitPlatformReporting = { module = "org.junit.platform:junit-platform-reporting" }
+
+sunMail = { module = "com.sun.mail:jakarta.mail:2.0.1" }
+jakartaMail = { module = "jakarta.mail:jakarta.mail-api", version = "2.1.2" }
+jakartaActivation = { module = "com.sun.activation:jakarta.activation", version = "2.0.1" }

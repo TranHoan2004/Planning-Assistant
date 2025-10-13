@@ -1,18 +1,39 @@
 load("@aspect_rules_py//py:defs.bzl", "py_library")
 
+# keep
+py_library(
+    name = "models",
+    srcs = [
+        "models.py",
+    ],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "@pip//pydantic",
+    ],
+)
+
+# keep
+py_library(
+    name = "runtime",
+    srcs = [
+        "runtime.py",
+    ],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//agents/shared/utils",
+    ],
+)
+
+# keep
 py_library(
     name = "shared",
     srcs = [
         "__init__.py",
-        "data_stream/consts.py",
-        "data_stream/stream_parts.py",
-        "models.py",
         "state.py",
     ],
     visibility = ["//:__subpackages__"],
     deps = [
-        "@pip//langgraph",
-        "@pip//pydantic",
-        "@pip//typing_extensions",
+        ":models",
+        ":runtime",
     ],
 )

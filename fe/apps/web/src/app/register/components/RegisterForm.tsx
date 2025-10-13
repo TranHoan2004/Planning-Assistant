@@ -9,29 +9,35 @@ import PasswordInput from '@/components/ui/PasswordInput'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Link } from '@heroui/react'
 import { callToast } from '@/app/forgot-password/components/CallToast'
+import { useTranslations } from 'next-intl'
 
-const registerFormSchema = z
-  .object({
-    email: z.email('Please enter a valid email address'),
-    password: z
-      .string()
-      .min(8, 'Password must be at least 8 characters')
-      .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])(?=.{8,})/,
-        'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'
-      ),
-    confirmPassword: z.string()
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ['confirmPassword']
-  })
-
-type RegisterFormData = z.infer<typeof registerFormSchema>
+type RegisterFormData = {
+  email: string
+  password: string
+  confirmPassword: string
+}
 
 const RegisterForm = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const t = useTranslations('RegisterPage')
+
+  const registerFormSchema = z
+    .object({
+      email: z.email(t('error.invalidEmail')),
+      password: z
+        .string()
+        .min(8, t('error.passwordLength', { passwordMin: 8 }))
+        .regex(
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])(?=.{8,})/,
+          t('error.passwordComplexity')
+        ),
+      confirmPassword: z.string()
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: t('error.passwordMismatch'),
+      path: ['confirmPassword']
+    })
 
   const {
     register,
@@ -75,9 +81,9 @@ const RegisterForm = () => {
       setTimeout(() => {
         router.push(
           `/login` +
-          (callbackUrl !== '/'
-            ? `?callbackUrl=${encodeURIComponent(callbackUrl)}`
-            : '')
+            (callbackUrl !== '/'
+              ? `?callbackUrl=${encodeURIComponent(callbackUrl)}`
+              : '')
         )
       }, 3000)
     } catch (error) {
@@ -98,9 +104,9 @@ const RegisterForm = () => {
         {...register('email')}
         variant="bordered"
         type="email"
-        placeholder="Enter your email"
+        placeholder={t('form.emailPlaceholder')}
         className={`w-full ${errors.email ? 'border-red-500' : ''}`}
-        label="Email"
+        label={t('form.email')}
         isInvalid={!!errors.email}
         errorMessage={errors.email?.message}
         autoComplete="email"
@@ -108,8 +114,8 @@ const RegisterForm = () => {
 
       <PasswordInput
         {...register('password')}
-        placeholder="Create a password"
-        label="Password"
+        placeholder={t('form.passwordPlaceholder')}
+        label={t('form.password')}
         isInvalid={!!errors.password}
         errorMessage={errors.password?.message}
         autoComplete="new-password"
@@ -117,16 +123,15 @@ const RegisterForm = () => {
 
       <PasswordInput
         {...register('confirmPassword')}
-        placeholder="Confirm your password"
-        label="Confirm Password"
+        placeholder={t('form.confirmPasswordPlaceholder')}
+        label={t('form.confirmPassword')}
         isInvalid={!!errors.confirmPassword}
         errorMessage={errors.confirmPassword?.message}
         autoComplete="new-password"
       />
 
       <p className="mt-1 text-xs text-gray-500">
-        Must be at least 8 characters with uppercase, lowercase, number, and
-        special character
+        {t('form.passwordRule', { passwordMin: 8 })}
       </p>
 
       {errors.root && (
@@ -140,13 +145,15 @@ const RegisterForm = () => {
         disabled={isSubmitting}
         className="w-full bg-gradient-to-r from-[#F65555] to-[#FFB26A] text-white font-medium py-2 px-4 rounded-xl hover:from-[#FFB26A] hover:to-[#F65555] transition disabled:opacity-70 disabled:cursor-not-allowed"
       >
-        {isSubmitting ? 'Creating account...' : 'Create Account'}
+        {isSubmitting
+          ? t('form.registerButtonLoading')
+          : t('form.registerButton')}
       </button>
 
       <p className="text-center text-sm">
-        Already have an account?{' '}
-        <Link className="text-sm cursor-pointer" href="/login">
-          Login now
+        {t('form.loginText') + ' '}
+        <Link className="text-sm cursor-pointer text-orange-500" href="/login">
+          {t('form.loginLink')}
         </Link>
       </p>
     </form>

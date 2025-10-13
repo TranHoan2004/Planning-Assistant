@@ -1,17 +1,15 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import { useState, useEffect } from 'react'
-
-const prompts = [
-  'Ask PlanGo to make a completed initerary',
-  'Ask PlanGo what should i go today',
-  'Ask PlanGo to book a hotel, flight ticket'
-]
 
 const RightSide = () => {
   const [currentPromptIndex, setCurrentPromptIndex] = useState(0)
   const [displayText, setDisplayText] = useState('')
   const [isTyping, setIsTyping] = useState(true)
+  const t = useTranslations('LoginPage')
+
+  const prompts = t.raw('prompts') as string[]
 
   useEffect(() => {
     const currentPrompt = prompts[currentPromptIndex]

@@ -10,12 +10,11 @@ class Settings(BaseSettings):
     DEBUG: bool = bool(os.getenv("DEBUG", True))
     ALLOWED_ORIGINS: str = os.getenv("ALLOWED_ORIGINS", "*")
 
-    GROQ_API_KEY: str | None = os.getenv("GROQ_API_KEY")
-    MODEL_NAME: str = os.getenv("MODEL_NAME", "openai/gpt-oss-20b")
+    MODEL_NAME: str = os.getenv("MODEL_NAME", "")
     MODEL_MAX_TOKENS: int = int(os.getenv("MODEL_MAX_TOKENS", 4096))
     MODEL_TEMPERATURE: float = float(os.getenv("MODEL_TEMPERATURE", 0.1))
 
-    PLANNING_MODEL_NAME: str = os.getenv("PLANNING_MODEL_NAME", "openai/gpt-oss-120b")
+    PLANNING_MODEL_NAME: str = os.getenv("PLANNING_MODEL_NAME", "")
     PLANNING_MODEL_MAX_TOKENS: int = int(os.getenv("PLANNING_MODEL_MAX_TOKENS", 16384))
     PLANNING_MODEL_TEMPERATURE: float = float(
         os.getenv("PLANNING_MODEL_TEMPERATURE", 0.1)
@@ -40,16 +39,43 @@ class Settings(BaseSettings):
     POSTGRES_DB: str = os.getenv("POSTGRES_DB", "plango")
     CONNECTION_POOL_SIZE: int = int(os.getenv("CONNECTION_POOL_SIZE", 5))
 
+    GOOGLE_MAPS_API_KEY: str | None = os.getenv("GOOGLE_MAPS_API_KEY")
+
+    OPENAI_API_KEY: str | None = os.getenv("OPENAI_API_KEY")
+
+    RAPIDAPI_KEY: str | None = os.getenv("RAPIDAPI_KEY")
+
     @field_validator("ALLOWED_ORIGINS")
     @classmethod
     def parse_allowed_origin(cls, v: str) -> List[str]:
         return v.split(",") if v else []
 
-    @field_validator("GROQ_API_KEY")
+    @field_validator("GOOGLE_MAPS_API_KEY")
     @classmethod
-    def parse_groq_api_key(cls, v: str | None) -> str:
+    def parse_google_maps_api_key(cls, v: str | None) -> str:
         if not v:
-            raise ValueError("GROQ_API_KEY is not set")
+            raise ValueError("GOOGLE_MAPS_API_KEY is not set")
+        return v
+
+    @field_validator("OPENAI_API_KEY")
+    @classmethod
+    def parse_openai_api_key(cls, v: str | None) -> str:
+        if not v:
+            raise ValueError("OPENAI_API_KEY is not set")
+        return v
+
+    @field_validator("MODEL_NAME")
+    @classmethod
+    def parse_model_name(cls, v: str) -> str:
+        if not v:
+            raise ValueError("MODEL_NAME is not set")
+        return v
+
+    @field_validator("PLANNING_MODEL_NAME")
+    @classmethod
+    def parse_planning_model_name(cls, v: str) -> str:
+        if not v:
+            raise ValueError("PLANNING_MODEL_NAME is not set")
         return v
 
 

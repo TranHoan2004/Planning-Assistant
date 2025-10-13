@@ -6,6 +6,7 @@ py_library(
         "__init__.py",
         "graph.py",
         "nodes.py",
+        "state.py",
         "summarize.py",
         "tools.py",
     ],
@@ -13,8 +14,9 @@ py_library(
     visibility = ["//:__subpackages__"],
     deps = [
         "//agents/chat/domain",
-        "//agents/plan/application",
-        "//agents/shared",
+        "//agents/hotel/application",
+        "//agents/shared:models",
+        "//agents/shared:runtime",
         "//agents/shared/infrastructure",
         "//agents/shared/infrastructure/config",
         "//agents/shared/tools",
@@ -22,6 +24,5 @@ py_library(
         "@pip//langchain_tavily",
         "@pip//langgraph",
         "@pip//langgraph_prebuilt",
-        "@pip//typing_extensions",
     ],
 )

@@ -22,6 +22,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.plango.auth.config.security.filter.JWTAuthenticationFilter;
+import com.plango.auth.config.security.JwtAuthenticationEntryPoint;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,8 +31,10 @@ import lombok.RequiredArgsConstructor;
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    @Autowired
-    private JWTAuthenticationFilter filter;
+    private final JWTAuthenticationFilter filter;
+
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
     private static final String[] WHITE_LIST_URL = {
             "/health",
             "/api/log",
@@ -44,9 +47,13 @@ public class SecurityConfig {
             "/h2-console/**",
             "/api/auth/login",
             "/api/auth/register",
+            "/api/auth/verify-email",
+            "/api/auth/otp",
+            "/api/auth/reset-password",
             "/api/auth/refreshToken",
             "/api/auth/logout",
             "/api/auth/inspect",
+            "/api/auth/outbound/*/authenticate",
     };
 
     @Bean
@@ -60,6 +67,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .build();
     }
 
@@ -79,8 +87,8 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http,
-                                                       PasswordEncoder encoder,
-                                                       UserDetailsService userDetailsService) throws Exception {
+            PasswordEncoder encoder,
+            UserDetailsService userDetailsService) throws Exception {
         AuthenticationManagerBuilder authenticationManagerBuilder = http
                 .getSharedObject(AuthenticationManagerBuilder.class);
 

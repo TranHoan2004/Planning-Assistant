@@ -6,7 +6,7 @@ from agents.shared.infrastructure.config.settings import settings
 connection_pool: Optional[AsyncConnectionPool] = None
 
 
-async def init_connection_pool():
+async def init_connection_pool() -> AsyncConnectionPool:
     """
     Initialize async connection pool for postgres
     """
@@ -29,6 +29,7 @@ async def init_connection_pool():
         logger.info(
             "Connection pool created, pool size: {pool_size}", pool_size=pool_size
         )
+        return connection_pool
     except Exception as e:
         logger.error("Error creating connection pool {error}", error=str(e))
         raise e
@@ -45,7 +46,8 @@ async def close_pool():
             raise e
 
 
-async def get_connection_pool():
+async def get_connection_pool() -> AsyncConnectionPool:
+    global connection_pool
     if connection_pool is None:
-        await init_connection_pool()
+        connection_pool = await init_connection_pool()
     return connection_pool

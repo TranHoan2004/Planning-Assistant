@@ -5,6 +5,7 @@ import { Input } from '@heroui/react'
 import CustomButton from '@/components/ui/CustomButton'
 import { Step } from '@/app/forgot-password/components/ForgotPasswordFlow'
 import { callToast } from '@/app/forgot-password/components/CallToast'
+import { useTranslations } from 'next-intl'
 
 interface VerifyEmailProps {
   setStep: React.Dispatch<React.SetStateAction<Step>>
@@ -30,13 +31,13 @@ const VerifyEmail = ({ setStep, setEmail, email }: VerifyEmailProps) => {
       switch (status) {
         case 'REG_002':
           callToast({
-            message: 'Email is not found. Please enter your email again',
+            message: t('emailNotFound'),
             color: 'warning'
           })
           break
         case '200':
           callToast({
-            message: 'Please check your email to get 6-digit OTP code',
+            message: t('sendOtpSuccess'),
             title: 'Email verify success',
             color: 'success'
           })
@@ -50,19 +51,19 @@ const VerifyEmail = ({ setStep, setEmail, email }: VerifyEmailProps) => {
     } catch (error) {
       callToast({
         message: (error as Error).message,
-        title: 'Verify email failed',
+        title: t('verifyEmailFailed'),
         color: 'danger'
       })
     }
   }
 
+  const t = useTranslations('ForgotPasswordPage')
+
   return (
     <>
       <div className="w-full text-center space-y-2">
-        <h2 className="text-5xl font-[700]">Have you forgot password?</h2>
-        <p className="text-gray-500 text-md mt-4">
-          Enter your email to reset your password.
-        </p>
+        <h2 className="text-5xl font-[700]">{t('title')}</h2>
+        <p className="text-gray-500 text-md mt-4">{t('subtitle')}</p>
       </div>
       <div className="w-full bg-white rounded-3xl shadow-md border border-gray-200 p-6 space-y-4">
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -75,7 +76,7 @@ const VerifyEmail = ({ setStep, setEmail, email }: VerifyEmailProps) => {
             className="w-full"
             label="Email"
           />
-          <CustomButton type="submit" label={'Verify your email'} />
+          <CustomButton type="submit" label={t('verifyEmailBtn')} />
         </form>
       </div>
     </>

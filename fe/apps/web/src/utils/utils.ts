@@ -28,10 +28,10 @@ export const formatDate = (dateString: string | null | undefined) => {
   if (!dateString) return ''
   try {
     const date = parseISO(dateString)
-    if (isToday(date)) {
-      return format(date, 'HH:mm') + ' Hôm nay'
-    }
-    return format(date, 'dd/MM/yyyy HH:mm')
+    // if (isToday(date)) {
+    //   return format(date, 'HH:mm') + ' Hôm nay'
+    // }
+    return format(date, 'dd/MM/yyyy')
   } catch (error) {
     return ''
   }

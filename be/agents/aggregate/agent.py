@@ -9,11 +9,17 @@ from langchain_core.messages import AIMessage, HumanMessage
 from langgraph.checkpoint.postgres.aio import AsyncPostgresSaver
 from langgraph.types import Command
 from psycopg_pool import AsyncConnectionPool
+from langgraph.checkpoint.memory import MemorySaver
+from langgraph_swarm import create_swarm
 
-from agents.chat.application.graph import chatbot_graph
+from agents.chat.application.graph import chatbot
+from agents.plan.application.graph import plan_agent
+from agents.hotel.application.graph import create_hotel_agent
 from agents.shared.data_stream.stream_parts import (
     DataStreamFinishPart,
     DataStreamInterruptPart,
+    DataStreamStartStepPart,
+    DataStreamFinishStepPart,
     DataStreamMessageStartPart,
     DataStreamTextDeltaPart,
     DataStreamTextEndPart,
@@ -21,6 +27,8 @@ from agents.shared.data_stream.stream_parts import (
     DataStreamDataPart,
 )
 from agents.shared.infrastructure.connection_pool import get_connection_pool
+from agents.shared.runtime import ContextSchema
+from agents.shared.state import AgentState
 
 
 class StreamStatus(Enum):
@@ -43,7 +51,14 @@ class Agent:
 
     async def _create_workflow_graph(self) -> CompiledStateGraph:
         if self._graph is None:
-            graph_builder = chatbot_graph()
+            hotel_agent = create_hotel_agent()
+
+            graph_builder = create_swarm(
+                agents=[chatbot, plan_agent, hotel_agent],  # type: ignore
+                default_active_agent="chatbot",
+                context_schema=ContextSchema,
+                state_schema=AgentState,
+            )
 
             try:
                 connection_pool = await self._get_connection_pool()
@@ -52,32 +67,45 @@ class Agent:
                     await checkpointer.setup()
                 else:
                     checkpointer = None
+                # checkpointer = MemorySaver()
                 self._graph = graph_builder.compile(checkpointer=checkpointer)
             except Exception as e:
                 logger.error("Error creating checkpointer", error=str(e))
                 raise e
         return self._graph
 
-    async def _async_stream(self, human_message: HumanMessage, config: RunnableConfig):
+    async def _async_stream(
+        self,
+        human_message: HumanMessage,
+        config: RunnableConfig,
+        context: ContextSchema,
+    ):
+        if self._graph is None:
+            self._graph = await self._create_workflow_graph()
+
         message_id = f"{uuid4().hex}"
         text_id = f"msg_{message_id}"
+        text_started = False
 
         if self._status == StreamStatus.INIT:
             self._status = StreamStatus.RUNNING
             yield DataStreamMessageStartPart(message_id).format()
-            yield DataStreamTextStartPart(text_id).format()
 
         async for chunk in self._graph.astream(
             input={"messages": [human_message]},
             stream_mode=["messages", "custom"],
-            config=config,
+            config={**config, "recursion_limit": 12},
             subgraphs=True,
+            context=context,  # type:ignore
         ):
             _, stream_mode, step = chunk
             if stream_mode == "messages" and isinstance(step, tuple) and len(step) == 2:
                 message, metadata = step
-                if metadata.get("langgraph_node") == "chat_node":
+                if metadata.get("langgraph_node") == "agent":
                     if hasattr(message, "content") and message.content:
+                        if not text_started:
+                            yield DataStreamTextStartPart(text_id).format()
+                            text_started = True
                         yield DataStreamTextDeltaPart(text_id, message.content).format()
 
             # if stream_mode == "updates":
@@ -97,11 +125,24 @@ class Agent:
                             # Emit itinerary data chunks to the client
                             yield DataStreamDataPart("itinerary", data).format()
 
-        if self._status == StreamStatus.RUNNING:
-            self._status = StreamStatus.FINISHED
-            yield DataStreamTextEndPart(text_id).format()
+                    hotel_payload = step.get("data-hotel")
+                    if hotel_payload:
+                        data = hotel_payload.get("data")
+                        metadata = hotel_payload.get("metadata", {})
+                        if metadata.get("langgraph_node") == "rank_hotels_node":
+                            yield DataStreamDataPart("hotel", data).format()
 
-    async def stream_response(self, session_id: str, user_id: str, content: str):
+        if self._status == StreamStatus.RUNNING:
+            if text_started:
+                yield DataStreamTextEndPart(text_id).format()
+            self._status = StreamStatus.FINISHED
+
+        if self._status != StreamStatus.INTERRUPTED:
+            yield DataStreamFinishPart().format()
+
+    async def stream_response(
+        self, session_id: str, user_id: str, content: str, context: ContextSchema
+    ):
         """Stream response from agent compatible with Vercel AI SDK protocol"""
         if self._graph is None:
             self._graph = await self._create_workflow_graph()
@@ -118,11 +159,8 @@ class Agent:
 
         message = HumanMessage(content=content)
         try:
-            async for msg in self._async_stream(message, config):
+            async for msg in self._async_stream(message, config, context):
                 yield msg
-
-            if self._status != StreamStatus.INTERRUPTED:
-                yield DataStreamFinishPart().format()
 
             yield "data: [DONE]\n\n"
         except Exception as e:
@@ -142,14 +180,20 @@ class Agent:
         try:
             response = await self._graph.ainvoke(
                 Command(resume={"action": "create_itinerary", "approved": approved}),
-                config=config,
+                config={**config, "recursion_limit": 12},
             )
             return response
         except Exception as e:
             logger.error(f"Error getting response: {str(e)}")
             raise RuntimeError(f"Error getting response: {str(e)}") from e
 
-    async def response(self, session_id: str, user_id: str, content: str):
+    async def response(
+        self,
+        session_id: str,
+        user_id: str,
+        content: str,
+        context: ContextSchema,
+    ):
         if self._graph is None:
             self._graph = await self._create_workflow_graph()
 
@@ -163,8 +207,9 @@ class Agent:
         try:
             result = await self._graph.ainvoke(
                 {"messages": [HumanMessage(content=content)]},
-                config=config,
+                config={**config, "recursion_limit": 12},
                 subgraphs=True,
+                context=context,  # type:ignore
             )
             return result
         except Exception as e:
@@ -186,13 +231,22 @@ class Agent:
             result = await self._graph.aget_state(config=config)
             for msg in result.values.get("messages", []):
                 converted_msg = self._convert_to_ui_message(msg)
-                final_msg.append(converted_msg)
-            return final_msg
+                if converted_msg:
+                    final_msg.append(converted_msg)
+            itinerary = result.values.get("itinerary")
+            hotel_recommendation = result.values.get("hotel_recommendation")
+            return {
+                "messages": final_msg,
+                "itinerary": itinerary,
+                "hotel_recommendation": hotel_recommendation,
+            }
         except Exception as e:
             logger.error(f"Error getting response: {str(e)}")
             raise RuntimeError(f"Error getting response: {str(e)}") from e
 
-    def _convert_to_ui_message(self, msg: Union[HumanMessage, AIMessage]) -> Optional[dict]:
+    def _convert_to_ui_message(
+        self, msg: Union[HumanMessage, AIMessage]
+    ) -> Optional[dict]:
         if isinstance(msg, HumanMessage):
             return {
                 "id": msg.id,
@@ -208,6 +262,3 @@ class Agent:
                 }
 
         return None
-
-
-agent = Agent()

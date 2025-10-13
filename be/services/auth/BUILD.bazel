@@ -16,6 +16,13 @@ runtime_deps = [
     "@maven//:org_springframework_spring_tx",
     "@maven//:org_springframework_spring_webmvc",
     "@maven//:org_springframework_boot_spring_boot_starter_validation",
+    "@maven//:org_springframework_boot_spring_boot_starter_data_redis",
+    "@maven//:org_springframework_data_spring_data_redis",
+    "@maven//:org_springframework_boot_spring_boot_starter_mail",
+    "@maven//:jakarta_mail_jakarta_mail_api",
+    "@maven//:com_sun_mail_jakarta_mail",
+    "@maven//:com_sun_activation_jakarta_activation",
+    "@maven//:com_fasterxml_jackson_core_jackson_databind",
 
     # --- Database ---
     "@maven//:org_postgresql_postgresql",

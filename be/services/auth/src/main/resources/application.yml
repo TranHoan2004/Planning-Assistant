@@ -18,7 +18,30 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+  data:
+    redis:
+      host: ${SPRING_REDIS_HOST}
+      port: ${SPRING_REDIS_PORT}
+      password: ${SPRING_REDIS_PASSWORD}
 
+
+outbound:
+    identity:
+      google:
+        token-url: ${OUTBOUND_IDENTITY_GOOGLE_TOKEN_URL}
+        userinfo-url: ${OUTBOUND_IDENTITY_GOOGLE_USERINFO_URL}
+        client-id: "${OUTBOUND_IDENTITY_GOOGLE_CLIENT_ID}"
+        client-secret: "${OUTBOUND_IDENTITY_GOOGLE_CLIENT_SECRET}"
+        redirect-uri: "${OUTBOUND_IDENTITY_GOOGLE_REDIRECT_URI}"
+        grant-type: "${OUTBOUND_IDENTITY_GOOGLE_GRANT_TYPE}"
+
+      facebook:
+        token-url: https://graph.facebook.com/v18.0/oauth/access_token
+        userinfo-url: https://graph.facebook.com/me?fields=id,name,email
+        client-id: "YOUR_FACEBOOK_CLIENT_ID"
+        client-secret: "YOUR_FACEBOOK_CLIENT_SECRET"
+        redirect-uri: "http://localhost:8080/api/auth/outbound/facebook"
+        grant-type: "authorization_code"
 exe:
   security:
     jwt:
@@ -26,3 +49,6 @@ exe:
       refresh-token:
         expiration: ${SPRING_JWT_REFRESH_TOKEN_EXPIRATION}
       secret-key: ${SPRING_JWT_SECRET}
+profile:
+    service:
+        register-url: ${PROFILE_SERVICE_REGISTER_URL}

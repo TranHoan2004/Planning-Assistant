@@ -5,17 +5,15 @@ import { Image } from '@heroui/image'
 import React, { Suspense } from 'react'
 import RegisterForm from './components/RegisterForm'
 import { Link } from '@heroui/react'
-
-const prompts = [
-  'Ask PlanGo to make a completed initerary',
-  'Ask PlanGo what should i go today',
-  'Ask PlanGo to book a hotel, flight ticket'
-]
+import { useTranslations } from 'next-intl'
 
 const RegisterPage = () => {
   const [currentPromptIndex, setCurrentPromptIndex] = useState(0)
   const [displayText, setDisplayText] = useState('')
   const [isTyping, setIsTyping] = useState(true)
+  const t = useTranslations('RegisterPage')
+
+  const prompts = t.raw('prompts') as string[]
 
   useEffect(() => {
     const currentPrompt = prompts[currentPromptIndex]
@@ -67,15 +65,11 @@ const RegisterPage = () => {
           <div className="flex justify-center flex-1 items-center">
             <div className="w-full max-w-[450px] space-y-8">
               <div className="w-full text-center space-y-2">
-                <h2 className="text-6xl font-[700]">
-                  Plan Less
-                  <br />
-                  Travel More
-                </h2>
+                <h2 className="text-6xl font-[700]">{t('slogan')}</h2>
                 <p className="text-gray-500 text-md mt-4">
-                  The AI for planning and booking.{' '}
+                  {t('subtitle') + ' '}
                   <Link href="/" className="text-orange-600">
-                    Try it now !
+                    {t('tryNow')}
                   </Link>
                 </p>
               </div>

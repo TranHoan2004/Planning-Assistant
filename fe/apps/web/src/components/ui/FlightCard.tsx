@@ -61,22 +61,16 @@ export default function FlightCard({
           <div className="flex-1 grid grid-cols-3 gap-4 items-center">
             {/* Departure */}
             <div className=" text-center">
-              <div className="text-[28px] font-bold">
-                {departureTime}
-              </div>
+              <div className="text-[28px] font-bold">{departureTime}</div>
               <div className="text-sm text-gray-600 mb-0.5">
                 {departureLocation}
               </div>
-              <div className="text-sm text-gray-500">
-                {departureCity}
-              </div>
+              <div className="text-sm text-gray-500">{departureCity}</div>
             </div>
 
             {/* Flight Duration and Icon */}
             <div className="text-center">
-              <div className="text-sm text-gray-500 mb-4">
-                {duration}
-              </div>
+              <div className="text-sm text-gray-500 mb-4">{duration}</div>
               <div className="relative flex items-center justify-center mb-4">
                 <div className="w-full h-px bg-gray-300"></div>
                 <div className="absolute bg-white px-2">
@@ -85,31 +79,26 @@ export default function FlightCard({
                   </div>
                 </div>
               </div>
-              <div className="text-sm text-gray-500">
-                {flightType}
-              </div>
+              <div className="text-sm text-gray-500">{flightType}</div>
             </div>
 
             {/* Arrival */}
             <div className="text-center">
-              <div className="text-[28px] font-bold">
-                {arrivalTime}
-              </div>
+              <div className="text-[28px] font-bold">{arrivalTime}</div>
               <div className="text-sm text-gray-600 mb-0.5">
                 {arrivalLocation}
               </div>
-              <div className="text-sm text-gray-500">
-                {arrivalCity}
-              </div>
+              <div className="text-sm text-gray-500">{arrivalCity}</div>
             </div>
           </div>
 
           {/* Price and Button */}
           <div className="flex-shrink-0 text-center">
             <div className="text-2xl font-bold mb-3">
-              {price}{currency}
+              {price}
+              {currency}
             </div>
-            <Button 
+            <Button
               className="bg-black text-white px-8 py-2 rounded-lg font-medium w-36 h-9"
               size="lg"
             >

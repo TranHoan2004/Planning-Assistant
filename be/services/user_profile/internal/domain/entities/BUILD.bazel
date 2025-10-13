@@ -1,0 +1,12 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "entities",
+    srcs = [
+        "saved.go",
+        "user.go",
+    ],
+    importpath = "gitlab.com/plango-travel/backend/services/user_profile/internal/domain/entities",
+    visibility = ["//services/user_profile:__subpackages__"],
+    deps = ["//services/user_profile/internal/domain/valueobjects"],
+)
