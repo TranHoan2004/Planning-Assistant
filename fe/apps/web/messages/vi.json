@@ -23,6 +23,8 @@
         ]
     },
     "LoginPage": {
+        "login-google": "Tiếp tục với Google",
+        "or-continue": "Hoặc tiếp tục với",
         "slogan": "\"Ít kế hoạch, nhiều khám phá\"",
         "subtitle": "Plango ở đây để giúp bạn có được chuyến đi đẹp nhất trong cuộc đời của mình.",
         "tryNow": "Dùng thử ngay!",

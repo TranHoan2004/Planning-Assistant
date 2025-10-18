@@ -4,10 +4,6 @@ import { ItineraryResponse } from '@/app/(main)/chat/_schema/itinerary'
 import { createContext, useState, use } from 'react'
 
 type ChatContextType = {
-  currentSessionId?: string
-  setCurrentSessionId: (sessionId: string) => void
-  input: string
-  setInput: (input: string) => void
   itinerary?: ItineraryResponse
   setItinerary: (itinerary?: ItineraryResponse) => void
   recommendHotelIds: string[]
@@ -18,15 +14,15 @@ export const ChatContext = createContext<ChatContextType | null>(null)
 
 type ChatProviderProps = {
   children: React.ReactNode
-  sessionId?: string
+  itinerary?: ItineraryResponse
 }
 
-export const ChatProvider = ({ children, sessionId }: ChatProviderProps) => {
-  const [currentSessionId, setCurrentSessionId] = useState(sessionId)
-  const [input, setInput] = useState('')
-
+export const ChatProvider = ({
+  children,
+  itinerary: initialItinerary
+}: ChatProviderProps) => {
   const [itinerary, setItinerary] = useState<ItineraryResponse | undefined>(
-    undefined
+    initialItinerary
   )
 
   const [recommendHotelIds, setRecommendHotelIds] = useState<string[]>([])
@@ -34,10 +30,6 @@ export const ChatProvider = ({ children, sessionId }: ChatProviderProps) => {
   return (
     <ChatContext.Provider
       value={{
-        currentSessionId,
-        setCurrentSessionId,
-        input,
-        setInput,
         itinerary,
         setItinerary,
         recommendHotelIds,

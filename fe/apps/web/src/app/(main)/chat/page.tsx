@@ -10,18 +10,14 @@ const NewChatPage = () => {
 
   return (
     <main className="flex w-full">
-      <ChatProvider sessionId={id}>
+      <ChatProvider>
         {/* Left Side - Prompt Part */}
-        <ScrollShadow className="flex-1/2 h-full" size={0} hideScrollBar>
-          <PromptSection sessionId={id} />
-        </ScrollShadow>
+        <div className="flex-1/2 h-full">
+          <PromptSection sessionId={id} initialMessages={[]} />
+        </div>
 
         {/* Right Side - Suggestions/Map Part */}
         <RightSideBar />
-
-        {/* <ScrollShadow className="pl-2 flex-1/2 h-full" size={0} hideScrollBar>
-          <SuggestionSection />
-        </ScrollShadow> */}
       </ChatProvider>
     </main>
   )

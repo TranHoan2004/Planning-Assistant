@@ -1,5 +1,5 @@
 import { withAuth } from '@/middlewares/auth-middleware'
-import { CONVERSATION_API_URL } from '@/utils/constraints'
+import { getConversationById } from '@/services/conversation.service'
 import { NextRequest, NextResponse } from 'next/server'
 
 const getConversation = async (
@@ -22,21 +22,9 @@ const getConversation = async (
     )
   }
 
-  const response = await fetch(
-    `${CONVERSATION_API_URL}/v1/conversation/${sessionId}`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }
-  )
+  const response = getConversationById(sessionId)
 
-  return new NextResponse(response.body, {
-    headers: response.headers,
-    status: response.status,
-    statusText: response.statusText
-  })
+  return NextResponse.json({ ...response })
 }
 
 export const GET = withAuth(getConversation)

@@ -14,6 +14,7 @@ import {
   QueryClient,
   QueryClientProvider
 } from '@tanstack/react-query'
+import { useLocale } from 'next-intl'
 
 function makeQueryClient() {
   return new QueryClient({
@@ -51,6 +52,7 @@ export interface ProvidersProps {
 export function Providers({ children, themeProps }: ProvidersProps) {
   const router = useRouter()
   const queryClient = getQueryClient()
+  const language = useLocale()
 
   return (
     <StoreProvider>
@@ -58,7 +60,7 @@ export function Providers({ children, themeProps }: ProvidersProps) {
         <HeroUIProvider navigate={router.push}>
           <GoogleMapsAPIProvider
             apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}
-            language="vi"
+            language={language}
             region="VN"
           >
             <NextThemesProvider {...themeProps}>

@@ -6,7 +6,7 @@ import { format } from 'date-fns'
 import { useSelector } from 'react-redux'
 import HotelGrid from '@/components/ui/HotelGrid'
 import { useChatContext } from '@/contexts/chat-context'
-import ItineraryDetailView from '@/app/(main)/chat/components/ItinenaryDetailView'
+import ItineraryDetailView from '@/components/itinerary/ItinenaryDetailView'
 import FlightCard from '@/components/ui/FlightCard'
 import MapSection from '@/app/(main)/chat/components/MapSection'
 
@@ -41,7 +41,7 @@ const RightSideBarContentWrapper = () => {
           {itinerary ? (
             <ItineraryDetailView data={itinerary} />
           ) : (
-            <>Bắt đầu chat với PlanGo để lên kế hoạch ngay!</>
+            <p>Bắt đầu chat với Plango để lên kế hoạch ngay!</p>
           )}
         </div>
       )}

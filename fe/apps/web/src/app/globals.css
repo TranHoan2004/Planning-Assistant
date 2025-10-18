@@ -19,6 +19,16 @@
   @apply bg-[#FFB26A]
 }
 
+::-webkit-scrollbar {
+  background-color: transparent;
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: oklch(87% 0 0);
+  border-radius: 8px;
+}
+
 @layer utilities {
   /* Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {

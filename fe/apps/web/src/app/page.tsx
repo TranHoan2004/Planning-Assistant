@@ -5,9 +5,10 @@ import { Blogs } from '@/constants'
 import { Button } from '@heroui/button'
 import { Card } from '@heroui/card'
 import { Image } from '@heroui/image'
-import InputContainer from '@/components/ui/landing-page/InputContainer'
+import InputContainer from '@/components/landing-page/InputContainer'
 import { getTranslations } from 'next-intl/server'
 import { ScrollShadow } from '@heroui/scroll-shadow'
+import Footer from "@/components/layout/Footer";
 
 const Home = async () => {
   const t = await getTranslations('HomePage')
@@ -294,6 +295,7 @@ const Home = async () => {
               </div>
             </div>
           </main>
+          <Footer/>
         </ScrollShadow>
       </div>
     </div>

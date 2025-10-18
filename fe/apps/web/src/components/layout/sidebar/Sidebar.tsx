@@ -62,7 +62,7 @@ export const Sidebar = () => {
   return (
     <aside
       className={cn(
-        'h-full flex flex-col z-50 justify-between w-16 border-r border-[#E5E7EB]'
+        'relative h-full flex flex-col z-50 justify-between w-16 border-r border-[#E5E7EB]'
       )}
     >
       {/* Navigation */}

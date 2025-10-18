@@ -1,5 +1,5 @@
 // Only using this service in server side
-
+import 'server-only'
 import { AUTH_API_URL } from '@/utils/constraints'
 
 export interface LoginRequest {
@@ -105,5 +105,23 @@ export const getSixDigitsOtpCode = async (email: string) => {
   })
 
   if (!res.ok) throw new Error('Cannot get OTP code')
+  return await res.json()
+}
+
+export const onboardOAuth2 = async (provider: string, code: string) => {
+  const res = await fetch(
+    `${AUTH_API_URL}/api/auth/outbound/${provider}/authenticate`,
+    {
+      method: 'POST',
+      body: JSON.stringify({
+        code
+      })
+    }
+  )
+
+  if (!res.ok) {
+    throw new Error(`Error onboarding user. Status ${res.status}`)
+  }
+
   return await res.json()
 }

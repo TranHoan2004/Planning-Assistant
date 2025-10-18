@@ -23,6 +23,8 @@
         ]
     },
     "LoginPage": {
+        "login-google": "Continue with Google",
+        "or-continue": "Or continue with",
         "slogan": "\"Plan less, travel more\"",
         "subtitle": "Plango is here to help you have the best trip of your life.",
         "tryNow": "Try now!",

@@ -21,7 +21,7 @@ import { Avatar } from '@heroui/avatar'
 import { SearchIcon } from '@/assets/Icons'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@/state/store'
-import { CiLogout } from 'react-icons/ci'
+import { CiLogout, CiUser } from 'react-icons/ci'
 import { useRouter } from 'next/navigation'
 import { clearCurrentUser, setCurrentUser } from '@/state/auth-slice'
 import { clientApi } from '@/utils/client-api'
@@ -171,7 +171,7 @@ export const ChatHeader = () => {
                 id={item}
                 className="text-black"
                 href={`/${item}`}
-                onClick={handleNav(item)}
+                onPress={handleNav(item)}
               >
                 <div
                   id={item}
@@ -191,11 +191,21 @@ export const ChatHeader = () => {
               </Link>
             ))}
             {!currentUser && (
-              <div className="w-[160px] text-center cursor-pointer pb-3">
-                <Link href="/login">
-                  <span className="font-bold text-red-500">{t('login')}</span>
-                </Link>
-              </div>
+              <>
+                <div className="w-[160px] text-center cursor-pointer pb-3">
+                  <Link href="/login">
+                    <span className="font-bold text-red-500">{t('login')}</span>
+                  </Link>
+                </div>
+                <Button
+                  as={Link}
+                  href="/register"
+                  disableAnimation
+                  className="w-[80px] bg-white text-center cursor-pointer pb-3 mr-4"
+                >
+                  <span className="text-lg scale-90 h-[32px]">Đăng ký</span>
+                </Button>
+              </>
             )}
           </div>
           {!currentUser ? (
@@ -216,6 +226,13 @@ export const ChatHeader = () => {
                   <Avatar size="sm" className="cursor-pointer mb-1.5" />
                 </DropdownTrigger>
                 <DropdownMenu>
+                  <DropdownItem
+                    key={'profile'}
+                    onPress={() => router.push('/profile')}
+                    startContent={<CiUser className="text-xl" />}
+                  >
+                    Profile
+                  </DropdownItem>
                   <DropdownItem
                     key="logout"
                     closeOnSelect={true}

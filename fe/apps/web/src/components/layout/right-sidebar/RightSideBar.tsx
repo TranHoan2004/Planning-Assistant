@@ -17,6 +17,7 @@ import { Tooltip } from '@heroui/react'
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import RightSideBarContentWrapper from './RightSideBarContentWrapper'
+import { cn } from '@repo/utils/tailwind-utils'
 
 const RightSideBar = () => {
   const activeRightSideBarItem = useSelector(
@@ -37,8 +38,10 @@ const RightSideBar = () => {
 
   return (
     <aside
-      className={`shadow p-4 transition-all duration-300 ease-in-out overflow-hidden mt-4 mb-4 rounded-l-3xl
-        ${isCollapsed ? 'w-[clamp(400px,50vw,800px)] max-w-[800px] ' : 'w-16'}`}
+      className={cn(
+        `shadow p-4 transition-all duration-300 ease-in-out overflow-hidden mt-4 mb-4 rounded-l-3xl`,
+        isCollapsed ? 'w-[clamp(400px,50vw,800px)] max-w-[800px]' : 'w-16'
+      )}
     >
       <nav
         className={`flex ${isCollapsed ? 'gap-5 flex-row' : 'flex-col gap-4'}`}

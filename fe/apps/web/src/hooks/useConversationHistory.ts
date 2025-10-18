@@ -6,19 +6,16 @@ const fetchConversationHistory = async (
   userId: string,
   page?: number,
   pageSize?: number
-) => {
-  try {
-    const resp = await clientApi.get(`/api/conversation/history/${userId}`, {
+) =>
+  clientApi
+    .get(`/api/conversation/history/${userId}`, {
       params: {
         page,
         pageSize
       }
     })
-    return resp.data
-  } catch (err) {
-    throw new Error(`Cannot get conversation history`)
-  }
-}
+    .then((resp) => resp.data)
+    .catch((err) => err)
 
 interface useConversationHistoryProps {
   userId: string

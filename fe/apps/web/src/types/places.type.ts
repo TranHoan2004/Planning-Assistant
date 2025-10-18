@@ -1,49 +1,26 @@
 export interface PlaceDetailsResponse {
   id: string
   displayName?: {
-    text: string
-    languageCode: string
-  }
-  formattedAddress?: string
+    text?: string | null
+    languageCode?: string | null
+  } | null
+  formattedAddress?: string | null
   location?: {
-    latitude: number
-    longitude: number
-  }
-  rating?: number
-  userRatingCount?: number
-  businessStatus?: string
-  priceLevel?: string
-  websiteUri?: string
-  internationalPhoneNumber?: string
-  nationalPhoneNumber?: string
-  types?: string[]
-  googleMapsUri?: string
-  openingHours?: {
-    openNow: boolean
-    periods: Array<{
-      open: { day: number; hour: number; minute: number }
-      close: { day: number; hour: number; minute: number }
-    }>
-    weekdayDescriptions: string[]
-  }
-  photos?: Array<{
-    name: string
-    widthPx: number
-    heightPx: number
-  }>
-  reviews?: Array<{
-    name: string
-    relativePublishTimeDescription: string
-    rating: number
-    text: { text: string; languageCode: string }
-    originalText: { text: string; languageCode: string }
-    authorAttribution: {
-      displayName: string
-      uri: string
-      photoUri: string
-    }
-  }>
-  [key: string]: any
+    latitude?: number | null
+    longitude?: number | null
+  } | null
+  rating?: number | null
+  userRatingCount?: number | null
+  businessStatus?: string | null
+  priceLevel?: string | null
+  websiteUri?: string | null
+  internationalPhoneNumber?: string | null
+  nationalPhoneNumber?: string | null
+  types?: string[] | null
+  googleMapsUri?: string | null
+  openingHours?: google.maps.places.OpeningHours | null
+  photos?: Array<google.maps.places.Photo> | null
+  reviews?: Array<google.maps.places.Review> | null
 }
 
 export interface PlaceDetailsOptions {

@@ -2,7 +2,7 @@
 
 import FlightCard from '@/components/ui/FlightCard'
 import HotelGrid from '@/components/ui/HotelGrid'
-import ItineraryDetailView from './ItinenaryDetailView'
+import ItineraryDetailView from '../../../../components/itinerary/ItinenaryDetailView'
 import { useChatContext } from '@/contexts/chat-context'
 import { format } from 'date-fns'
 

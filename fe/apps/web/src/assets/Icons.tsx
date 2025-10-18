@@ -1,7 +1,11 @@
 import * as React from 'react'
 
 import { IconSvgProps } from '@/types'
+export * from './FacebookIcon'
+export * from './ParkIcon'
+export * from './AttractionsIcon'
 
+// TODO: refactor this code
 export const DiscordIcon: React.FC<IconSvgProps> = ({
   size = 24,
   width,
