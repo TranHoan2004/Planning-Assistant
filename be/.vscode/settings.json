@@ -1,50 +1,59 @@
 {
-    "python.analysis.autoImportCompletions": true,
-    "search.exclude": {
-        "bazel-*": true
-    },
-    "files.watcherExclude": {
-        "bazel-*/**": true
-    },
-    "files.exclude": {
-        "bazel-*/**": true
-    },
+  "python.analysis.autoImportCompletions": true,
+  "search.exclude": {
+    "bazel-*": true
+  },
+  "files.watcherExclude": {
+    "bazel-*/**": true
+  },
+  "files.exclude": {
+    "bazel-*/**": true
+  },
+  "bazel.buildifierFixOnFormat": true,
+  "bazel.enableCodeLens": true,
+  "bazel.buildifierExecutable": "./bazel-out/bazel_env-opt/bin/tools/bazel_env/bin/buildifier",
+  "bazel.lsp.command": "./bazel-out/bazel_env-opt/bin/tools/bazel_env/bin/starpls",
+  "bazel.queriesShareServer": false,
+  "bazel.lsp.args": [
+    "server",
+    "--experimental_infer_ctx_attributes",
+    "--experimental_use_code_flow_analysis",
+    "--experimental_enable_label_completions"
+  ],
 
-    "python.analysis.exclude": [
-        "bazel-*/**",
-        "grade/**",
-        "infra/**",
-        "tools/**",
-        "requirements/**",
-        "services/auth/**",
-        "services/accommodation/**",
-        "services/user_profile/**"
-    ],
-    "bazel.lsp.command": "starpls",
-    "bazel.lsp.args": ["server", "--experimental_infer_ctx_attributes"],
-    "windsurfPyright.analysis.autoImportCompletions": true,
-    "windsurfPyright.analysis.exclude": [
-        ".git",
-        ".venv",
-        "**/__pycache__",
-        "**/node_modules",
-        "bazel-*/**",
-        "grade/**",
-        "infra/**",
-        "tools/**",
-        "requirements/**",
-        "services/auth/**",
-        "services/accommodation/**",
-        "services/user_profile/**"
-    ],
-    "cursorpyright.analysis.autoImportCompletions": true,
-    "cursorpyright.analysis.exclude": [
-        "bazel-*/**",
-        "grade/**",
-        "infra/**",
-        "tools/**",
-        "services/auth/**",
-        "services/accommodation/**",
-        "services/user_profile/**"
-    ]
+  "python.analysis.exclude": [
+    "bazel-*/**",
+    "grade/**",
+    "infra/**",
+    "tools/**",
+    "requirements/**",
+    "services/auth/**",
+    "services/accommodation/**",
+    "services/user_profile/**"
+  ],
+  "windsurfPyright.analysis.autoImportCompletions": true,
+  "windsurfPyright.analysis.exclude": [
+    ".git",
+    ".venv",
+    "**/__pycache__",
+    "**/node_modules",
+    "bazel-*/**",
+    "grade/**",
+    "infra/**",
+    "tools/**",
+    "requirements/**",
+    "services/auth/**",
+    "services/accommodation/**",
+    "services/user_profile/**"
+  ],
+  "cursorpyright.analysis.autoImportCompletions": true,
+  "cursorpyright.analysis.exclude": [
+    "bazel-*/**",
+    "grade/**",
+    "infra/**",
+    "tools/**",
+    "services/auth/**",
+    "services/accommodation/**",
+    "services/user_profile/**"
+  ]
 }

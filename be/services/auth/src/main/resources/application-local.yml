@@ -36,10 +36,11 @@ spring:
 
 # ===== Java Mail Sender =====
   mail:
-    host: smtp.gmail.com
-    port: 587
+    host: ${SMTP_HOST}
+    port: ${SMTP_PORT}
     username: ${SMTP_USERNAME}
     password: ${SMTP_PASSWORD}
+    from: ${SEND_FROM}
     properties:
       mail:
         smtp:

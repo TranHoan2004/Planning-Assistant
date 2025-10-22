@@ -17,7 +17,7 @@ py_library(
         "//agents/chat/domain",
         "//agents/shared:runtime",
         "//agents/shared/data_stream",
-        "//agents/shared/infrastructure/config",
+        "//agents/shared/infrastructure/config:rate_limit",
         "@pip//fastapi",
         "@pip//loguru",
         "@pip//pydantic",

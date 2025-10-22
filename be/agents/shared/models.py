@@ -1,6 +1,6 @@
 from enum import Enum
 from typing import TypedDict, Optional, List
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 from datetime import date
 
 
@@ -194,7 +194,6 @@ class HotelPick(BaseModel):
 
 
 class HotelRecommendation(BaseModel):
-    time_interval: TimeInterval = Field(description="Check-in and check-out dates")
     recommended_hotels: List[HotelPick] = Field(
         description="Top recommended hotels with brief reasoning"
     )
@@ -204,6 +203,7 @@ class HotelRecommendation(BaseModel):
     booking_tips: Optional[str] = Field(
         default=None, description="Tips for booking these hotels"
     )
+    model_config = ConfigDict(extra="allow")
 
 
 class DestinationInfo(BaseModel):

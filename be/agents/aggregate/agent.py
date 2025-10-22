@@ -1,5 +1,4 @@
 from typing import Optional, Union
-from uuid import uuid4
 from enum import Enum
 
 from langgraph.graph.state import CompiledStateGraph
@@ -15,34 +14,16 @@ from langgraph_swarm import create_swarm
 from agents.chat.application.graph import chatbot
 from agents.plan.application.graph import plan_agent
 from agents.hotel.application.graph import create_hotel_agent
-from agents.shared.data_stream.stream_parts import (
-    DataStreamFinishPart,
-    DataStreamInterruptPart,
-    DataStreamStartStepPart,
-    DataStreamFinishStepPart,
-    DataStreamMessageStartPart,
-    DataStreamTextDeltaPart,
-    DataStreamTextEndPart,
-    DataStreamTextStartPart,
-    DataStreamDataPart,
-)
+from agents.shared.data_stream import CustomDataStreamConfig, StreamResponse
 from agents.shared.infrastructure.connection_pool import get_connection_pool
 from agents.shared.runtime import ContextSchema
 from agents.shared.state import AgentState
-
-
-class StreamStatus(Enum):
-    INIT = "init"
-    RUNNING = "running"
-    FINISHED = "finished"
-    INTERRUPTED = "interrupted"
 
 
 class Agent:
     def __init__(self) -> None:
         self._graph: Optional[CompiledStateGraph] = None
         self._connection_pool: Optional[AsyncConnectionPool] = None
-        self._status: StreamStatus = StreamStatus.INIT
 
     async def _get_connection_pool(self) -> AsyncConnectionPool:
         if self._connection_pool is None:
@@ -83,62 +64,29 @@ class Agent:
         if self._graph is None:
             self._graph = await self._create_workflow_graph()
 
-        message_id = f"{uuid4().hex}"
-        text_id = f"msg_{message_id}"
-        text_started = False
-
-        if self._status == StreamStatus.INIT:
-            self._status = StreamStatus.RUNNING
-            yield DataStreamMessageStartPart(message_id).format()
-
-        async for chunk in self._graph.astream(
-            input={"messages": [human_message]},
-            stream_mode=["messages", "custom"],
-            config={**config, "recursion_limit": 12},
-            subgraphs=True,
-            context=context,  # type:ignore
+        async for data_part in StreamResponse(
+            iterator=self._graph.astream(
+                input={"messages": [human_message]},
+                stream_mode=["messages", "custom"],
+                config={**config, "recursion_limit": 12},
+                subgraphs=True,
+                context=context,  # type:ignore
+            ),
+            messages_streamable_nodes=["agent"],
+            custom_data_stream_config=[
+                CustomDataStreamConfig(
+                    key="data-itinerary",
+                    node_name="create_itinerary_node",
+                    data_type="itinerary",
+                ),
+                CustomDataStreamConfig(
+                    key="data-hotel",
+                    node_name="rank_hotels_node",
+                    data_type="hotel",
+                ),
+            ],
         ):
-            _, stream_mode, step = chunk
-            if stream_mode == "messages" and isinstance(step, tuple) and len(step) == 2:
-                message, metadata = step
-                if metadata.get("langgraph_node") == "agent":
-                    if hasattr(message, "content") and message.content:
-                        if not text_started:
-                            yield DataStreamTextStartPart(text_id).format()
-                            text_started = True
-                        yield DataStreamTextDeltaPart(text_id, message.content).format()
-
-            # if stream_mode == "updates":
-            #     logger.debug(f"updates: {step}")
-            #     if isinstance(step, dict) and step.get("__interrupt__"):
-            #         self._status = StreamStatus.INTERRUPTED
-            #         yield DataStreamInterruptPart({"message": "Do you want to create a detailed itinerary?"}).format()
-
-            if stream_mode == "custom":
-                # Forward custom data emitted by get_stream_writer() from nodes
-                if isinstance(step, dict):
-                    payload = step.get("data-itinerary")
-                    if payload:
-                        data = payload.get("data")
-                        metadata = payload.get("metadata", {})
-                        if metadata.get("langgraph_node") == "create_itinerary_node":
-                            # Emit itinerary data chunks to the client
-                            yield DataStreamDataPart("itinerary", data).format()
-
-                    hotel_payload = step.get("data-hotel")
-                    if hotel_payload:
-                        data = hotel_payload.get("data")
-                        metadata = hotel_payload.get("metadata", {})
-                        if metadata.get("langgraph_node") == "rank_hotels_node":
-                            yield DataStreamDataPart("hotel", data).format()
-
-        if self._status == StreamStatus.RUNNING:
-            if text_started:
-                yield DataStreamTextEndPart(text_id).format()
-            self._status = StreamStatus.FINISHED
-
-        if self._status != StreamStatus.INTERRUPTED:
-            yield DataStreamFinishPart().format()
+            yield data_part
 
     async def stream_response(
         self, session_id: str, user_id: str, content: str, context: ContextSchema
@@ -146,9 +94,6 @@ class Agent:
         """Stream response from agent compatible with Vercel AI SDK protocol"""
         if self._graph is None:
             self._graph = await self._create_workflow_graph()
-
-        # Reset stream status for each new streaming request
-        self._status = StreamStatus.INIT
 
         config: RunnableConfig = {
             "configurable": {
@@ -161,8 +106,6 @@ class Agent:
         try:
             async for msg in self._async_stream(message, config, context):
                 yield msg
-
-            yield "data: [DONE]\n\n"
         except Exception as e:
             logger.error(f"Error streaming response: {str(e)}")
 

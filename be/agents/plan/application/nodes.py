@@ -27,10 +27,9 @@ async def create_itinerary_node(
     state: PlanAgentState, config: RunnableConfig
 ) -> PlanAgentState:
     """Create detailed itinerary based on plan."""
-    context = state["context"]
     plan = state["plan"]
-    if context is None or plan is None:
-        logger.warning("create_itinerary_node: Missing context or plan in state")
+    if plan is None:
+        logger.warning("create_itinerary_node: Missing plan in state")
         return {**state}
     parser = JsonOutputParser(pydantic_object=ItineraryResponse)
     stream_writer = get_stream_writer()
@@ -43,12 +42,22 @@ async def create_itinerary_node(
     ).partial(
         language=state["language"],
         format_instructions=parser.get_format_instructions(),
-        attractions=json.dumps(context.get("attractions", []), ensure_ascii=False),
-        restaurants=json.dumps(context.get("restaurants", []), ensure_ascii=False),
+        attractions=json.dumps(state["attractions"], ensure_ascii=False),
+        restaurants=json.dumps(state["restaurants"], ensure_ascii=False),
     )
     chain = prompt | planning_llm | parser
 
+    stream_writer(
+        {
+            "data-itinerary": {
+                "data": {"status": "loading"},
+                "metadata": {"langgraph_node": "create_itinerary_node"},
+            }
+        }
+    )
+
     response = {}
+
     async for chunk in chain.astream(
         {
             "plan": plan.model_dump_json(),
@@ -75,7 +84,7 @@ async def get_attractions_node(
     state: PlanAgentState,
     config: RunnableConfig,
     runtime: Runtime[ContextSchema],
-) -> PlanAgentState:
+) -> dict:
     plan = state["plan"]
     if plan is None:
         logger.warning("get_attractions_node: Missing plan in state")
@@ -118,14 +127,11 @@ You must response in {language}
             page_size=20,  # type: ignore
         )
 
-        context = state.get("context") or {}
-        context = {**context, "attractions": attractions}
-        return {**state, "context": context}
+        return {"attractions": attractions}
     except Exception as e:
         logger.error(f"Error in get_attractions_node: {str(e)}")
         return {
-            **state,
-            "context": {"attractions": []},
+            "attractions": [],
         }
 
 
@@ -145,7 +151,7 @@ async def get_restaurants_node(
     state: PlanAgentState,
     config: RunnableConfig,
     runtime: Runtime[ContextSchema],
-) -> PlanAgentState:
+) -> dict:
     plan = state["plan"]
     if plan is None:
         logger.warning("get_restaurants_node: Missing plan in state")
@@ -189,18 +195,11 @@ Respond in {language}.
             page_size=20,
         )
 
-        # Merge with existing context if present
-        context = state.get("context") or {}
-        context = {**context, "restaurants": restaurants}
         return {
-            **state,
-            "context": context,
+            "restaurants": restaurants,
         }
     except Exception as e:
         logger.error(f"Error in get_restaurants_node: {str(e)}")
-        context = state.get("context") or {}
-        context = {**context, "restaurants": []}
         return {
-            **state,
-            "context": context,
+            "restaurants": [],
         }

@@ -6,13 +6,9 @@ import java.util.UUID;
 import com.plango.auth.common.code.ProviderType;
 import com.plango.auth.common.constants.ErrorCodes;
 import com.plango.auth.dto.request.EmailAndPasswordRequest;
-import com.plango.auth.dto.request.ExchangeTokenRequest;
-import com.plango.auth.dto.request.LoginRequest;
 import com.plango.auth.dto.request.ProfileRegisterRequest;
 import com.plango.auth.dto.request.RefreshTokenRequest;
 import com.plango.auth.dto.request.RegisterRequest;
-import com.plango.auth.dto.response.ExchangeTokenResponse;
-import com.plango.auth.dto.response.GoogleUserResponse;
 import com.plango.auth.dto.response.LoginResponse;
 import com.plango.auth.dto.response.OnboardingUser;
 import com.plango.auth.dto.response.RegisterResponse;
@@ -20,7 +16,6 @@ import com.plango.auth.exception.AppException;
 import com.plango.auth.mapper.UserMapper;
 import com.plango.auth.model.User;
 import com.plango.auth.model.UserProvider;
-import com.plango.auth.repository.TokenRepository;
 import com.plango.auth.repository.UserProviderRepository;
 import com.plango.auth.repository.UserRepository;
 import com.plango.auth.service.oauth2.OAuth2Service;
@@ -116,7 +111,6 @@ public class AuthService {
     }
 
     public LoginResponse refreshToken(RefreshTokenRequest request) {
-
         String refreshToken = request.getRefreshToken();
         String userEmail;
         try {

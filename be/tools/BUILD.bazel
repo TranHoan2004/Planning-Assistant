@@ -28,15 +28,19 @@ py_console_script_binary(
 bazel_env(
     name = "bazel_env",
     toolchains = {
+        "nodejs": "@nodejs_toolchains//:resolved_toolchain",
         "python": "@rules_python//python:current_py_toolchain",
         "jdk": "@rules_java//toolchains:current_host_java_runtime",
     },
     tools = {
         # Mapping from tool binary name ($PATH entry) to Bazel label
         "buildifier": "@buildifier_prebuilt//:buildifier",
+        "format": "//tools/format:format",
         "copier": ":copier",
         "go": "@rules_go//go",
         "python": "$(PYTHON3)",
+        "node": "$(NODE_PATH)",
+        "pnpm": "@pnpm",
         "jar": "$(JAVABASE)/bin/jar",
         "java": "$(JAVA)",
     } | MULTITOOL_TOOLS,

@@ -82,14 +82,15 @@ def init_logging(is_dev: bool):
     loggers = (
         logging.getLogger(name)
         for name in logging.root.manager.loggerDict
-        if name.startswith("uvicorn.")
+        if name.startswith("uvicorn.") or name.startswith("sqlalchemy.")
     )
-    for uvicorn_logger in loggers:
-        uvicorn_logger.handlers = []
+    for log in loggers:
+        log.handlers = []
 
     # change handler for default uvicorn logger
     intercept_handler = InterceptHandler()
     logging.getLogger("uvicorn").handlers = [intercept_handler]
+    logging.getLogger("sqlalchemy").handlers = [intercept_handler]
 
     # set logs output, level and format
     if is_dev:

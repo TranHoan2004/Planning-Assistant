@@ -4,17 +4,7 @@ load("@aspect_bazel_lib//lib:transitions.bzl", "platform_transition_filegroup")
 load("@aspect_rules_py//py:defs.bzl", "py_image_layer")
 load("@rules_oci//oci:defs.bzl", "oci_image", "oci_load")
 
-def py_image(
-        name,
-        binary,
-        root = "/",
-        layer_groups = {},
-        env = {},
-        workdir = None,
-        base = "@python_base",
-        tag = "latest",
-        exposed_ports = None,
-        **kwargs):
+def py3_image(name, binary, root = "/", layer_groups = {}, env = {}, workdir = None, base = "@python_base"):
     """Create a Python 3 image from a Python binary.
 
     Args:
@@ -47,7 +37,6 @@ def py_image(
         entrypoint = [binary_path],
         env = env,
         workdir = workdir or "{}/{}".format(runfiles_dir, repo_name),
-        exposed_ports = exposed_ports,
     )
     platform_transition_filegroup(
         name = name,
@@ -61,7 +50,6 @@ def py_image(
         name = name + ".load",
         image = name,
         repo_tags = [
-            native.package_name() + ":" + tag,
+            native.package_name() + ":latest",
         ],
-        **kwargs
     )

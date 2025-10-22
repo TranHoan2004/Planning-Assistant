@@ -8,8 +8,8 @@ git_commit=$(git rev-parse HEAD)
 
 # Follows https://blog.aspect.build/versioning-releases-from-a-monorepo
 auto_version=$(
-    git describe --tags --long --match="[0-9][0-9][0-9][0-9].[0-9][0-9]" |
-        sed -e 's/-/./;s/-g/-/'
+	git describe --tags --long --match="[0-9][0-9][0-9][0-9].[0-9][0-9]" |
+		sed -e 's/-/./;s/-g/-/'
 )
 
 cat <<EOF

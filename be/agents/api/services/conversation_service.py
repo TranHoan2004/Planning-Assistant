@@ -1,10 +1,11 @@
-from typing import Annotated, Any, Optional, Dict, Sequence
+from typing import Annotated, Optional, Dict
 import uuid
 from fastapi import Depends
 from loguru import logger
 from sqlmodel.ext.asyncio.session import AsyncSession
-from sqlmodel import select
+from sqlmodel import desc, select
 
+from agents.api.common import Page, PaginatedResponse
 from agents.chat.domain.entities import UserConversation
 from agents.shared.infrastructure.db import get_session
 
@@ -36,18 +37,29 @@ class UserConversationService:
     async def list_user_conversation_history(
         self,
         user_id: str,
-        pagination: Dict[str, Any],
-    ) -> Sequence[UserConversation]:
+        pagination: Dict[str, int],
+    ) -> PaginatedResponse[UserConversation]:
         logger.info(f"get converstation history for user: {user_id}")
         try:
+            offset = (pagination["page"] - 1) * pagination["limit"]
             statement = (
                 select(UserConversation)
                 .where(UserConversation.user_id == int(user_id))
-                .offset(pagination["offset"])
-                .limit(pagination["limit"])
+                .order_by(desc(UserConversation.created_at))
+                .offset(offset)
+                .limit(pagination["limit"] + 1)
             )
             result = await self._db_session.exec(statement)
-            return result.all()
+            user_conversations = result.all()
+            has_next = len(user_conversations) > pagination["limit"]
+            return PaginatedResponse(
+                data=user_conversations[: pagination["limit"]],
+                page=Page(
+                    number=pagination["page"],
+                    page_size=pagination["limit"],
+                    has_next=has_next,
+                ),
+            )
         except Exception as e:
             logger.error(f"Error getting conversation history for user: {user_id}")
             raise RuntimeError(

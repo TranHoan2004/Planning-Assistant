@@ -83,44 +83,19 @@ class BookingComAPI:
                 )
                 response.raise_for_status()
                 data = response.json()
+                hotels = self._parse_hotels_response(data, currency)
 
-                hotels = []
-                if data.get("status") and data.get("data"):
-                    hotel_data = data["data"]
-                    hotels_list = hotel_data.get("hotels", [])
+            if not hotels and currency.upper() == "VND" and language != "vi":
+                params["languagecode"] = "vi"
+                async with httpx.AsyncClient() as client:
+                    response = await client.get(
+                        url, headers=self.headers, params=params, timeout=30.0
+                    )
+                    response.raise_for_status()
+                    data = response.json()
+                    hotels = self._parse_hotels_response(data, currency)
 
-                    for hotel in hotels_list:
-                        try:
-                            property_data = hotel.get("property", {})
-
-                            price_info = property_data.get("priceBreakdown", {})
-                            gross_price = price_info.get("grossPrice", {})
-                            price = gross_price.get("value", 0)
-
-                            hotel_obj = HotelDetails(
-                                hotel_id=str(property_data.get("id", "")),
-                                name=property_data.get("name", ""),
-                                property_type=self._map_property_type(property_data),
-                                rating=float(property_data.get("reviewScore", 0)),
-                                review_score=float(property_data.get("reviewScore", 0)),
-                                review_count=int(property_data.get("reviewCount", 0)),
-                                price_per_night=float(price),
-                                currency=gross_price.get("currency", currency),
-                                latitude=float(property_data.get("latitude", 0)),
-                                longitude=float(property_data.get("longitude", 0)),
-                                address=self._extract_address(property_data),
-                                amenities=self._extract_amenities(property_data),
-                                photos=self._extract_photos(property_data),
-                                distance_to_center=self._extract_distance(
-                                    property_data
-                                ),
-                            )
-                            hotels.append(hotel_obj)
-                        except Exception as e:
-                            logger.warning(f"Error parsing hotel: {str(e)}")
-                            continue
-
-                return hotels
+            return hotels
 
         except Exception as e:
             logger.error(f"Error searching hotels: {str(e)}")
@@ -201,6 +176,41 @@ class BookingComAPI:
         except:
             pass
         return None
+
+    def _parse_hotels_response(
+        self, data: Dict[str, Any], currency: str
+    ) -> List[HotelDetails]:
+        hotels: List[HotelDetails] = []
+        if data.get("status") and data.get("data"):
+            hotel_data = data["data"]
+            hotels_list = hotel_data.get("hotels", [])
+            for hotel in hotels_list:
+                try:
+                    property_data = hotel.get("property", {})
+                    price_info = property_data.get("priceBreakdown", {})
+                    gross_price = price_info.get("grossPrice", {})
+                    price = gross_price.get("value", 0)
+                    hotel_obj = HotelDetails(
+                        hotel_id=str(property_data.get("id", "")),
+                        name=property_data.get("name", ""),
+                        property_type=self._map_property_type(property_data),
+                        rating=float(property_data.get("reviewScore", 0)),
+                        review_score=float(property_data.get("reviewScore", 0)),
+                        review_count=int(property_data.get("reviewCount", 0)),
+                        price_per_night=float(price),
+                        currency=gross_price.get("currency", currency),
+                        latitude=float(property_data.get("latitude", 0)),
+                        longitude=float(property_data.get("longitude", 0)),
+                        address=self._extract_address(property_data),
+                        amenities=self._extract_amenities(property_data),
+                        photos=self._extract_photos(property_data),
+                        distance_to_center=self._extract_distance(property_data),
+                    )
+                    hotels.append(hotel_obj)
+                except Exception as e:
+                    logger.warning(f"Error parsing hotel: {str(e)}")
+                    continue
+        return hotels
 
     def _map_property_type(self, property_data: Dict[str, Any]) -> str:
         code = property_data.get("propertyClass")

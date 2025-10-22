@@ -1,15 +1,23 @@
 /**
  * AppConfig
- *
+ * <p>
  * Created At: 2024/12/16
  * Author:    HungNH
  */
 package com.plango.auth.config;
 
+import com.plango.auth.event.EmailQueueConsumer;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.ChannelTopic;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -64,4 +72,33 @@ public class AppConfig {
         return RestClient.create();
     }
 
+    @Bean
+    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
+        RedisTemplate<String, Object> template = new RedisTemplate<>();
+        template.setConnectionFactory(factory);
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+        return template;
+    }
+
+    @Bean
+    public ChannelTopic topic() {
+        return new ChannelTopic("events");
+    }
+
+    @Bean
+    public RedisMessageListenerContainer redisContainer(
+            RedisConnectionFactory factory,
+            MessageListenerAdapter listenerAdapter
+    ) {
+        var container = new RedisMessageListenerContainer();
+        container.setConnectionFactory(factory);
+        container.addMessageListener(listenerAdapter, topic());
+        return container;
+    }
+
+    @Bean
+    public MessageListenerAdapter listenerAdapter(EmailQueueConsumer subscriber) {
+        return new MessageListenerAdapter(subscriber);
+    }
 }

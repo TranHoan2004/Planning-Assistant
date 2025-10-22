@@ -5,7 +5,7 @@ from loguru import logger
 from pydantic import BaseModel, Field
 
 from agents.aggregate.agent import Agent
-from agents.api.common import Pagination
+from agents.api.common import PaginatedResponse, Pagination
 from agents.api.response import AgentStreamingResponse
 from agents.api.services.conversation_service import UserConversationService
 from agents.chat.domain.entities import UserConversationResponse
@@ -146,7 +146,9 @@ async def get_conversation(
         raise HTTPException(status_code=500, detail=f"Internal error: {str(e)}") from e
 
 
-@router.get("/history/{user_id}", response_model=list[UserConversationResponse])
+@router.get(
+    "/history/{user_id}", response_model=PaginatedResponse[UserConversationResponse]
+)
 @limiter.limit("30/minutes")
 async def get_user_conversation_history(
     request: Request,
@@ -156,6 +158,11 @@ async def get_user_conversation_history(
         UserConversationService, Depends(UserConversationService)
     ],
 ):
+    logger.info(
+        f"get conversation history. user_id: {user_id}, page: {pagination['page']}, limit: {pagination['limit']}",
+        user_id=user_id,
+        pagination=pagination,
+    )
     try:
         return await conversation_service.list_user_conversation_history(
             user_id, pagination

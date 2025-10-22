@@ -1,0 +1,59 @@
+@url = http://localhost:8080/api/auth
+
+POST {{url}}/outbound/google/authenticate
+Content-Type: application/json
+
+{
+  "code":"4%2F0AVGzR1DY-iYUARj0CioSsGYdnAuUHxV2bSMO2QMjaaybC7EOpoynoTYPs4kmZ4bOCCxjcw"
+}
+
+### Create new account
+POST {{url}}/register
+Content-Type: application/json
+
+{
+    "email": "hoana5k44nknd@gmail.com",
+    "password": "P@ssw0rd"
+}
+
+### Create otp
+GET {{url}}/send-otp?email=hoana5k44nknd@gmail.com
+Accept: application/json
+
+### Validate Otp
+POST {{url}}/verify-otp
+Content-Type: application/json
+Accept: application/json
+
+{
+  "otp": "245534",
+  "email": "hoana5k44nknd@gmail.com"
+}
+
+### Verify Email, Happy case
+POST {{url}}/verify-email
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "hoana5k44nknd@gmail.com"
+}
+
+### Verify Email, Unhappy case
+POST {{url}}/verify-email
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "hoana5k44ndgmail.com"
+}
+
+### Reset password
+PATCH {{url}}/reset-password
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "hoana5k44nknd@gmail.com",
+  "password": "Hehe@ssw0rd"
+}

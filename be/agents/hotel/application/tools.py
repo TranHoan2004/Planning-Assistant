@@ -9,7 +9,7 @@ from langchain_core.output_parsers import PydanticOutputParser
 from langgraph.prebuilt import InjectedState
 from langgraph.types import Command
 
-from agents.shared.infrastructure.llm import llm, planning_llm
+from agents.shared.infrastructure.llm import extract_llm
 from agents.shared.models import HotelSearchCriteria, Plan, MultiHotelSearchCriteria
 
 
@@ -60,7 +60,7 @@ def _validate_search_criteria(criteria: HotelSearchCriteria) -> list[str]:
     return errors
 
 
-@tool
+@tool(return_direct=True)
 def transfer_to_chatbot(
     state: Annotated[dict, InjectedState],
     tool_call_id: Annotated[str, InjectedToolCallId],
@@ -120,7 +120,7 @@ def transfer_to_chatbot(
     )
 
 
-@tool
+@tool(return_direct=True)
 async def recommend_hotels(
     language: str,
     state: Annotated[dict, InjectedState],
@@ -141,7 +141,7 @@ Previous trip plan (you can reuse this information if user doesn't specify again
 - Budget: {plan.budget.min_value}-{plan.budget.max_value} {plan.budget.currency.value}
 - Preferences: {plan.user_preferences or "Not specified"}
 
-**IMPORTANT**: User may want different budget for hotel (usually smaller than total trip budget). 
+**IMPORTANT**: User may want different budget for hotel (usually smaller than total trip budget).
 If user doesn't mention hotel budget, you can use the trip budget as reference but adjust reasonably.
 If user asks for hotels without specifying details, reuse the above information intelligently.
 """
@@ -176,7 +176,7 @@ Return ONLY a valid JSON object. Do not wrap in code fences or tags.
         ]
     )
 
-    chain = prompt | planning_llm | parser
+    chain = prompt | extract_llm | parser
 
     conv_messages = _filter_conversation_messages(state["messages"])
     search_criteria: HotelSearchCriteria = await chain.ainvoke(
@@ -256,7 +256,7 @@ Return ONLY a valid JSON object. Do not wrap in code fences or tags.
         ]
     )
 
-    chain = prompt | planning_llm | parser
+    chain = prompt | extract_llm | parser
 
     conv_messages = _filter_conversation_messages(state["messages"])
     multi_criteria: MultiHotelSearchCriteria = await chain.ainvoke(

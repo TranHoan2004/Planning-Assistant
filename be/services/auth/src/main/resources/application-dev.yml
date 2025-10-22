@@ -27,19 +27,15 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
-    properties:
-      hibernate:
-        format_sql: true
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-    show-sql: true
-    open-in-view: false
 
   # ===== Java Mail Sender =====
   mail:
-    host: smtp.gmail.com
-    port: 587
+    host: ${SMTP_HOST}
+    port: ${SMTP_PORT}
     username: ${SMTP_USERNAME}
     password: ${SMTP_PASSWORD}
+    from: ${SEND_FROM}
     properties:
       mail:
         smtp:
@@ -49,8 +45,3 @@ spring:
           starttls:
             enable: true
 
-# ===== Logging =====
-logging:
-  level:
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE

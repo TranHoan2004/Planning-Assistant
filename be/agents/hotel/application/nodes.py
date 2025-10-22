@@ -36,8 +36,12 @@ async def search_hotels_node(
     state: HotelAgentState,
     config: RunnableConfig,
     runtime: Runtime[ContextSchema],
-) -> HotelAgentState:
+) -> dict:
     search_criteria = state["search_criteria"]
+    if not search_criteria:
+        logger.warning("No search criteria found")
+        return {"context": {"hotels": [], "destination_info": None}}
+
     booking_api = runtime.context.booking_api
 
     structured_llm = llm.with_structured_output(DestinationQuery)
@@ -58,11 +62,12 @@ async def search_hotels_node(
 
     try:
         destination_info = await booking_api.search_destination(
-            query=dest_query.destination, language=state["language"]
+            query=dest_query.destination,
+            language=state["language"],  # type:ignore
         )
 
         hotels = await booking_api.search_hotels(
-            dest_id=destination_info.destination_id,
+            dest_id=destination_info.destination_id,  # type:ignore
             check_in=search_criteria.check_in.isoformat(),
             check_out=search_criteria.check_out.isoformat(),
             adults=search_criteria.adults,
@@ -73,7 +78,9 @@ async def search_hotels_node(
                 search_criteria.currency, "value", str(search_criteria.currency)
             ),
         )
-        enriched_hotels = _enrich_distance_to_center(hotels, destination_info)
+        logger.debug(f"Hotels: {hotels}")
+        enriched_hotels = _enrich_distance_to_center(hotels, destination_info)  # type:ignore
+        logger.debug(f"Enriched hotels: {enriched_hotels}")
 
         return {
             "context": {"hotels": enriched_hotels, "destination_info": destination_info}
@@ -87,11 +94,14 @@ async def search_hotels_node(
 async def rank_hotels_node(
     state: HotelAgentState,
     config: RunnableConfig,
-) -> HotelAgentState:
+) -> dict:
     parser = JsonOutputParser(pydantic_object=HotelRecommendation)
     stream_writer = get_stream_writer()
 
     search_criteria = state.get("search_criteria")
+    if not search_criteria:
+        logger.warning("No search criteria found")
+        return {"hotel_recommendation": None}
     context = state.get("context") or {}
     hotels = context.get("hotels", [])
 
@@ -182,6 +192,12 @@ async def rank_hotels_node(
             )
             if isinstance(chunk, dict):
                 response.update(chunk)
+        response.update(
+            {
+                "check_in_date": search_criteria.check_in,
+                "check_out_date": search_criteria.check_out,
+            }
+        )
     except Exception as e:
         logger.error(
             f"rank_hotels_node streaming error: {str(e)} — falling back to non-streaming invoke"
@@ -274,8 +290,11 @@ async def multi_segment_hotels_node(
     state: HotelAgentState,
     config: RunnableConfig,
     runtime: Runtime[ContextSchema],
-) -> HotelAgentState:
-    multi: MultiHotelSearchCriteria = state["multi_search_criteria"]
+) -> dict:
+    multi = state["multi_search_criteria"]
+    if not multi:
+        logger.warning("No multi search criteria found")
+        return {"multi_hotel_recommendation": None}
     booking_api = runtime.context.booking_api
     language = state["language"]
 
@@ -295,7 +314,7 @@ async def multi_segment_hotels_node(
         dest = await (prompt | structured_llm).ainvoke({}, config=config)
 
         destination_info = await booking_api.search_destination(
-            query=dest.destination,
+            query=dest.destination,  # type:ignore
             language=language,
         )
 

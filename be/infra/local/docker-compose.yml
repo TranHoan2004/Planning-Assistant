@@ -21,6 +21,23 @@ services:
     networks:
       - plango-infra
 
+  mongodb:
+    image: mongo:8.0-noble
+    ports:
+      - "27017:27017"
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: plango
+      MONGO_INITDB_ROOT_PASSWORD: plango
+      MONGO_INITDB_DATABASE: plango
+    networks:
+      - plango-infra
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:
+
 networks:
   plango-infra:
     driver: bridge

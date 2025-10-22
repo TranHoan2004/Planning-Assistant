@@ -11,7 +11,7 @@ py_library(
     visibility = ["//:__subpackages__"],
     deps = [
         "//agents/chat/domain",
-        "//agents/shared/infrastructure/config",
+        "//agents/shared/infrastructure/config:settings",
         "@pip//langchain_openai",
         "@pip//loguru",
         "@pip//psycopg",  # keep

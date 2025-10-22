@@ -18,7 +18,7 @@ py_library(
         "//agents/shared:models",
         "//agents/shared:runtime",
         "//agents/shared/infrastructure",
-        "//agents/shared/infrastructure/config",
+        "//agents/shared/infrastructure/config:settings",
         "//agents/shared/tools",
         "@pip//langchain_core",
         "@pip//langchain_tavily",

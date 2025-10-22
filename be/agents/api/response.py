@@ -1,6 +1,6 @@
 from fastapi.responses import StreamingResponse
 
-from agents.shared.data_stream.consts import (
+from agents.shared.data_stream import (
     DATA_STREAM_HEADER,
     DATA_STREAM_HEADER_VALUE,
 )

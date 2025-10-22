@@ -1,4 +1,3 @@
-load("@aspect_bazel_lib//lib:tar.bzl", "tar")
 load("@contrib_rules_jvm//java:defs.bzl", "JUNIT5_DEPS", "java_test_suite")
 load("@rules_java//java:defs.bzl", "java_library", "java_plugin")
 load("@rules_oci//oci:defs.bzl", "oci_push")
@@ -23,6 +22,7 @@ runtime_deps = [
     "@maven//:com_sun_mail_jakarta_mail",
     "@maven//:com_sun_activation_jakarta_activation",
     "@maven//:com_fasterxml_jackson_core_jackson_databind",
+    "@maven//:com_fasterxml_jackson_core_jackson_core",
 
     # --- Database ---
     "@maven//:org_postgresql_postgresql",

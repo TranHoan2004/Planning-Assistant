@@ -1,7 +1,7 @@
 from psycopg_pool import AsyncConnectionPool
 from loguru import logger
 from typing import Optional
-from agents.shared.infrastructure.config.settings import settings
+from agents.shared.infrastructure.config import settings
 
 connection_pool: Optional[AsyncConnectionPool] = None
 

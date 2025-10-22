@@ -31,6 +31,7 @@ def plan_graph():
     graph_builder.add_node("tools", ToolNode([transfer_to_chatbot]))
 
     graph_builder.add_edge(START, "get_attractions_node")
+    graph_builder.add_edge(START, "get_restaurants_node")
     graph_builder.add_edge("get_attractions_node", CREATE_ITINERARY_NODE)
     graph_builder.add_edge("get_restaurants_node", CREATE_ITINERARY_NODE)
     graph_builder.add_edge(CREATE_ITINERARY_NODE, "transfer_node")

@@ -1,20 +1,46 @@
 load("@aspect_rules_py//py:defs.bzl", "py_library")
 
+package(default_visibility = ["//:__subpackages__"])
+
+# keep
 py_library(
     name = "config",
     srcs = [
         "__init__.py",
-        "logging.py",
-        "rate_limit.py",
-        "settings.py",
     ],
     imports = ["."],
-    visibility = ["//:__subpackages__"],
     deps = [
-        "@pip//fastapi",
-        "@pip//loguru",
+        ":logging",
+        ":rate_limit",
+        ":settings",
+    ],
+)
+
+# keep
+py_library(
+    name = "settings",
+    srcs = ["settings.py"],
+    deps = [
         "@pip//pydantic",
         "@pip//pydantic_settings",
+    ],
+)
+
+# keep
+py_library(
+    name = "logging",
+    srcs = ["logging.py"],
+    deps = [
+        "@pip//loguru",
+    ],
+)
+
+# keep
+py_library(
+    name = "rate_limit",
+    srcs = ["rate_limit.py"],
+    deps = [
+        "@pip//fastapi",
         "@pip//slowapi",
     ],
 )

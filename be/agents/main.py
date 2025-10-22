@@ -2,12 +2,12 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from slowapi.errors import RateLimitExceeded
-from agents.shared.infrastructure.config.rate_limit import (
+from agents.shared.infrastructure.config import (
+    settings,
     rate_limit_exceeded_handler,
     limiter,
+    init_logging,
 )
-from agents.shared.infrastructure.config.settings import settings
-from agents.shared.infrastructure.config.logging import init_logging
 from agents.shared.infrastructure.connection_pool import (
     init_connection_pool,
     close_pool,
@@ -24,7 +24,7 @@ init_logging(is_dev)
 
 async def startup(app: FastAPI):
     googlemaps_api = GoogleMapsAPI(api_key=settings.GOOGLE_MAPS_API_KEY)
-    booking_api = BookingComAPI(api_key=settings.RAPIDAPI_KEY)
+    booking_api = BookingComAPI(api_key=str(settings.RAPIDAPI_KEY))
     await init_connection_pool()
     await init_db()
     await googlemaps_api.__aenter__()

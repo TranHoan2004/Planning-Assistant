@@ -1,10 +1,38 @@
 load("@aspect_rules_py//py:defs.bzl", "py_library")
 
+# keep
+package(default_visibility = ["//visibility:public"])
+
+# keep
 py_library(
     name = "data_stream",
     srcs = [
-        "consts.py",
-        "stream_parts.py",
+        "__init__.py",
     ],
-    visibility = ["//:__subpackages__"],
+    deps = [
+        ":consts",
+        ":stream",
+        ":stream_parts",
+    ],
+)
+
+# keep
+py_library(
+    name = "consts",
+    srcs = ["consts.py"],
+)
+
+# keep
+py_library(
+    name = "stream",
+    srcs = ["stream.py"],
+    deps = [
+        ":stream_parts",
+    ],
+)
+
+#keep
+py_library(
+    name = "stream_parts",
+    srcs = ["stream_parts.py"],
 )

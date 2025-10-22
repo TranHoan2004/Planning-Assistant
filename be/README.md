@@ -1,5 +1,32 @@
 # Plango Backend Monorepo
 
+## Installing dev tools
+
+For developers to be able to run additional CLI tools without needing manual installation:
+
+1. Add the tool to `tools/tools.lock.json`
+2. Run `bazel run //tools:bazel_env` (following any instructions it prints)
+3. When working within the workspace, tools will be available on the PATH
+
+See https://blog.aspect.build/run-tools-installed-by-bazel for details.
+
+## Working with npm packages
+
+To install a `node_modules` tree locally for the editor or other tooling outside of Bazel:
+
+```shell
+% pnpm install
+```
+
+Similarly, you can run other `pnpm` commands to add or remove packages. Use `bazel info workspace` to avoid having a bunch of `../` segments when running tools from a subdirectory:
+
+```shell
+path/to/package% $(bazel info workspace)/tools/pnpm add http-server
+```
+
+This ensures you use the same pnpm version as other developers, and the lockfile format stays constant.
+
+
 ## Working with Python packages
 ```shell
 # Step 1: Add dependencies in pyproject.toml file to include your new dependency (If you need to add test/tools deps add it in test/tools.in file of requirements folder)
