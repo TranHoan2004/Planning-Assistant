@@ -76,9 +76,7 @@ export const verifyEmail = async (email: string) => {
     },
     body: JSON.stringify({ email })
   })
-  const data = await res.json()
-
-  return data.status
+  return await res.json()
 }
 
 export const resetPassword = async (email: string, newPassword: string) => {
@@ -97,14 +95,26 @@ export const resetPassword = async (email: string, newPassword: string) => {
 }
 
 export const getSixDigitsOtpCode = async (email: string) => {
-  const res = await fetch(`${AUTH_API_URL}/api/auth/otp?email=${email}`, {
+  const res = await fetch(`${AUTH_API_URL}/api/auth/send-otp?email=${email}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
     }
   })
+  return await res.json()
+}
 
-  if (!res.ok) throw new Error('Cannot get OTP code')
+export const verifyOtp = async (email: string, otp: string) => {
+  const res = await fetch(`${AUTH_API_URL}/api/auth/verify-otp`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      email,
+      otp
+    })
+  })
   return await res.json()
 }
 

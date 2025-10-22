@@ -1,21 +1,23 @@
+"use client"
+
 import React, { useState } from 'react'
 import PasswordInput from '@/components/ui/PasswordInput'
 import CustomButton from '@/components/ui/CustomButton'
 import { z } from 'zod'
 import { useRouter } from 'next/navigation'
 import { callToast } from '@/app/forgot-password/components/CallToast'
-import { getTranslations } from 'next-intl/server'
+import { useTranslations } from 'next-intl'
 
 interface Props {
   email: string
 }
 
-export default async function ResetPasswordForm({ email }: Props) {
+export default function ResetPasswordForm({ email }: Props) {
   const [password, setPassword] = useState('')
   const [confirm, setConfirm] = useState('')
   const [error, setError] = useState('')
   const router = useRouter()
-  const t = await getTranslations('ForgotPasswordPage')
+  const t = useTranslations('ForgotPasswordPage')
 
   const resetPasswordSchema = z
     .object({

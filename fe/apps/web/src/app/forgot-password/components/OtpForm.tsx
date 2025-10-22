@@ -1,3 +1,7 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable @next/next/no-async-client-component */
+"use client";
+
 import React, { useEffect, useRef, useState } from 'react'
 import { Link } from '@heroui/react'
 import { Input } from '@heroui/input'
@@ -5,21 +9,19 @@ import CustomButton from '@/components/ui/CustomButton'
 import { IoArrowBack } from 'react-icons/io5'
 import { Step } from '@/app/forgot-password/components/ForgotPasswordFlow'
 import { callToast } from '@/app/forgot-password/components/CallToast'
-import { get } from 'http'
-import { getTranslations } from 'next-intl/server'
-
+import { useTranslations } from 'next-intl'
 interface Props {
   setStep: React.Dispatch<React.SetStateAction<Step>>
   email: string
 }
 
-export default async function OtpForm({ setStep, email }: Props) {
+export default function OtpForm({ setStep, email }: Props) {
   const inputs = Array(6).fill(0)
   const inputRefs = useRef<(HTMLInputElement | null)[]>([])
+  const hasBeenRequested = useRef(false);
   const LENGTH = 6
   const [values, setValues] = useState<string[]>(Array(LENGTH).fill(''))
-  const [otp, setOtp] = useState('')
-  const t = await getTranslations('ForgotPasswordPage')
+  const t = useTranslations('ForgotPasswordPage')
 
   const focus = (i: number) => inputRefs.current[i]?.focus()
 
@@ -63,16 +65,34 @@ export default async function OtpForm({ setStep, email }: Props) {
   }
 
   const handleResendOtp = async () => {
-    await fetchOtp()
+    hasBeenRequested.current = false // cho phep request lai
+    await requestCreatingOtp()
     callToast({
       message: t('otp-sent'),
       color: 'primary'
     })
   }
 
-  const verifyOtp = (e: React.FormEvent<HTMLFormElement>) => {
+  const verifyOtp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (otp === values.join('')) {
+
+    try {
+      const res = await fetch('/api/auth/forgot-password/verify-otp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email,
+          otp: values.join('')
+        })
+      })
+      const data = await res.json()
+
+      if (data.code !== null) {
+        throw new Error(data.message)
+      }
+
       callToast({
         message: t('otp-valid'),
         color: 'success'
@@ -80,7 +100,7 @@ export default async function OtpForm({ setStep, email }: Props) {
       setTimeout(() => {
         setStep('reset-password')
       }, 3000)
-    } else {
+    } catch (e) {
       callToast({
         message: t('otp-invalid'),
         color: 'warning'
@@ -89,7 +109,8 @@ export default async function OtpForm({ setStep, email }: Props) {
     }
   }
 
-  const fetchOtp = async () => {
+  const requestCreatingOtp = async () => {
+    if (hasBeenRequested.current === true) return;
     try {
       const res = await fetch(
         `/api/auth/forgot-password?email=${encodeURIComponent(email)}`,
@@ -99,8 +120,12 @@ export default async function OtpForm({ setStep, email }: Props) {
       )
       const data = await res.json()
 
-      setOtp(String(data.otp))
+      if (data.code !== '202') {
+        throw new Error(data.message)
+      }
+      hasBeenRequested.current = true // ngan khong cho tu dong request lan 2
     } catch (error) {
+      console.error('Error: ', error)
       callToast({
         title: 'Error',
         message: t('otp-get-error') + (error as Error).message,
@@ -110,7 +135,7 @@ export default async function OtpForm({ setStep, email }: Props) {
   }
 
   useEffect(() => {
-    fetchOtp()
+    requestCreatingOtp()
   }, [])
 
   return (

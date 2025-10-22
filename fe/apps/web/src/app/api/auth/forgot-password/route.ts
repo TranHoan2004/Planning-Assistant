@@ -8,9 +8,9 @@ import {
 export const POST = async (request: NextRequest) => {
   const body = await request.json()
   try {
-    const status = await verifyEmail(body.email)
+    const data = await verifyEmail(body.email)
 
-    return NextResponse.json({ code: status }, { status: 200 })
+    return NextResponse.json({ code: data.code, message: data.message }, { status: 200 })
   } catch (error) {
     return NextResponse.json(
       { error: (error as Error).message },
@@ -42,7 +42,7 @@ export const GET = async (request: NextRequest) => {
 
     const data = await getSixDigitsOtpCode(email)
 
-    return NextResponse.json({ otp: data }, { status: 200 })
+    return NextResponse.json({ code: data.code, message: data.message }, { status: 200 })
   } catch (error) {
     return NextResponse.json(
       { error: (error as Error).message },
