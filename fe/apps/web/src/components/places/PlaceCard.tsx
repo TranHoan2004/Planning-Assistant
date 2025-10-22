@@ -1,7 +1,7 @@
 'use client'
 
 import { usePlaceDetail } from '@/hooks/useGooglePlacesApi'
-import React, { memo } from 'react'
+import React, { memo, useEffect } from 'react'
 import { LuStar } from 'react-icons/lu'
 import Image from 'next/image'
 import { Card, CardBody, CardFooter, CardHeader } from '@heroui/card'
@@ -10,13 +10,9 @@ import { Link } from '@heroui/link'
 import { FaExternalLinkAlt } from 'react-icons/fa'
 import { useDisclosure } from '@heroui/modal'
 import PlaceModal from './PlaceModal'
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious
-} from '../ui/carousel'
+import { Skeleton } from '@heroui/skeleton'
+import { Spacer } from '@heroui/spacer'
+import { useChatContext } from '@/contexts/chat-context'
 
 interface PlaceCardProps {
   placeId: string
@@ -24,44 +20,78 @@ interface PlaceCardProps {
 
 const PlaceCard = ({ placeId }: PlaceCardProps) => {
   const { onOpen, onOpenChange, isOpen } = useDisclosure()
-  const placeDetails = usePlaceDetail(placeId)
+  const { placesData, setPlacesData } = useChatContext()
+
+  const placeFromContext = placesData.find((place) => place.id === placeId)
+  const {
+    placeDetails: fetchedPlaceDetails,
+    isPending,
+    isError
+  } = usePlaceDetail(placeId, {
+    enabled: !placeFromContext
+  })
+
+  useEffect(() => {
+    if (fetchedPlaceDetails) {
+      const inContext = placesData.find(
+        (place) => place.id === fetchedPlaceDetails.id
+      )
+      if (!inContext) {
+        setPlacesData((prevData) => [...prevData, fetchedPlaceDetails])
+      }
+    }
+  }, [fetchedPlaceDetails, placesData, setPlacesData])
+
+  const placeDetails = placeFromContext || fetchedPlaceDetails
+
+  if (isPending) {
+    return (
+      <Card className="shadow-none rounded-2xl cursor-pointer">
+        <Skeleton className="h-60 w-full rounded-lg" />
+        <Spacer y={2} />
+        <Skeleton className="h-6 w-full rounded-full" />
+        <Spacer y={2} />
+        <Skeleton className="h-6 w-full rounded-full" />
+      </Card>
+    )
+  }
+
+  if (isError) {
+    return (
+      <Card className="shadow-none rounded-2xl cursor-pointer">
+        <CardBody>
+          <p className="text-center text-pink-600 font-semibold">
+            Something went wrong
+          </p>
+        </CardBody>
+      </Card>
+    )
+  }
 
   return (
     <>
-      <Card className="border border-neutral-300/50 shadow rounded-2xl cursor-pointer">
-        <CardHeader className="p-0">
-          <Carousel opts={{ loop: true }} className="w-full">
-            <CarouselContent>
-              {placeDetails?.photos?.map((photo, index) => (
-                <CarouselItem key={index}>
-                  <div className="relative h-52 w-full">
-                    <Image
-                      alt={placeDetails?.displayName?.text || ''}
-                      src={
-                        photo.getURI({ maxWidth: 400, maxHeight: 400 }) || ''
-                      }
-                      fill={true}
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                      className="w-full h-auto object-center object-cover"
-                    />
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
-          </Carousel>
-        </CardHeader>
-        <CardBody className="p-4" onClick={onOpen}>
+      <Card className="shadow-none rounded-2xl cursor-pointer">
+        {/* <CardHeader className="p-0">
+          <div className="relative h-64 w-full">
+            <Image
+              alt={placeDetails?.displayName?.text || ''}
+              src={
+                placeDetails?.photos?.[0]?.getURI({
+                  maxWidth: 400,
+                  maxHeight: 400
+                }) || ''
+              }
+              fill={true}
+              sizes="(max-width: 768px) 100vw, 33vw"
+              className="w-full h-auto object-center object-cover rounded-2xl"
+            />
+          </div>
+        </CardHeader> */}
+        <CardBody className="p-0 mt-2" onClick={onOpen}>
           <div className="w-full flex items-center justify-between">
             <p className="font-semibold text-ellipsis line-clamp-1">
               {placeDetails?.displayName?.text}
             </p>
-            <div className="inline-flex gap-2 items-center">
-              <LuStar size={16} className="text-yellow-400 fill-yellow-400" />
-              <span className="text-sm">{placeDetails?.rating}</span>
-              <span>({placeDetails?.userRatingCount})</span>
-            </div>
           </div>
           <div className="mt-3">
             <p className="text-sm text-neutral-500 text-ellipsis line-clamp-1">
@@ -69,14 +99,15 @@ const PlaceCard = ({ placeId }: PlaceCardProps) => {
             </p>
           </div>
         </CardBody>
-        <CardFooter onClick={onOpen}>
+        <CardFooter onClick={onOpen} className="p-0 mt-2">
           <Button
+            size="sm"
             as={Link}
             href={placeDetails?.googleMapsUri || ''}
             target="_blank"
             className="bg-foreground text-background"
             radius="full"
-            endContent={<FaExternalLinkAlt className="size-4" />}
+            endContent={<FaExternalLinkAlt className="size-3" />}
           >
             Maps
           </Button>

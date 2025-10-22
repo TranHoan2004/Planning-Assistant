@@ -1,6 +1,6 @@
 'use client'
 
-import { ItineraryResponse } from '../../app/(main)/chat/_schema/itinerary'
+import { ItineraryResponse } from '../../app/chat/_schema/itinerary'
 import { useTranslations } from 'next-intl'
 import DailyItinerary from '@/components/itinerary/DailyItinerary'
 import ItineraryOverview from '@/components/itinerary/ItineraryOverview'
@@ -14,12 +14,12 @@ const ItineraryDetailView = ({ data }: ItineraryDetailViewProps) => {
   const t = useTranslations('ChatPage.itinenaryDetailView')
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8">
+    <div className="max-w-6xl mx-auto space-y-4">
       <ItineraryOverview summary={data?.trip_summary} />
 
       {/* Daily Itinerary */}
-      <div className="space-y-6">
-        <h2 className="text-3xl font-bold text-foreground mb-8">
+      <div className="space-y-4">
+        <h2 className="text-2xl font-bold text-foreground mb-4">
           {t('daily-itinerary')}
         </h2>
 
@@ -30,14 +30,14 @@ const ItineraryDetailView = ({ data }: ItineraryDetailViewProps) => {
 
       {data?.notes && (
         <>
-          <h3 className="text-2xl font-bold text-foreground">
+          <h3 className="text-2xl font-bold text-foreground mb-2">
             {t('important-travel-notes')}
           </h3>
 
           {data?.notes?.split('\n').map((note, index) => (
             <AIResponse
               key={index}
-              className="text-muted-foreground leading-relaxed mb-3"
+              className="text-muted-foreground leading-relaxed"
             >
               {note}
             </AIResponse>

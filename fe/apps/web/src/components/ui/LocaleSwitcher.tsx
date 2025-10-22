@@ -3,11 +3,12 @@
 import { useRouter } from 'next/navigation'
 import { useLocale } from 'next-intl'
 import { AmericanFlagIcon, VietnamFlagIcon } from '@/assets/Icons'
+import { cn } from '@repo/utils/tailwind-utils'
+import { Button, ButtonProps } from '@heroui/button'
 
-export default function LocaleSwitcher() {
+export default function LocaleSwitcher({ className, ...props }: ButtonProps) {
   const router = useRouter()
   const currentLocale = useLocale()
-  // const [selectedLocale, setSelectedLocale] = useState(currentLocale)
 
   const handleChange = async (newLocale: string) => {
     if (newLocale === currentLocale) return
@@ -22,31 +23,15 @@ export default function LocaleSwitcher() {
   }
 
   return (
-    <>
-      {/* <Select
-          size="sm"
-          value={selectedLocale}
-          selectedKeys={new Set([selectedLocale])}
-          onChange={(e) => {
-            setSelectedLocale(e.target.value)
-            handleChange(e.target.value)
-          }}
-          className="w-18"
-          selectionMode="single"
-          // selectorIcon={<span />}
-          aria-labelledby="Select Language"
-          variant='underlined'
-      >
-        {SUPPORTED_LOCALES.map((loc) => (
-          <SelectItem key={loc}>{loc}</SelectItem>
-        ))}
-      </Select> */}
-      <div
-        className="cursor-pointer"
-        onClick={() => handleChange(currentLocale === 'en' ? 'vi' : 'en')}
-      >
-        {currentLocale === 'en' ? <AmericanFlagIcon /> : <VietnamFlagIcon />}
-      </div>
-    </>
+    <Button
+      className={cn('cursor-pointer', className)}
+      isIconOnly
+      variant="flat"
+      radius="full"
+      onPress={() => handleChange(currentLocale === 'en' ? 'vi' : 'en')}
+      {...props}
+    >
+      {currentLocale === 'en' ? <AmericanFlagIcon /> : <VietnamFlagIcon />}
+    </Button>
   )
 }

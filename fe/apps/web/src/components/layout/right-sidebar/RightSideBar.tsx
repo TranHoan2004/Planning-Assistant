@@ -13,7 +13,8 @@ import {
   setIsCollapsed
 } from '@/state/rightsidebar-slice'
 import { RootState } from '@/state/store'
-import { Tooltip } from '@heroui/react'
+import { Tooltip } from '@heroui/tooltip'
+import { Button } from '@heroui/button'
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import RightSideBarContentWrapper from './RightSideBarContentWrapper'
@@ -37,119 +38,187 @@ const RightSideBar = () => {
   }
 
   return (
-    <aside
-      className={cn(
-        `shadow p-4 transition-all duration-300 ease-in-out overflow-hidden mt-4 mb-4 rounded-l-3xl`,
-        isCollapsed ? 'w-[clamp(400px,50vw,800px)] max-w-[800px]' : 'w-16'
+    <>
+      {/* Overlay - only visible on md+ screens when sidebar is expanded */}
+      {!isCollapsed && (
+        <div
+          className="block md:hidden fixed inset-0 bg-black/40 z-10"
+          onClick={handleToggle}
+        />
       )}
-    >
-      <nav
-        className={`flex ${isCollapsed ? 'gap-5 flex-row' : 'flex-col gap-4'}`}
+
+      <aside
+        className={cn(
+          'md:p-4 md:pr-0 transition-all duration-500 ease-in-out bg-white',
+          // Desktop styles (md and above)
+          'md:relative md:overflow-hidden md:h-full md:rounded-t-0',
+          !isCollapsed ? 'lg:w-1/2' : 'lg:w-20',
+          // Mobile styles (below md) - always fixed at bottom
+          'fixed md:relative bottom-0 left-0 right-0 p-0 rounded-t-3xl',
+          // Mobile height
+          !isCollapsed ? 'h-[90vh]' : 'h-16',
+          // Z-index: higher on desktop when expanded to be above overlay
+          'z-20'
+        )}
       >
-        {!isCollapsed ? (
-          // collapsed view
-          <div className="grid justify-center gap-8">
-            {/* <SearchIcon
-              className="w-5 h-5 cursor-pointer"
-              onClick={handleToggle}
-            /> */}
-            <Tooltip content="Map" placement="left" showArrow={true}>
-              <MapIcon
-                className="w-5 h-5 cursor-pointer"
-                onClick={() => {
-                  handleToggle()
-                  handleState('Map')
-                }}
-              />
-            </Tooltip>
-            <Tooltip content="Itineraries" placement="left" showArrow={true}>
-              <ItineraryIcon
-                className="w-5 h-5 cursor-pointer"
-                onClick={() => {
-                  handleToggle()
-                  handleState('Itineraries')
-                }}
-              />
-            </Tooltip>
-            <Tooltip content="Hotels" placement="left" showArrow={true}>
-              <HotelIcon
-                className="w-5 h-5 cursor-pointer"
-                onClick={() => {
-                  handleToggle()
-                  handleState('Hotels')
-                }}
-              />
-            </Tooltip>
-            <Tooltip content="Flights" placement="left" showArrow={true}>
-              <PaperFlightIcon
-                className="w-5 h-5 cursor-pointer"
-                onClick={() => {
-                  handleToggle()
-                  handleState('Flights')
-                }}
-              />
-            </Tooltip>
-          </div>
-        ) : (
-          // expanded view
-          <>
-            <div className="w-full">
-              <div className=" flex justify-between items-center">
-                <div className="flex gap-5 flex-row py-3">
-                  <div
-                    className={`shadow rounded-2xl p-3 cursor-pointer ${activeRightSideBarItem === 'Map' ? 'bg-black' : 'transition hover:scale-105'}`}
-                    onClick={() => handleState('Map')}
-                  >
-                    <MapIcon
-                      className={`w-5 h-5 ${activeRightSideBarItem === 'Map' ? 'text-white' : ''}`}
-                    />
-                  </div>
-                  <div
-                    className={`shadow rounded-2xl p-3 cursor-pointer ${activeRightSideBarItem === 'Itineraries' ? 'bg-black' : 'transition hover:scale-105'}`}
-                    onClick={() => handleState('Itineraries')}
-                  >
-                    <ItineraryIcon
-                      className={`w-5 h-5 ${activeRightSideBarItem === 'Itineraries' ? 'text-white' : ''}`}
-                    />
-                  </div>
-                  <div
-                    className={`shadow rounded-2xl p-3 cursor-pointer ${activeRightSideBarItem === 'Hotels' ? 'bg-black' : 'transition hover:scale-105'}`}
-                    onClick={() => handleState('Hotels')}
-                  >
-                    <HotelIcon
-                      className={`w-5 h-5 ${activeRightSideBarItem === 'Hotels' ? 'text-white' : ''}`}
-                    />
-                  </div>
-                  <div
-                    className={`shadow rounded-2xl p-3 cursor-pointer ${activeRightSideBarItem === 'Flights' ? 'bg-black' : 'transition hover:scale-105'}`}
-                    onClick={() => handleState('Flights')}
-                  >
-                    <PaperFlightIcon
-                      className={`w-5 h-5 ${activeRightSideBarItem === 'Flights' ? 'text-white' : ''}`}
-                    />
-                  </div>
-                </div>
-                <div className="">
-                  <button
-                    onClick={() => {
+        <div
+          className={cn(
+            'p-4 md:shadow-lg ring-1 ring-neutral-100 rounded-t-3xl md:rounded-l-3xl md:rounded-t-none h-full md:h-full md:overflow-y-auto'
+          )}
+        >
+          <div
+            className={cn(
+              'flex',
+              !isCollapsed
+                ? 'gap-5 flex-col md:flex-row'
+                : 'flex-row md:flex-col gap-4'
+            )}
+          >
+            {isCollapsed ? (
+              // collapsed view
+              <nav
+                className={cn(
+                  'grid gap-4',
+                  'grid-flow-col md:grid-flow-row',
+                  'justify-center w-full md:w-auto'
+                )}
+              >
+                <Tooltip content="Map" placement="left" showArrow={true}>
+                  <Button
+                    isIconOnly
+                    variant="light"
+                    radius="lg"
+                    onPress={() => {
                       handleToggle()
+                      handleState('Map')
                     }}
                   >
-                    <CollapseIcon className="w-4 h-4 cursor-pointer" />
-                  </button>
+                    <MapIcon className="w-5 h-5" />
+                  </Button>
+                </Tooltip>
+                <Tooltip
+                  content="Itineraries"
+                  placement="left"
+                  showArrow={true}
+                >
+                  <Button
+                    isIconOnly
+                    variant="light"
+                    radius="lg"
+                    onPress={() => {
+                      handleToggle()
+                      handleState('Itineraries')
+                    }}
+                  >
+                    <ItineraryIcon className="w-5 h-5" />
+                  </Button>
+                </Tooltip>
+                <Tooltip content="Hotels" placement="left" showArrow={true}>
+                  <Button
+                    isIconOnly
+                    variant="light"
+                    radius="lg"
+                    onPress={() => {
+                      handleToggle()
+                      handleState('Hotels')
+                    }}
+                  >
+                    <HotelIcon className="w-5 h-5" />
+                  </Button>
+                </Tooltip>
+                <Tooltip content="Flights" placement="left" showArrow={true}>
+                  <Button
+                    isIconOnly
+                    variant="light"
+                    radius="lg"
+                    onPress={() => {
+                      handleToggle()
+                      handleState('Flights')
+                    }}
+                  >
+                    <PaperFlightIcon className="w-5 h-5" />
+                  </Button>
+                </Tooltip>
+              </nav>
+            ) : (
+              // expanded view
+              <>
+                <div className="w-full">
+                  <div className="flex justify-between items-center">
+                    <nav className="flex gap-5 flex-row py-3 group">
+                      <Button
+                        data-active={activeRightSideBarItem === 'Map'}
+                        isIconOnly
+                        variant="solid"
+                        radius="lg"
+                        onPress={() => {
+                          handleState('Map')
+                        }}
+                        className="bg-background shadow-md data-[active=true]:bg-black data-[active=true]:text-white"
+                      >
+                        <MapIcon className="w-5 h-5" />
+                      </Button>
+                      <Button
+                        data-active={activeRightSideBarItem === 'Itineraries'}
+                        isIconOnly
+                        variant="solid"
+                        radius="lg"
+                        onPress={() => {
+                          handleState('Itineraries')
+                        }}
+                        className="bg-background shadow-md data-[active=true]:bg-black data-[active=true]:text-white"
+                      >
+                        <ItineraryIcon className="w-5 h-5" />
+                      </Button>
+                      <Button
+                        data-active={activeRightSideBarItem === 'Hotels'}
+                        isIconOnly
+                        variant="solid"
+                        radius="lg"
+                        onPress={() => {
+                          handleState('Hotels')
+                        }}
+                        className="bg-background shadow-md data-[active=true]:bg-black data-[active=true]:text-white"
+                      >
+                        <HotelIcon className="w-5 h-5" />
+                      </Button>
+                      <Button
+                        data-active={activeRightSideBarItem === 'Flights'}
+                        isIconOnly
+                        variant="solid"
+                        radius="lg"
+                        onPress={() => {
+                          handleState('Flights')
+                        }}
+                        className="bg-background shadow-md data-[active=true]:bg-black data-[active=true]:text-white"
+                      >
+                        <PaperFlightIcon className="w-5 h-5" />
+                      </Button>
+                    </nav>
+                    <Button
+                      variant="light"
+                      isIconOnly
+                      radius="full"
+                      onPress={() => {
+                        handleToggle()
+                      }}
+                    >
+                      <CollapseIcon className="w-4 h-4 cursor-pointer" />
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            </div>
-          </>
-        )}
-      </nav>
+              </>
+            )}
+          </div>
 
-      {isCollapsed && (
-        <div className="rounded-2xl p-2 no-scrollbar overflow-auto h-full">
-          <RightSideBarContentWrapper />
+          {!isCollapsed && (
+            <div className={cn('no-scrollbar h-full overflow-y-auto md:h-fit')}>
+              <RightSideBarContentWrapper />
+            </div>
+          )}
         </div>
-      )}
-    </aside>
+      </aside>
+    </>
   )
 }
 

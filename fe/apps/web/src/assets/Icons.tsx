@@ -404,25 +404,6 @@ export const NewConversationIcon = ({ className }: { className?: string }) => (
   </svg>
 )
 
-export const ConversationHistoryIcon = ({
-  className
-}: {
-  className?: string
-}) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    fill="currentColor"
-    stroke="currentColor"
-    strokeWidth="1.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className="shrink-0 transform-cpu ml-0 group-hover/button:scale-105 transition-transform will-change-transform"
-  >
-    <path d="M12.429 5a7.428 7.428 0 0 0-6.183 11.543L5 19.857l4.171-.754A7.429 7.429 0 1 0 12.43 5Z"></path>
-  </svg>
-)
-
 export const LoveHotelsIcon = ({ className }: { className?: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -692,7 +673,7 @@ export const MinusNumberIcon = ({ className }: { className?: string }) => (
     viewBox="0 0 24 24"
     strokeWidth={1.5}
     stroke="currentColor"
-    className="size-6"
+    className="size-4"
   >
     <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14" />
   </svg>
@@ -705,7 +686,7 @@ export const PlusNumberIcon = ({ className }: { className?: string }) => (
     viewBox="0 0 24 24"
     strokeWidth={1.5}
     stroke="currentColor"
-    className="size-6"
+    className="size-4"
   >
     <path
       strokeLinecap="round"

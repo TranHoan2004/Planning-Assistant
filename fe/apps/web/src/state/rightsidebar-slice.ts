@@ -7,7 +7,7 @@ export interface RightSidebarContextState {
 
 const initialState: RightSidebarContextState = {
   activeRightBarItem: 'Map',
-  isCollapsed: false
+  isCollapsed: true
 }
 
 const rightsidebarSlice = createSlice({

@@ -179,14 +179,15 @@ function CarouselPrevious({
     <button
       data-slot="carousel-previous"
       className={cn(
-        'absolute size-8 rounded-full inline-flex items-center justify-center text-white hover:bg-foreground hover:text-background transition-background cursor-pointer',
+        'absolute z-10 size-10 rounded-full inline-flex items-center justify-center bg-white/80 hover:bg-white text-gray-800 shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed',
         orientation === 'horizontal'
-          ? 'top-1/2 left-1 -translate-y-1/2'
-          : '-top-12 left-1/2 -translate-x-1/2 rotate-90',
+          ? 'top-1/2 left-4 -translate-y-1/2'
+          : 'top-4 left-1/2 -translate-x-1/2 rotate-90',
         className
       )}
       disabled={!canScrollPrev}
       onClick={scrollPrev}
+      aria-label="Previous slide"
       {...props}
     >
       <FaChevronLeft className="size-4" />
@@ -201,14 +202,15 @@ function CarouselNext({ className, ...props }: React.ComponentProps<'button'>) {
     <button
       data-slot="carousel-next"
       className={cn(
-        'absolute size-8 rounded-full inline-flex items-center justify-center text-white hover:bg-foreground hover:text-background transition-background cursor-pointer',
+        'absolute z-10 size-10 rounded-full inline-flex items-center justify-center bg-white/80 hover:bg-white text-gray-800 shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed',
         orientation === 'horizontal'
-          ? 'top-1/2 right-1 -translate-y-1/2'
-          : '-bottom-12 left-1/2 -translate-x-1/2 rotate-90',
+          ? 'top-1/2 right-4 -translate-y-1/2'
+          : 'bottom-4 left-1/2 -translate-x-1/2 rotate-90',
         className
       )}
       disabled={!canScrollNext}
       onClick={scrollNext}
+      aria-label="Next slide"
       {...props}
     >
       <FaChevronRight className="size-4" />
@@ -225,12 +227,11 @@ function CarouselDot({ className, selected, ...props }: CarouselDotProps) {
     <button
       data-slot="carousel-dot"
       className={cn(
-        'size-4 rounded-full inline-flex cursor-pointer',
-        selected
-          ? 'bg-foreground text-background'
-          : 'bg-background border border-foreground',
+        'size-2.5 rounded-full inline-flex cursor-pointer transition-all duration-200',
+        selected ? 'bg-foreground w-8' : 'bg-gray-400 hover:bg-gray-600',
         className
       )}
+      aria-label={selected ? 'Current slide' : 'Go to slide'}
       {...props}
     />
   )

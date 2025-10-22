@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { Map } from '@vis.gl/react-google-maps'
 import { cn } from '@repo/utils/tailwind-utils'
 
@@ -119,10 +119,11 @@ const CustomGoogleMap = ({
       defaultZoom={defaultZoom}
       className={cn('w-full h-full', className)}
       disableDefaultUI={true}
+      mapId={process.env.NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID}
     >
       {children}
     </Map>
   )
 }
 
-export default CustomGoogleMap
+export default memo(CustomGoogleMap)

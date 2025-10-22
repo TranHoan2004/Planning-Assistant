@@ -1,5 +1,5 @@
-import { ChatHeader } from '@/components/layout/ChatHeader'
-import Sidebar from '@/components/layout/sidebar/Sidebar'
+import { Header } from '@/components/layout/Header'
+import LocaleSwitcher from '@/components/ui/LocaleSwitcher'
 import React from 'react'
 
 export default function Layout({
@@ -8,12 +8,13 @@ export default function Layout({
   children: React.ReactNode
 }>) {
   return (
-    <div className="h-screen">
-      <ChatHeader />
-      <div className="relative flex-1 flex h-[calc(100vh-62px)]">
-        <Sidebar />
+    <div className="relative flex flex-col">
+      <Header />
+      <div className="relative flex-1 flex h-full">
+        {/* <Sidebar /> */}
         {children}
       </div>
+      <LocaleSwitcher className="fixed bottom-3 right-3 z-20" size="lg" />
     </div>
   )
 }

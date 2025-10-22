@@ -113,14 +113,18 @@ export const onboardOAuth2 = async (provider: string, code: string) => {
     `${AUTH_API_URL}/api/auth/outbound/${provider}/authenticate`,
     {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({
-        code
+        code: code
       })
     }
   )
 
   if (!res.ok) {
-    throw new Error(`Error onboarding user. Status ${res.status}`)
+    const error = await res.json()
+    throw new Error(`Error onboarding user. ${error.message}`)
   }
 
   return await res.json()

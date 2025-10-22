@@ -21,13 +21,11 @@ import {
   CarouselPrevious
 } from '../ui/carousel'
 import Image from 'next/image'
-import { LuStar } from 'react-icons/lu'
 import ParkIcon from '@/assets/ParkIcon'
 import { IoIosRestaurant } from 'react-icons/io'
 import { MdOutlineEmojiFoodBeverage } from 'react-icons/md'
 import AttractionsIcon from '@/assets/AttractionsIcon'
 import { FaExternalLinkAlt } from 'react-icons/fa'
-import { FaChevronDown, FaChevronUp, FaRegClock } from 'react-icons/fa6'
 
 interface PlaceModalProps {
   isOpen: boolean
@@ -95,10 +93,8 @@ const PlaceModal = ({
                   ))}
                 </CarouselContent>
                 <div className="flex justify-between items-center mt-3">
-                  <div className="flex gap-2 items-center">
-                    <CarouselPrevious className="relative bg-foreground top-0 left-0 translate-0" />
-                    <CarouselNext className="relative bg-foreground top-0 right-0 translate-0" />
-                  </div>
+                  <CarouselPrevious />
+                  <CarouselNext />
                   <div className="flex gap-2 items-center">
                     {Array.from(Array(count).keys()).map((_, index) => (
                       <CarouselDot
@@ -120,15 +116,6 @@ const PlaceModal = ({
               </div>
             </ModalHeader>
             <ModalBody>
-              <div className="inline-flex gap-2 items-center">
-                <LuStar size={28} className="text-yellow-400 fill-yellow-400" />
-                <span className="text-lg font-semibold">
-                  {placeDetails?.rating}
-                </span>
-                <span className="text-lg">
-                  ({placeDetails?.userRatingCount})
-                </span>
-              </div>
               <div className="flex gap-3 items-center">
                 {placeDetails?.types?.map((type, index) => {
                   switch (type) {
@@ -151,7 +138,7 @@ const PlaceModal = ({
                 })}
               </div>
 
-              <div
+              {/* <div
                 className="text-xl font-bold cursor-pointer inline-flex items-center"
                 role="button"
                 onClick={() => setOpenOpeningHours(!openOpeningHours)}
@@ -176,7 +163,7 @@ const PlaceModal = ({
                     )
                   )}
                 </div>
-              )}
+              )} */}
 
               <Link
                 href={placeDetails?.googleMapsUri || ''}

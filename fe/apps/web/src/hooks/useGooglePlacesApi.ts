@@ -18,13 +18,28 @@ const usePlacesService = () => {
   return placesService
 }
 
-const usePlaceDetail = (placeId: string) => {
+const FIELDS = [
+  'displayName',
+  'formattedAddress',
+  'location',
+  'types',
+  'googleMapsURI',
+  'plusCode',
+  'viewport',
+  'photos'
+]
+const usePlaceDetail = (placeId: string, options?: { enabled?: boolean }) => {
+  const { enabled = true } = options || {}
+
   const placesLibrary = useMapsLibrary('places')
   const language = useLocale()
 
-  const [placeDetail, setPlaceDetail] = useState<PlaceDetailsResponse | null>(
+  const [placeDetails, setPlaceDetails] = useState<PlaceDetailsResponse | null>(
     null
   )
+  const [isPending, setIsPending] = useState(false)
+  const [isError, setIsError] = useState(false)
+
   const place = useMemo(
     () =>
       placesLibrary &&
@@ -37,50 +52,64 @@ const usePlaceDetail = (placeId: string) => {
   )
 
   useEffect(() => {
-    if (!place) return
-
-    const getPlaceDetails = async () => {
-      await place.fetchFields({
-        fields: [
-          'id',
-          'displayName',
-          'formattedAddress',
-          'location',
-          'rating',
-          'userRatingCount',
-          'businessStatus',
-          'types',
-          'regularOpeningHours',
-          'googleMapsURI',
-          'photos'
-        ]
-      })
-
-      setPlaceDetail({
-        id: place.id,
-        displayName: {
-          languageCode: place.displayNameLanguageCode,
-          text: place.displayName
-        },
-        formattedAddress: place.formattedAddress,
-        location: {
-          latitude: place.location?.lat(),
-          longitude: place.location?.lng()
-        },
-        rating: place.rating,
-        userRatingCount: place.userRatingCount,
-        businessStatus: place.businessStatus,
-        types: place.types,
-        photos: place.photos,
-        openingHours: place.regularOpeningHours,
-        googleMapsUri: place.googleMapsURI
-      })
+    if (!place || !enabled) {
+      if (!enabled) {
+        setIsPending(false)
+      }
+      return
     }
 
-    getPlaceDetails()
-  }, [place])
+    let ignore = false
 
-  return placeDetail
+    setIsPending(true)
+    setIsError(false)
+
+    place
+      .fetchFields({
+        fields: FIELDS
+      })
+      .then(() => {
+        if (!ignore) {
+          setPlaceDetails({
+            id: place.id,
+            displayName: {
+              languageCode: place.displayNameLanguageCode,
+              text: place.displayName
+            },
+            formattedAddress: place.formattedAddress,
+            location: {
+              latitude: place.location?.lat(),
+              longitude: place.location?.lng()
+            },
+            types: place.types,
+            googleMapsUri: place.googleMapsURI,
+            plusCode: place.plusCode,
+            viewport: place.viewport,
+            photos: place.photos
+          })
+        }
+      })
+      .catch((e) => {
+        if (!ignore) {
+          setIsError(true)
+        }
+      })
+      .finally(() => {
+        if (!ignore) {
+          setIsPending(false)
+        }
+      })
+
+    return () => {
+      ignore = true
+    }
+  }, [place, enabled])
+
+  return {
+    placeDetails,
+    isPending,
+    isError
+  }
 }
 
 export { usePlacesService, usePlaceDetail }

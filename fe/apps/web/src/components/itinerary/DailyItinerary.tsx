@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
-import { ItineraryDay } from '@/app/(main)/chat/_schema/itinerary'
+import { ItineraryDay } from '@/app/chat/_schema/itinerary'
 import { Response as AIResponse } from '../ai/response'
 import { useTranslations } from 'next-intl'
-import { IoMoonOutline } from 'react-icons/io5'
+import { IoCalendarOutline } from 'react-icons/io5'
+import { GiNightSky } from 'react-icons/gi'
 import { CiSun } from 'react-icons/ci'
 import { formatDate } from '@/utils/utils'
 import { Button } from '@heroui/react'
 import { FaChevronUp, FaChevronDown } from 'react-icons/fa6'
-import { MdCalendarToday } from 'react-icons/md'
+import { HiOutlineLocationMarker } from 'react-icons/hi'
 import { IoIosRestaurant } from 'react-icons/io'
 import { PiClockAfternoon, PiCarProfile, PiMapPinFill } from 'react-icons/pi'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -17,13 +18,6 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import PlaceCard from '@/components/places/PlaceCard'
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious
-} from '../ui/carousel'
 
 interface DailyItineraryProps {
   order: number
@@ -35,10 +29,10 @@ const DailyItinerary = ({ order, itineraryDay }: DailyItineraryProps) => {
   const [expand, setExpand] = useState(false)
 
   return (
-    <div className="relative w-full h-auto flex flex-col border border-neutral-300/50 shadow rounded-2xl px-7 py-5 gap-3">
+    <div className="relative w-full h-auto flex flex-col border border-neutral-300/50 shadow rounded-2xl px-7 py-3 gap-3">
       <Button
         isIconOnly
-        className="absolute top-4 right-4"
+        className="absolute top-3 right-4"
         size="sm"
         radius="full"
         variant="light"
@@ -50,18 +44,22 @@ const DailyItinerary = ({ order, itineraryDay }: DailyItineraryProps) => {
           <FaChevronUp className="size-4" />
         )}
       </Button>
-      <div className="flex items-center justify-start gap-2">
-        <h1 className="font-bold text-2xl">
+      <div className="flex items-center justify-start gap-5">
+        <h1 className="font-medium text-xl">
           {t('day')} {order}
         </h1>
-        <span>
-          <PiMapPinFill className="size-6" />
-        </span>
-        <span className="text-lg">{itineraryDay.location}</span>
-        <span>
-          <MdCalendarToday className="size-6" />
-        </span>
-        <span className="text-lg">{formatDate(itineraryDay.date_)}</span>
+        <div className="flex items-center gap-2">
+          <span>
+            <HiOutlineLocationMarker className="size-5" />
+          </span>
+          <span className="text-lg">{itineraryDay.location}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span>
+            <IoCalendarOutline className="size-5" />
+          </span>
+          <span className="text-lg">{formatDate(itineraryDay.date_)}</span>
+        </div>
       </div>
       <AnimatePresence initial={false}>
         {expand && (
@@ -76,7 +74,7 @@ const DailyItinerary = ({ order, itineraryDay }: DailyItineraryProps) => {
               <div className="w-full">
                 <h6 className="text-lg font-semibold inline-flex items-center gap-2">
                   <span>
-                    <CiSun className="size-6" />
+                    <CiSun className="size-5" />
                   </span>
                   {t('activity-timeline.morning')}
                 </h6>
@@ -85,7 +83,7 @@ const DailyItinerary = ({ order, itineraryDay }: DailyItineraryProps) => {
               <div className="w-full">
                 <h6 className="text-lg font-semibold inline-flex items-center gap-2">
                   <span>
-                    <PiClockAfternoon className="size-6" />
+                    <PiClockAfternoon className="size-5" />
                   </span>
                   {t('activity-timeline.afternoon')}
                 </h6>
@@ -94,7 +92,7 @@ const DailyItinerary = ({ order, itineraryDay }: DailyItineraryProps) => {
               <div className="w-full">
                 <h6 className="text-lg font-semibold inline-flex items-center gap-2">
                   <span>
-                    <IoMoonOutline className="size-6" />
+                    <GiNightSky className="size-5" />
                   </span>
                   {t('activity-timeline.evening')}
                 </h6>
@@ -105,7 +103,7 @@ const DailyItinerary = ({ order, itineraryDay }: DailyItineraryProps) => {
               <div className="w-full">
                 <h6 className="text-lg font-semibold inline-flex items-center gap-2">
                   <span>
-                    <IoIosRestaurant className="size-6" />
+                    <IoIosRestaurant className="size-5" />
                   </span>
                   {t('aditional-details.meals')}
                 </h6>
@@ -120,7 +118,7 @@ const DailyItinerary = ({ order, itineraryDay }: DailyItineraryProps) => {
               <div className="w-full">
                 <h6 className="text-lg font-semibold inline-flex items-center gap-2">
                   <span>
-                    <PiCarProfile className="size-6" />
+                    <PiCarProfile className="size-5" />
                   </span>
                   {t('aditional-details.transportation')}
                 </h6>
@@ -132,13 +130,13 @@ const DailyItinerary = ({ order, itineraryDay }: DailyItineraryProps) => {
             <Swiper
               className="w-full"
               modules={[Navigation, Pagination, Scrollbar, A11y]}
-              spaceBetween={10}
+              spaceBetween={20}
               slidesPerView={2}
               pagination={{ clickable: true }}
               scrollbar={{ draggable: true }}
             >
               {itineraryDay.attraction_recommendations?.map((attraction) => (
-                <SwiperSlide key={attraction.place_id} className="md:basis-1/2">
+                <SwiperSlide key={attraction.place_id}>
                   <PlaceCard placeId={attraction.place_id} />
                 </SwiperSlide>
               ))}

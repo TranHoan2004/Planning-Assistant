@@ -1,7 +1,11 @@
 import type { NextConfig } from 'next'
 import createNextIntlPlugin from 'next-intl/plugin'
+import { join } from 'path'
 
 const nextConfig: NextConfig = {
+  turbopack: {
+    root: join(__dirname, '../..')
+  },
   images: {
     remotePatterns: [
       {

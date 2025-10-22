@@ -21,6 +21,8 @@ export interface PlaceDetailsResponse {
   openingHours?: google.maps.places.OpeningHours | null
   photos?: Array<google.maps.places.Photo> | null
   reviews?: Array<google.maps.places.Review> | null
+  plusCode?: google.maps.places.PlusCode | null
+  viewport?: google.maps.LatLngBounds | null
 }
 
 export interface PlaceDetailsOptions {

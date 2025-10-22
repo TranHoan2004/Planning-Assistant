@@ -1,6 +1,7 @@
 'use client'
 
-import { ItineraryResponse } from '@/app/(main)/chat/_schema/itinerary'
+import { ItineraryResponse } from '@/app/chat/_schema/itinerary'
+import { PlaceDetailsResponse } from '@/types/places.type'
 import { createContext, useState, use } from 'react'
 
 type ChatContextType = {
@@ -8,6 +9,10 @@ type ChatContextType = {
   setItinerary: (itinerary?: ItineraryResponse) => void
   recommendHotelIds: string[]
   setRecommendHotelIds: (hotelIds: string[]) => void
+  initBasicParams: PlanRequest
+  setInitBasicParams: (params: PlanRequest) => void
+  placesData: PlaceDetailsResponse[]
+  setPlacesData: React.Dispatch<React.SetStateAction<PlaceDetailsResponse[]>>
 }
 
 export const ChatContext = createContext<ChatContextType | null>(null)
@@ -15,6 +20,20 @@ export const ChatContext = createContext<ChatContextType | null>(null)
 type ChatProviderProps = {
   children: React.ReactNode
   itinerary?: ItineraryResponse
+}
+
+type PlanRequest = {
+  from: string
+  to: string
+  checkInDate: string
+  checkOutDate: string
+  adults?: number
+  children?: number
+  babies?: number
+  withPets?: boolean
+  currency: string
+  minBudget: number
+  maxBudget: number
 }
 
 export const ChatProvider = ({
@@ -26,6 +45,17 @@ export const ChatProvider = ({
   )
 
   const [recommendHotelIds, setRecommendHotelIds] = useState<string[]>([])
+  const [initBasicParams, setInitBasicParams] = useState<PlanRequest>({
+    from: '',
+    to: '',
+    checkInDate: '',
+    checkOutDate: '',
+    currency: '',
+    minBudget: 0,
+    maxBudget: 0
+  })
+
+  const [placesData, setPlacesData] = useState<PlaceDetailsResponse[]>([])
 
   return (
     <ChatContext.Provider
@@ -33,7 +63,11 @@ export const ChatProvider = ({
         itinerary,
         setItinerary,
         recommendHotelIds,
-        setRecommendHotelIds
+        setRecommendHotelIds,
+        initBasicParams,
+        setInitBasicParams,
+        placesData,
+        setPlacesData
       }}
     >
       {children}

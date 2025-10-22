@@ -37,7 +37,7 @@ const InputContainer = () => {
   }
 
   return (
-    <div className="relative z-40 w-full max-w-[768px]">
+    <div className="relative z-20 w-full max-w-3xl mx-auto">
       <form className="relative" onSubmit={handleSubmit}>
         <div className="relative flex flex-col overflow-hidden rounded-3xl border border-gray-200 bg-white py-4 pl-4 pr-[52px] shadow-lg">
           <AnimatedPlaceholder isVisible={!input} />

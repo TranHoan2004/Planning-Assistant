@@ -1,4 +1,4 @@
-import { TripSummary } from '@/app/(main)/chat/_schema/itinerary'
+import { TripSummary } from '@/app/chat/_schema/itinerary'
 import { formatCurrency } from '@/utils/formatters'
 import { Card, CardBody } from '@heroui/card'
 import { cn } from '@repo/utils/tailwind-utils'
@@ -14,7 +14,7 @@ interface ItineraryOverviewProps {
 const ItineraryOverview = ({ summary, className }: ItineraryOverviewProps) => {
   const t = useTranslations('ChatPage.itinenaryDetailView')
   return (
-    <Card className={cn('p-7 shadow', className)}>
+    <Card className={cn('p-4 shadow', className)}>
       <CardBody className="flex items-center justify-between flex-row p-0">
         <div className="flex flex-col gap-3">
           <span className="text-xl font-semibold">

@@ -4,23 +4,16 @@ import { AUTH_API_URL } from '@/utils/constraints'
 
 export const POST = async (request: NextRequest) => {
   const cookieStore = await cookies()
-  const accessToken = request.headers.get('Authorization')?.split('Bearer ')[1]
-
-  if (!accessToken) {
-    return NextResponse.json(
-      { status: 'error', error: 'Access token not found' },
-      { status: 401 }
-    )
-  }
+  const accessToken = cookieStore.get('access_token')?.value
+  const refreshToken = cookieStore.get('refresh_token')?.value
 
   try {
-    const response = await fetch(`${AUTH_API_URL}/api/auth/logout`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json'
+    const response = await fetch(
+      `${AUTH_API_URL}/api/auth/logout?accessToken=${accessToken}&refreshToken=${refreshToken}`,
+      {
+        method: 'POST'
       }
-    })
+    )
 
     if (!response.ok) {
       return NextResponse.json(

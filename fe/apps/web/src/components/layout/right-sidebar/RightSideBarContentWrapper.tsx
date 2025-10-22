@@ -8,7 +8,8 @@ import HotelGrid from '@/components/ui/HotelGrid'
 import { useChatContext } from '@/contexts/chat-context'
 import ItineraryDetailView from '@/components/itinerary/ItinenaryDetailView'
 import FlightCard from '@/components/ui/FlightCard'
-import MapSection from '@/app/(main)/chat/components/MapSection'
+import MapSection from '@/app/chat/components/MapSection'
+import { ScrollShadow } from '@heroui/react'
 
 const RightSideBarContentWrapper = () => {
   const activeRightSideBarItem = useSelector(
@@ -17,21 +18,21 @@ const RightSideBarContentWrapper = () => {
   const { itinerary } = useChatContext()
 
   return (
-    <div className="h-full">
+    <>
       {activeRightSideBarItem === 'Hotels' && (
-        <>
+        <ScrollShadow className="h-full" size={0}>
           <HotelGrid
             initialQuery="Nha Trang Hotels"
             checkInDate={format(new Date(), 'yyyy-MM-dd')}
-            checkOutDate={'2025-10-10'}
+            checkOutDate={'2025-10-20'}
             adults={2}
             children={0}
           />
-        </>
+        </ScrollShadow>
       )}
 
       {activeRightSideBarItem === 'Map' && (
-        <div className="w-full h-[80vh] rounded-2xl overflow-hidden">
+        <div className="w-full h-[86vh] rounded-2xl overflow-hidden">
           <MapSection />
         </div>
       )}
@@ -48,36 +49,34 @@ const RightSideBarContentWrapper = () => {
 
       {activeRightSideBarItem === 'Flights' && (
         <>
-          <div>
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold text-black mb-4">
-                Chuyến bay vào ngày 12/06 đến Nha Trang
-              </h2>
-              <button className="text-sm text-gray-600 cursor-pointer">
-                See all
-              </button>
-            </div>
-            <div className="flex flex-col gap-4">
-              <FlightCard
-                departureTime="11:00"
-                arrivalTime="18:00"
-                departureLocation="Sân bay Nội Bài"
-                arrivalLocation="Sân bay Cam Ranh"
-                departureCity="Thành phố Hà Nội"
-                arrivalCity="Thành phố Nha Trang"
-                duration="2h 30m"
-                flightType="Chiều đi"
-                airline="Vietnam Airline"
-                flightNumber="VN123"
-                ticketClass="Vé thương gia"
-                price="2,100,550"
-                currency="₫"
-              />
-            </div>
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-bold text-black mb-4">
+              Chuyến bay vào ngày 12/06 đến Nha Trang
+            </h2>
+            <button className="text-sm text-gray-600 cursor-pointer">
+              See all
+            </button>
+          </div>
+          <div className="flex flex-col gap-4">
+            <FlightCard
+              departureTime="11:00"
+              arrivalTime="18:00"
+              departureLocation="Sân bay Nội Bài"
+              arrivalLocation="Sân bay Cam Ranh"
+              departureCity="Thành phố Hà Nội"
+              arrivalCity="Thành phố Nha Trang"
+              duration="2h 30m"
+              flightType="Chiều đi"
+              airline="Vietnam Airline"
+              flightNumber="VN123"
+              ticketClass="Vé thương gia"
+              price="2,100,550"
+              currency="₫"
+            />
           </div>
         </>
       )}
-    </div>
+    </>
   )
 }
 

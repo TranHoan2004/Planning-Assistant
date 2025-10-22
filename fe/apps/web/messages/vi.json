@@ -1,203 +1,231 @@
 {
-    "HomePage": {
-        "slogan": "\"Ít kế hoạch, nhiều khám phá\"",
-        "description": "Sử dụng AI để tạo hành trình nhóm hoàn hảo của bạn trong vài phút.",
-        "pre-promt": [
-            "Hãy giúp tôi lập kế hoạch cho chuyến đi nhóm.",
-            "Tôi cần một lịch trình cho chuyến đi của chúng tôi.",
-            "Bạn có thể đề xuất một kế hoạch du lịch không?",
-            "Tôi muốn một lịch trình cho chuyến đi của chúng tôi.",
-            "Hãy giúp tôi tạo một kế hoạch du lịch.",
-            "Tôi cần một lịch trình cho chuyến đi nhóm của chúng tôi.",
-            "Bạn có thể giúp tôi lập kế hoạch cho chuyến đi không?",
-            "Tôi muốn một kế hoạch du lịch cho nhóm của chúng tôi.",
-            "Hãy giúp tôi tạo một lịch trình cho chuyến đi của chúng tôi.",
-            "Tôi cần một kế hoạch du lịch cho chuyến đi của chúng tôi."
-        ],
-        "quick-action": [
-            "Kế hoạch du lịch Đà Nẵng",
-            "Kế hoạch du lịch Hội An",
-            "Ý tưởng du lịch tiết kiệm",
-            "Du lịch với gia đình",
-            "Xem thêm..."
-        ]
+  "HomePage": {
+    "slogan": "\"Ít kế hoạch, nhiều khám phá\"",
+    "description": "Sử dụng AI để tạo hành trình nhóm hoàn hảo của bạn trong vài phút.",
+    "pre-promt": [
+      "Hãy giúp tôi lập kế hoạch cho chuyến đi nhóm.",
+      "Tôi cần một lịch trình cho chuyến đi của chúng tôi.",
+      "Bạn có thể đề xuất một kế hoạch du lịch không?",
+      "Tôi muốn một lịch trình cho chuyến đi của chúng tôi.",
+      "Hãy giúp tôi tạo một kế hoạch du lịch.",
+      "Tôi cần một lịch trình cho chuyến đi nhóm của chúng tôi.",
+      "Bạn có thể giúp tôi lập kế hoạch cho chuyến đi không?",
+      "Tôi muốn một kế hoạch du lịch cho nhóm của chúng tôi.",
+      "Hãy giúp tôi tạo một lịch trình cho chuyến đi của chúng tôi.",
+      "Tôi cần một kế hoạch du lịch cho chuyến đi của chúng tôi."
+    ],
+    "quick-action": [
+      "Kế hoạch du lịch Đà Nẵng",
+      "Kế hoạch du lịch Hội An",
+      "Ý tưởng du lịch tiết kiệm",
+      "Du lịch với gia đình",
+      "Xem thêm..."
+    ]
+  },
+  "LoginPage": {
+    "login-google": "Tiếp tục với Google",
+    "or-continue": "Hoặc tiếp tục với",
+    "slogan": "\"Ít kế hoạch, nhiều khám phá\"",
+    "subtitle": "Plango ở đây để giúp bạn có được chuyến đi đẹp nhất trong cuộc đời của mình.",
+    "tryNow": "Dùng thử ngay!",
+    "form": {
+      "email": "Email",
+      "emailPlaceholder": "Nhập email của bạn",
+      "password": "Mật khẩu",
+      "passwordPlaceholder": "Nhập mật khẩu của bạn",
+      "loginButton": "Đăng nhập",
+      "loginButtonLoading": "Đang đăng nhập...",
+      "registerText": "Chưa có tài khoản? ",
+      "registerLink": "Đăng ký ngay",
+      "forgotPassword": "Quên mật khẩu?"
     },
-    "LoginPage": {
-        "login-google": "Tiếp tục với Google",
-        "or-continue": "Hoặc tiếp tục với",
-        "slogan": "\"Ít kế hoạch, nhiều khám phá\"",
-        "subtitle": "Plango ở đây để giúp bạn có được chuyến đi đẹp nhất trong cuộc đời của mình.",
-        "tryNow": "Dùng thử ngay!",
-        "form": {
-            "email": "Email",
-            "emailPlaceholder": "Nhập email của bạn",
-            "password": "Mật khẩu",
-            "passwordPlaceholder": "Nhập mật khẩu của bạn",
-            "loginButton": "Đăng nhập",
-            "loginButtonLoading": "Đang đăng nhập...",
-            "registerText": "Chưa có tài khoản? ",
-            "registerLink": "Đăng ký ngay",
-            "forgotPassword": "Quên mật khẩu?"
-        },
+    "error": {
+      "invalidCredentials": "Email hoặc mật khẩu không đúng",
+      "invalidEmail": "Hãy điền một địa chỉ email hợp lệ",
+      "invalidPassword": "Mật khẩu phải có ít nhất {passwordMin} kí tự"
+    },
+    "prompts": [
+      "Hỏi Plango để tạo một hành trình hoàn chỉnh",
+      "Yêu cầu đề xuất khách sạn tại điểm đến của bạn",
+      "Tìm hiểu về các hoạt động và điểm tham quan địa phương"
+    ]
+  },
+  "RegisterPage": {
+    "slogan": "\"Ít kế hoạch, nhiều khám phá\"",
+    "subtitle": "Plango ở đây để giúp bạn có được chuyến đi đẹp nhất trong cuộc đời của mình",
+    "tryNow": "Dùng thử ngay!",
+    "form": {
+      "email": "Email",
+      "emailPlaceholder": "Nhập email của bạn",
+      "password": "Mật khẩu",
+      "passwordPlaceholder": "Tạo mật khẩu",
+      "confirmPassword": "Xác nhận mật khẩu",
+      "confirmPasswordPlaceholder": "Xác nhận mật khẩu của bạn",
+      "passwordRule": "Ít nhất {passwordMin} kí tự, bao gồm chữ hoa, chữ thường, số và kí tự đặc biệt",
+      "registerButton": "Đăng ký",
+      "registerButtonLoading": "Đang tạo tài khoản...",
+      "loginText": "Đã có tài khoản? ",
+      "loginLink": "Đăng nhập ngay"
+    },
+    "error": {
+      "emailExists": "Email đã tồn tại",
+      "invalidEmail": "Hãy điền một địa chỉ email hợp lệ",
+      "passwordMismatch": "Mật khẩu không khớp",
+      "passwordLength": "Mật khẩu phải có ít nhất 8 kí tự",
+      "passwordComplexity": "Mật khẩu phải bao gồm chữ hoa, chữ thường, số và kí tự đặc biệt"
+    },
+    "prompts": [
+      "Hỏi Plango để tạo một hành trình hoàn chỉnh",
+      "Yêu cầu đề xuất khách sạn tại điểm đến của bạn",
+      "Tìm hiểu về các hoạt động và điểm tham quan địa phương"
+    ]
+  },
+  "ForgotPasswordPage": {
+    "title": "Bạn quên mật khẩu?",
+    "subtitle": "Nhập email của bạn để nhận mã OTP đặt lại mật khẩu.",
+    "verifyEmailBtn": "Xác minh email",
+    "otp-sent": "Mã OTP đã được gửi đến email của bạn.",
+    "otp-valid": "Mã OTP của bạn đã được xác minh thành công.",
+    "otp-invalid": "Mã OTP không hợp lệ hoặc đã hết hạn.",
+    "otp-get-error": "Đã xảy ra lỗi trong quá trình lấy mã OTP:",
+    "otp-title": "Xác minh mã OTP",
+    "otp-subtitle": "Vui lòng nhập mã OTP (6 số) đã được gửi đến email của bạn.",
+    "otp-placeholder": "Nhập mã OTP",
+    "otp-resend": "Gửi lại mã OTP",
+    "backToLogin": "Quay lại trang đăng nhập",
+    "emailNotFound": "Email không tồn tại trong hệ thống",
+    "sendOtpSuccess": "Hãy kiểm tra email của bạn để lấy mã OTP 6 chữ số",
+    "verifyEmailFailed": "Xác minh email thất bại. Vui lòng thử lại.",
+    "resetPassword": "Đặt lại mật khẩu",
+    "resetPasswordSubtitle": "Vui lòng nhập mật khẩu mới cho tài khoản của bạn.",
+    "resetPasswordBtn": "Đặt lại mật khẩu",
+    "newPassword": "Mật khẩu mới",
+    "passwordLength": "Mật khẩu phải có it nhất {passwordMin} kí tự.",
+    "passwordRules": "Mật khẩu phải bao gồm chữ hoa, chữ thường, số và kí tự đặc biệt.",
+    "passwordMismatch": "Mật khẩu không khớp.",
+    "savePasswordErrorDefault": "Mật khẩu không hợp lệ!",
+    "resetPasswordSuccessMessage": "Mật khẩu của bạn đã được đặt lại thành công. Vui lòng đăng nhập lại.",
+    "resetPasswordSuccessTitle": "Đặt lại mật khẩu thành công",
+    "resetPasswordUnexpectedError": "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại.",
+    "passwordLabel": "Mật khẩu",
+    "passwordPlaceholder": "Nhập mật khẩu mới",
+    "confirmPasswordLabel": "Xác nhận mật khẩu",
+    "confirmPasswordPlaceholder": "Xác nhận mật khẩu mới"
+  },
+  "Header": {
+    "chat": "Trò chuyện",
+    "explore": "Khám phá",
+    "flight": "Chuyến bay",
+    "hotel": "Khách sạn",
+    "blog": "Bài viết",
+    "about-us": "Về Plango",
+    "login": "Đăng nhập",
+    "logout": "Đăng xuất",
+    "plan-now": "Lên kế hoạch ngay",
+    "search-placeholder": "Tìm kiếm...",
+    "profile": "Hồ sơ cá nhân",
+    "home": "Trang chủ"
+  },
+  "Sidebar": {
+    "tool-tips": {
+      "home": "Trang chủ",
+      "new-chat": "Cuộc trò chuyện mới",
+      "chat-history": "Đoạn chat",
+      "saved": "Yêu thích",
+      "language": "Đổi ngôn ngữ"
+    },
+    "historyTitle": "Đoạn chat",
+    "follow-us": "Theo dõi Plango",
+    "logout": "Đăng xuất"
+  },
+  "ChatPage": {
+    "title": "Kế hoạch mới",
+    "description": "Lên kế hoạch chuyến đi nhóm hoàn hảo của bạn với Plango",
+    "approve-select": {
+      "yes": "Có",
+      "no": "Không"
+    },
+    "itinenaryDetailView": {
+      "day": "Ngày",
+      "destination": "Điểm đến",
+      "estimated-budget": "Ngân sách ước tính",
+      "daily-itinerary": "Lịch trình hàng ngày",
+      "daily-budget": "Ngân sách hàng ngày",
+      "activity-timeline": {
+        "morning": "Buổi sáng",
+        "afternoon": "Buổi chiều",
+        "evening": "Buổi tối"
+      },
+      "aditional-details": {
+        "meals": "Bữa ăn",
+        "transportation": "Phương tiện di chuyển"
+      },
+      "important-travel-notes": "Ghi chú quan trọng"
+    },
+    "loadingIndicator": {
+      "aiThinking": "AI đang suy nghĩ..."
+    },
+    "promptContainer": {
+      "placeholderDefault": "Hãy giúp tôi lập kế hoạch cho chuyến đi nhóm.",
+      "file": "Tệp",
+      "fileCount": "đã chọn"
+    },
+    "promtSection": {
+      "title": "Lên ý tưởng cùng Plango",
+      "subtitle": "Plango ở đây để giúp bạn có được chuyến đi đẹp nhất trong cuộc đời của mình",
+      "helper-text": "Hãy bắt đầu hỏi mình bất cứ điều gì về du lịch!",
+      "placeholderProps": "Tạo kế hoạch du lịch hoàn hảo với plango ngay ..."
+    },
+    "suggestionSection": {
+      "hotel": {
         "error": {
-            "invalidCredentials": "Email hoặc mật khẩu không đúng",
-            "invalidEmail": "Hãy điền một địa chỉ email hợp lệ",
-            "invalidPassword": "Mật khẩu phải có ít nhất {passwordMin} kí tự"
+          "title": "Lỗi tìm kiếm khách sạn",
+          "subtitle": "Vui lòng thử lại sau.",
+          "button": "Thử lại"
         },
-        "prompts": [
-            "Hỏi Plango để tạo một hành trình hoàn chỉnh",
-            "Yêu cầu đề xuất khách sạn tại điểm đến của bạn",
-            "Tìm hiểu về các hoạt động và điểm tham quan địa phương"
-        ]
-    },
-    "RegisterPage": {
-        "slogan": "\"Ít kế hoạch, nhiều khám phá\"",
-        "subtitle": "Plango ở đây để giúp bạn có được chuyến đi đẹp nhất trong cuộc đời của mình",
-        "tryNow": "Dùng thử ngay!",
-        "form": {
-            "email": "Email",
-            "emailPlaceholder": "Nhập email của bạn",
-            "password": "Mật khẩu",
-            "passwordPlaceholder": "Tạo mật khẩu",
-            "confirmPassword": "Xác nhận mật khẩu",
-            "confirmPasswordPlaceholder": "Xác nhận mật khẩu của bạn",
-            "passwordRule": "Ít nhất {passwordMin} kí tự, bao gồm chữ hoa, chữ thường, số và kí tự đặc biệt",
-            "registerButton": "Đăng ký",
-            "registerButtonLoading": "Đang tạo tài khoản...",
-            "loginText": "Đã có tài khoản? ",
-            "loginLink": "Đăng nhập ngay"
+        "result": {
+          "title": "Khách sạn tại {location}"
         },
-        "error": {
-            "emailExists": "Email đã tồn tại",
-            "invalidEmail": "Hãy điền một địa chỉ email hợp lệ",
-            "passwordMismatch": "Mật khẩu không khớp",
-            "passwordLength": "Mật khẩu phải có ít nhất 8 kí tự",
-            "passwordComplexity": "Mật khẩu phải bao gồm chữ hoa, chữ thường, số và kí tự đặc biệt"
+        "filter": {
+          "arrange": {
+            "title": "Sắp xếp theo",
+            "priceLowToHigh": "Giá thấp nhất",
+            "highestRecommended": "Đánh giá cao nhất",
+            "mostReviewed": "Nhiều đánh giá nhất"
+          }
         },
-        "prompts": [
-            "Hỏi Plango để tạo một hành trình hoàn chỉnh",
-            "Yêu cầu đề xuất khách sạn tại điểm đến của bạn",
-            "Tìm hiểu về các hoạt động và điểm tham quan địa phương"
-        ]
-    },
-    "ForgotPasswordPage": {
-        "title": "Bạn quên mật khẩu?",
-        "subtitle": "Nhập email của bạn để nhận mã OTP đặt lại mật khẩu.",
-        "verifyEmailBtn": "Xác minh email",
-        "otp-sent": "Mã OTP đã được gửi đến email của bạn.",
-        "otp-valid": "Mã OTP của bạn đã được xác minh thành công.",
-        "otp-invalid": "Mã OTP không hợp lệ hoặc đã hết hạn.",
-        "otp-get-error": "Đã xảy ra lỗi trong quá trình lấy mã OTP:",
-        "otp-title": "Xác minh mã OTP",
-        "otp-subtitle": "Vui lòng nhập mã OTP (6 số) đã được gửi đến email của bạn.",
-        "otp-placeholder": "Nhập mã OTP",
-        "otp-resend": "Gửi lại mã OTP",
-        "backToLogin": "Quay lại trang đăng nhập",
-        "emailNotFound": "Email không tồn tại trong hệ thống",
-        "sendOtpSuccess": "Hãy kiểm tra email của bạn để lấy mã OTP 6 chữ số",
-        "verifyEmailFailed": "Xác minh email thất bại. Vui lòng thử lại.",
-        "resetPassword": "Đặt lại mật khẩu",
-        "resetPasswordSubtitle": "Vui lòng nhập mật khẩu mới cho tài khoản của bạn.",
-        "resetPasswordBtn": "Đặt lại mật khẩu",
-        "newPassword": "Mật khẩu mới",
-        "passwordLength": "Mật khẩu phải có it nhất {passwordMin} kí tự.",
-        "passwordRules": "Mật khẩu phải bao gồm chữ hoa, chữ thường, số và kí tự đặc biệt.",
-        "passwordMismatch": "Mật khẩu không khớp.",
-        "savePasswordErrorDefault": "Mật khẩu không hợp lệ!",
-        "resetPasswordSuccessMessage": "Mật khẩu của bạn đã được đặt lại thành công. Vui lòng đăng nhập lại.",
-        "resetPasswordSuccessTitle": "Đặt lại mật khẩu thành công",
-        "resetPasswordUnexpectedError": "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại.",
-        "passwordLabel": "Mật khẩu",
-        "passwordPlaceholder": "Nhập mật khẩu mới",
-        "confirmPasswordLabel": "Xác nhận mật khẩu",
-        "confirmPasswordPlaceholder": "Xác nhận mật khẩu mới"
-    },
-    "Header": {
-        "explore": "Khám phá",
-        "flight": "Chuyến bay",
-        "hotel": "Khách sạn",
-        "blog": "Bài viết",
-        "about-us": "Về Plango",
-        "login": "Đăng nhập",
-        "logout": "Đăng xuất",
-        "plan-now": "Lên kế hoạch ngay",
-        "search-placeholder": "Tìm kiếm..."
-    },
-    "Sidebar": {
-        "tool-tips": {
-            "new-chat": "Cuộc trò chuyện mới",
-            "chat-history": "Lịch sử trò chuyện",
-            "saved": "Yêu thích",
-            "language": "Đổi ngôn ngữ"
+        "loading": {
+          "isLoadingTrue": "Đang tải khách sạn...",
+          "loadmore": "Xem thêm khách sạn"
         },
-        "follow-us": "Theo dõi Plango"
-    },
-    "ChatPage": {
-        "title": "Kế hoạch mới",
-        "description": "Lên kế hoạch chuyến đi nhóm hoàn hảo của bạn với Plango",
-        "approve-select": {
-            "yes": "Có",
-            "no": "Không"
-        },
-        "itinenaryDetailView": {
-            "day": "Ngày",
-            "destination": "Điểm đến",
-            "estimated-budget": "Ngân sách ước tính",
-            "daily-itinerary": "Lịch trình hàng ngày",
-            "daily-budget": "Ngân sách hàng ngày",
-            "activity-timeline": {
-                "morning": "Buổi sáng",
-                "afternoon": "Buổi chiều",
-                "evening": "Buổi tối"
-            },
-            "aditional-details": {
-                "meals": "Bữa ăn",
-                "transportation": "Phương tiện di chuyển"
-            },
-            "important-travel-notes": "Ghi chú quan trọng"
-        },
-        "loadingIndicator": {
-            "aiThinking": "AI đang suy nghĩ..."
-        },
-        "promptContainer": {
-            "placeholderDefault": "Hãy giúp tôi lập kế hoạch cho chuyến đi nhóm.",
-            "file": "Tệp",
-            "fileCount": "đã chọn"
-        },
-        "promtSection": {
-            "title": "Lên ý tưởng cùng Plango",
-            "subtitle": "Plango ở đây để giúp bạn có được chuyến đi đẹp nhất trong cuộc đời của mình",
-            "helper-text": "Hãy bắt đầu hỏi mình bất cứ điều gì về du lịch!",
-            "placeholderProps": "Tạo kế hoạch du lịch hoàn hảo với plango ngay ..."
-        },
-        "suggestionSection": {
-            "hotel": {
-                "error": {
-                    "title": "Lỗi tìm kiếm khách sạn",
-                    "subtitle": "Vui lòng thử lại sau.",
-                    "button": "Thử lại"
-                },
-                "result": {
-                    "title": "Khách sạn tại {location}"
-                },
-                "filter": {
-                    "arrange": {
-                        "title": "Sắp xếp theo",
-                        "priceLowToHigh": "Giá thấp nhất",
-                        "highestRecommended": "Đánh giá cao nhất",
-                        "mostReviewed": "Nhiều đánh giá nhất"
-                    }
-                },
-                "loading": {
-                    "isLoadingTrue": "Đang tải khách sạn...",
-                    "loadmore": "Xem thêm khách sạn"
-                },
-                "noResult": {
-                    "title": "Không tìm thấy khách sạn",
-                    "subtitle": "Vui lòng thử lại với từ khóa khác.",
-                    "button": "Thử lại"
-                }
-            }
+        "noResult": {
+          "title": "Không tìm thấy khách sạn",
+          "subtitle": "Vui lòng thử lại với từ khóa khác.",
+          "button": "Thử lại"
         }
+      }
     }
+  },
+  "Profile": {
+    "setting": "Cài đặt",
+    "allFavourite": "Tất cả yêu thích",
+    "hotelsFavourite": "Khách sạn yêu thích",
+    "placesFavourite": "Địa điểm yêu thích",
+    "retry": "Thử lại",
+    "unAuthorized": "Vui lòng đăng nhập để truy cập trang này",
+    "loading": "Đang tải ...",
+    "error": {
+      "loadProfileFailed": "Đã xảy ra lỗi khi tải hồ sơ cá nhân",
+      "loadContentFailed": "Đã xảy ra lỗi khi tải nội dung"
+    }
+  },
+  "HistoryList": {
+    "historyTitle": "Lịch Sử Chat",
+    "isLoading": "Đang tải lịch sử trò chuyện...",
+    "cannotLoading": "Không thể tải lịch sử trò chuyện.",
+    "noChat": "Chưa có cuộc trò chuyện nào.",
+    "today": "Hôm nay",
+    "yesterday": "Hôm qua",
+    "previous7days": "7 ngày trước"
+  }
 }
